@@ -2,13 +2,7 @@
 
 [English](README.md) | [中文](README_zh.md)
 
-## 演示视频
-
-### Pick-and-Place 总览
-
-[![Pick-and-Place overview](media/gif/pnp_overview.gif)](media/pnp_overview.mp4)
-
-[打开 MP4](media/pnp_overview.mp4)
+## 演示结果
 
 ### 生成轨迹示例
 
@@ -25,7 +19,7 @@
 
 本仓库是一个 fork-style 的研究代码快照：它把 MolmoSpaces 代码库和 MolmoSpaces x MimicGen 集成层放在同一个仓库中，目标是支持 Pick-and-Place 轨迹生成，以及 bimanual YAM 的浏览器可视化和键盘遥操作。
 
-目标是让新用户 clone 仓库后，可以安装 MolmoSpaces 环境、拉取外部 MimicGen 依赖、下载官方 MolmoBot-Data shard，然后直接运行本仓库里的集成脚本，而不依赖私有的 4090 工作目录。
+目标是让新用户 clone 仓库后，可以安装 MolmoSpaces 环境、拉取外部 MimicGen 依赖、下载官方 MolmoBot-Data shard，然后直接运行本仓库里的集成脚本。
 
 ## 作者与引用
 
@@ -49,7 +43,7 @@ docs/upstream_molmospaces_readme.md  上游 MolmoSpaces 原始 README
 tools/setup_mimicgen_dependency.sh   拉取 MimicGen 到 vendor/ 的辅助脚本
 ```
 
-本仓库故意不追踪私有运行状态和大文件：`.venv`、`work/`、官方数据 shard、生成的 HDF5、完整 rollout 视频目录、simulator logs、PID 文件、cache 目录和内部 planning ledger。Git 中只保留 `media/` 下的小体积公开视频。
+本仓库故意不追踪本地运行状态和大文件：`.venv`、`work/`、官方数据 shard、生成的 HDF5、完整 rollout 视频目录、simulator logs、PID 文件、cache 目录和内部 planning ledger。Git 中只保留 `media/` 下的小体积公开视频。
 
 ## Clone
 
@@ -96,7 +90,7 @@ bash tools/setup_mimicgen_dependency.sh
 export MIMICGEN_ROOT=$PWD/vendor/mimicgen
 ```
 
-如果你已经有本地 MimicGen checkout，也可以直接把 `MIMICGEN_ROOT` 指向那个目录。
+已有 MimicGen checkout 时，可以直接把 `MIMICGEN_ROOT` 指向对应目录。
 
 ## 环境变量
 
@@ -113,7 +107,7 @@ export MOLMOSPACES_NLTK_DATA=/path/to/nltk_data
 创建运行目录：
 
 ```bash
-export MOLMOSPACES_PNP_WORKDIR=$PWD/work/current/mimicgen_pick_and_place
+export MOLMOSPACES_PNP_WORKDIR=$PWD/runtime/mimicgen_pick_and_place
 mkdir -p "$MOLMOSPACES_PNP_WORKDIR"/{artifacts/seeds,artifacts/mimicgen_pnp,data/molmobot_data/FrankaPickAndPlaceOmniCamConfig/val_shards,logs}
 ```
 
@@ -122,7 +116,7 @@ mkdir -p "$MOLMOSPACES_PNP_WORKDIR"/{artifacts/seeds,artifacts/mimicgen_pnp,data
 下载官方 MolmoBot Pick-and-Place validation shard 到：
 
 ```text
-work/current/mimicgen_pick_and_place/data/molmobot_data/FrankaPickAndPlaceOmniCamConfig/val_shards/00000.tar
+runtime/mimicgen_pick_and_place/data/molmobot_data/FrankaPickAndPlaceOmniCamConfig/val_shards/00000.tar
 ```
 
 仓库里包含 `results/` 下的轻量 manifest 和摘要，但不包含官方 shard、生成的 HDF5、生成 rollout 或完整视频目录。

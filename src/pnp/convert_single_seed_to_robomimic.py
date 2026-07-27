@@ -4,7 +4,7 @@ from pathlib import Path
 import h5py
 import numpy as np
 
-WORK = Path(os.environ.get('MOLMOSPACES_PNP_WORKDIR', 'work/current/mimicgen_pick_and_place'))
+WORK = Path(os.environ.get('MOLMOSPACES_PNP_WORKDIR', 'runtime/mimicgen_pick_and_place'))
 
 def decode_json_row(row) -> dict:
     raw = bytes(row).rstrip(b'\0')

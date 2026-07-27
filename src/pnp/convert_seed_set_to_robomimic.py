@@ -4,7 +4,7 @@ from pathlib import Path
 import h5py
 import numpy as np
 
-WORK = Path(os.environ.get('MOLMOSPACES_PNP_WORKDIR', 'work/current/mimicgen_pick_and_place'))
+WORK = Path(os.environ.get('MOLMOSPACES_PNP_WORKDIR', 'runtime/mimicgen_pick_and_place'))
 ACCEPTED_DEFAULT = [0,6,7,8,9,10,11,12,15,16]
 
 def decode_json_row(row) -> dict:

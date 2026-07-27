@@ -25,7 +25,7 @@ git clone https://github.com/NVlabs/mimicgen.git
 The scripts assume the MolmoSpaces checkout contains a work directory at:
 
 ```text
-${MOLMOSPACES_ROOT}/work/current/mimicgen_pick_and_place
+${MOLMOSPACES_ROOT}/runtime/mimicgen_pick_and_place
 ```
 
 Set the environment variables before running:
@@ -33,7 +33,7 @@ Set the environment variables before running:
 ```bash
 export MOLMOSPACES_ROOT=/path/to/molmospaces
 export MIMICGEN_ROOT=/path/to/mimicgen
-export MOLMOSPACES_PNP_WORKDIR=${MOLMOSPACES_ROOT}/work/current/mimicgen_pick_and_place
+export MOLMOSPACES_PNP_WORKDIR=${MOLMOSPACES_ROOT}/runtime/mimicgen_pick_and_place
 export MOLMOSPACES_PYTHON=${MOLMOSPACES_ROOT}/.venv/bin/python
 # optional, if your MolmoSpaces setup uses a local NLTK data cache
 export MOLMOSPACES_NLTK_DATA=/path/to/nltk_data

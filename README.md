@@ -2,13 +2,7 @@
 
 [English](README.md) | [中文](README_zh.md)
 
-## Demo Videos
-
-### Pick-and-Place Overview
-
-[![Pick-and-Place overview](media/gif/pnp_overview.gif)](media/pnp_overview.mp4)
-
-[Open MP4](media/pnp_overview.mp4)
+## Demo Results
 
 ### Generated Rollout Examples
 
@@ -25,7 +19,7 @@
 
 This repository is a fork-style research snapshot that combines the MolmoSpaces codebase with a MolmoSpaces x MimicGen integration layer for Pick-and-Place trajectory generation and bimanual YAM browser/keyboard teleoperation.
 
-The goal is that a new user can clone this repository, install the MolmoSpaces environment, fetch the external MimicGen dependency, download the official MolmoBot-Data shard, and run the included integration scripts without needing the private 4090 work directory.
+The goal is that a new user can clone this repository, install the MolmoSpaces environment, fetch the external MimicGen dependency, download the official MolmoBot-Data shard, and run the included integration scripts.
 
 ## Attribution
 
@@ -49,7 +43,7 @@ docs/upstream_molmospaces_readme.md  Original upstream MolmoSpaces README
 tools/setup_mimicgen_dependency.sh   Helper to fetch MimicGen into vendor/
 ```
 
-The repository intentionally excludes private runtime state and large artifacts: `.venv`, `work/`, official data shards, generated HDF5 files, full rollout video directories, simulator logs, PID files, cache directories, and internal planning ledgers. The only tracked videos are the small public demos in `media/`.
+The repository intentionally excludes local runtime state and large artifacts: `.venv`, `work/`, official data shards, generated HDF5 files, full rollout video directories, simulator logs, PID files, cache directories, and internal planning ledgers. The only tracked videos are the small public demos in `media/`.
 
 ## Clone
 
@@ -113,7 +107,7 @@ export MOLMOSPACES_NLTK_DATA=/path/to/nltk_data
 Create the runtime work directory:
 
 ```bash
-export MOLMOSPACES_PNP_WORKDIR=$PWD/work/current/mimicgen_pick_and_place
+export MOLMOSPACES_PNP_WORKDIR=$PWD/runtime/mimicgen_pick_and_place
 mkdir -p "$MOLMOSPACES_PNP_WORKDIR"/{artifacts/seeds,artifacts/mimicgen_pnp,data/molmobot_data/FrankaPickAndPlaceOmniCamConfig/val_shards,logs}
 ```
 
@@ -122,7 +116,7 @@ mkdir -p "$MOLMOSPACES_PNP_WORKDIR"/{artifacts/seeds,artifacts/mimicgen_pnp,data
 Download the official MolmoBot Pick-and-Place validation shard into:
 
 ```text
-work/current/mimicgen_pick_and_place/data/molmobot_data/FrankaPickAndPlaceOmniCamConfig/val_shards/00000.tar
+runtime/mimicgen_pick_and_place/data/molmobot_data/FrankaPickAndPlaceOmniCamConfig/val_shards/00000.tar
 ```
 
 The repository includes lightweight manifests and summaries in `results/`, but not the official shard, generated HDF5 files, generated rollouts, or videos.

@@ -2,7 +2,7 @@ from __future__ import annotations
 import io, json, re, tarfile, tempfile, os
 from pathlib import Path
 import h5py, numpy as np, zstandard as zstd
-WORK=Path(os.environ.get('MOLMOSPACES_PNP_WORKDIR', 'work/current/mimicgen_pick_and_place'))
+WORK=Path(os.environ.get('MOLMOSPACES_PNP_WORKDIR', 'runtime/mimicgen_pick_and_place'))
 TAR=WORK/'data/molmobot_data/FrankaPickAndPlaceOmniCamConfig/val_shards/00000.tar'
 houses=[1670,1716,2423,3080,5790,9695,4519,1536,9042,9270]
 with tarfile.open(TAR,'r') as outer:

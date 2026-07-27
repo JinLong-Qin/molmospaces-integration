@@ -1,5 +1,5 @@
 {
-  "out": "${MOLMOSPACES_ROOT}/work/current/mimicgen_pick_and_place/artifacts/seeds/robomimic_pnp_10demo_aligned.hdf5",
+  "out": "${MOLMOSPACES_ROOT}/runtime/mimicgen_pick_and_place/artifacts/seeds/robomimic_pnp_10demo_aligned.hdf5",
   "accepted": [
     0,
     6,

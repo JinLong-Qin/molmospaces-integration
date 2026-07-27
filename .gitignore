@@ -8,6 +8,7 @@ venv/
 
 # MolmoSpaces runtime/generated data
 work/
+runtime/
 data/
 logs/
 artifacts/

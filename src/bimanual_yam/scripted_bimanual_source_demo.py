@@ -1,6 +1,6 @@
 """Gate 1D-3: generate one strict bimanual scripted-expert source demo.
 
-This is an additive experiment under work/current/ithor_bimanual_yam.  It uses
+This is an additive experiment under runtime/ithor_bimanual_yam.  It uses
 MolmoSpaces' official iTHOR FloorPlan1/Packing placement flow, YAM controllers,
 MuJoCo dynamics, sensor/history path, HDF5 writer, and camera-video writer.  The
 only task-specific additions are: two gripper-sized THOR pickup assets, explicit

@@ -10,7 +10,7 @@ MIM = Path(os.environ.get("MIMICGEN_ROOT", "../mimicgen"))
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(MIM / "vendor/mimicgen"))
 sys.path.insert(0, str(MIM / "vendor/robomimic"))
-WORK = ROOT / "work/current/mimicgen_pick_and_place"
+WORK = ROOT / "runtime/mimicgen_pick_and_place"
 T0 = time.monotonic()
 def log(s): print(f"[{time.monotonic()-T0:7.1f}s] {s}", flush=True)
 

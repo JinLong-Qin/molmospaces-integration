@@ -383,7 +383,7 @@ def main() -> None:
     parser.add_argument("--visibility-threshold", type=float, default=1e-4)
     parser.add_argument(
         "--out-dir",
-        default="work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101",
+        default="runtime/ithor_bimanual_yam/artifacts/gate_1d1/seed101",
     )
     args = parser.parse_args()
     out_dir = Path(args.out_dir)

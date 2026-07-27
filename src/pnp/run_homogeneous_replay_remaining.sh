@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -u
-cd ${MOLMOSPACES_ROOT}/work/current/mimicgen_pick_and_place || exit 10
+cd ${MOLMOSPACES_ROOT}/runtime/mimicgen_pick_and_place || exit 10
 LOGDIR="logs/homogeneous_potato_tomato_bowl_replay_remaining_$(date +%Y%m%d_%H%M%S)"
 mkdir -p "$LOGDIR"
 echo "$LOGDIR" > logs/latest_homogeneous_replay_remaining_logdir.txt

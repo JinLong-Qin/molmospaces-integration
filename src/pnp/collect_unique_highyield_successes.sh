@@ -2,7 +2,7 @@
 set -euo pipefail
 
 : "${MOLMOSPACES_ROOT:?Set MOLMOSPACES_ROOT to the MolmoSpaces checkout}"
-WORK="${MOLMOSPACES_PNP_WORKDIR:-${MOLMOSPACES_ROOT}/work/current/mimicgen_pick_and_place}"
+WORK="${MOLMOSPACES_PNP_WORKDIR:-${MOLMOSPACES_ROOT}/runtime/mimicgen_pick_and_place}"
 PY="${MOLMOSPACES_PYTHON:-${MOLMOSPACES_ROOT}/.venv/bin/python}"
 cd "$WORK"
 

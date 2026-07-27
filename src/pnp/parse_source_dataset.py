@@ -8,7 +8,7 @@ sys.path.insert(0, str(MIM/'vendor/mimicgen'))
 sys.path.insert(0, str(MIM/'vendor/robomimic'))
 from mimicgen.utils.file_utils import parse_source_dataset
 
-SRC = Path(os.environ.get('PNP_SOURCE_HDF5', 'work/current/mimicgen_pick_and_place/artifacts/seeds/robomimic_pnp_seed00_aligned.hdf5'))
+SRC = Path(os.environ.get('PNP_SOURCE_HDF5', 'runtime/mimicgen_pick_and_place/artifacts/seeds/robomimic_pnp_seed00_aligned.hdf5'))
 OUT = SRC.parent / 'robomimic_pnp_seed00_parse_result.json'
 # Six detected subtasks + final residual segment. Offsets zero for first gate to avoid hiding boundary problems.
 signals = ['pregrasp_done', 'grasp_done', 'gripper_closed', 'lift_done', 'preplace_done', 'place_success', None]

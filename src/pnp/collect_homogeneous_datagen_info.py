@@ -6,7 +6,7 @@ signal.signal(signal.SIGALRM, lambda *_: (_ for _ in ()).throw(TimeoutError('har
 signal.alarm(1800)
 ROOT = Path(os.environ.get('MOLMOSPACES_ROOT', '.'))
 sys.path.insert(0, str(ROOT))
-WORK = ROOT / 'work/current/mimicgen_pick_and_place'
+WORK = ROOT / 'runtime/mimicgen_pick_and_place'
 ap = argparse.ArgumentParser()
 ap.add_argument('--seed-index', type=int, required=True)
 ap.add_argument('--manifest', default=str(WORK/'artifacts/seeds/pnp_seed_manifest_homogeneous_potato_tomato_bowl.json'))

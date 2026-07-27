@@ -1,6 +1,6 @@
 {
-  "out": "${MOLMOSPACES_ROOT}/work/current/mimicgen_pick_and_place/artifacts/seeds/robomimic_pnp_foodlike_bowl_10demo_aligned.hdf5",
-  "manifest": "${MOLMOSPACES_ROOT}/work/current/mimicgen_pick_and_place/artifacts/seeds/pnp_seed_manifest_homogeneous_foodlike_bowl_10candidate_v3.json",
+  "out": "${MOLMOSPACES_ROOT}/runtime/mimicgen_pick_and_place/artifacts/seeds/robomimic_pnp_foodlike_bowl_10demo_aligned.hdf5",
+  "manifest": "${MOLMOSPACES_ROOT}/runtime/mimicgen_pick_and_place/artifacts/seeds/pnp_seed_manifest_homogeneous_foodlike_bowl_10candidate_v3.json",
   "n_demos": 10,
   "total": 1793,
   "demos": [
