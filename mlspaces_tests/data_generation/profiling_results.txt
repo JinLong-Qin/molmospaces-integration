@@ -1,0 +1,47 @@
+
+================================================================================
+                          TEST SUITE PROFILING SUMMARY                          
+================================================================================
+
+Total Session Time: 24.88s
+
+--------------------------------------------------------------------------------
+                              TEST EXECUTION TIME                               
+--------------------------------------------------------------------------------
+Test                                                    Setup       Call   Teardown
+--------------------------------------------------------------------------------
+test_all_configs_have_unique_output_dirs              0.0004s    0.0111s    0.0003s
+test_all_configs_have_unique_tags                     0.0003s    0.0103s    0.0003s
+test_instantiation                                    0.0012s    0.0001s    0.0002s
+test_no_confusingly_similar_fields                    0.0010s    0.2997s    0.0003s
+test_no_duplicate_fields                              0.0010s    0.0002s    0.0002s
+test_output_dir_and_tag                               0.0012s    0.0002s    0.0002s
+test_instantiation                                    0.0010s    0.0002s    0.0002s
+test_no_confusingly_similar_fields                    0.0010s    0.3091s    0.0002s
+test_no_duplicate_fields                              0.0009s    0.0002s    0.0002s
+test_output_dir_and_tag                               0.0013s    0.0002s    0.0002s
+test_has_required_attributes                          0.0009s    0.0002s    0.0002s
+test_instantiation                                    0.0014s    0.0002s    0.0002s
+test_no_confusingly_similar_fields                    0.0010s    0.2711s    0.0002s
+test_no_duplicate_fields                              0.0008s    0.0002s    0.0002s
+test_output_dir_and_tag                               0.0009s    0.0002s    0.0002s
+test_timing_parameters_are_consistent                 0.0012s    0.0002s    0.0002s
+test_has_required_attributes                          0.0010s    0.0002s    0.0002s
+test_instantiation                                    0.0013s    0.0001s    0.0002s
+test_no_confusingly_similar_fields                    0.0009s    0.2614s    0.0002s
+test_no_duplicate_fields                              0.0008s    0.0002s    0.0002s
+test_output_dir_and_tag                               0.0011s    0.0001s    0.0002s
+test_timing_parameters_are_consistent                 0.0011s    0.0001s    0.0002s
+--------------------------------------------------------------------------------
+TOTAL TEST TIME                                       0.0216s    1.1655s    0.0046s
+
+Total Measured Time (Fixtures + Tests): 1.19s
+Pytest Overhead (collection, hooks, etc.): 23.68s
+
+[No profilers found - profiling may be disabled in test configs]
+
+================================================================================
+                            END OF PROFILING SUMMARY                            
+================================================================================
+
+Test exit status: 1

@@ -1,14 +1,17 @@
-# Python
+# Python/runtime
 __pycache__/
 *.py[cod]
 *.egg-info/
 .venv/
 venv/
+.env
 
-# Simulator and dataset artifacts
-artifacts/
+# MolmoSpaces runtime/generated data
+work/
 data/
 logs/
+artifacts/
+MUJOCO_LOG.TXT
 *.hdf5
 *.h5
 *.mp4
@@ -18,8 +21,6 @@ logs/
 *.npz
 *.tar
 *.tar.gz
-
-# Runtime files
 *.log
 *.out
 *.pid
@@ -34,3 +35,8 @@ logs/
 *progress*
 *planning*
 PROJECT_STRUCTURE.md
+
+# Editor/local
+.vscode/
+.idea/
+.DS_Store
