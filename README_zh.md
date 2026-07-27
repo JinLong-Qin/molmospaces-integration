@@ -10,12 +10,17 @@
 
 [打开 MP4](media/heterogeneous_generated_examples.mp4)
 
-### 源轨迹候选与 pilot 结果
+### 源轨迹候选
 
-| 源轨迹候选 | Pilot 结果 |
-| --- | --- |
-| [![Foodlike source candidates](media/gif/foodlike_source_candidates.gif)](media/foodlike_source_candidates.mp4) | [![Foodlike pilot outcomes](media/gif/foodlike_pilot_outcomes.gif)](media/foodlike_pilot_outcomes.mp4) |
-| [打开 MP4](media/foodlike_source_candidates.mp4) | [打开 MP4](media/foodlike_pilot_outcomes.mp4) |
+[![Foodlike source candidates](media/gif/foodlike_source_candidates.gif)](media/foodlike_source_candidates_grid.mp4)
+
+[打开 MP4](media/foodlike_source_candidates_grid.mp4)
+
+### Pilot 结果
+
+[![Foodlike pilot outcomes](media/gif/foodlike_pilot_outcomes.gif)](media/foodlike_pilot_outcomes.mp4)
+
+[打开 MP4](media/foodlike_pilot_outcomes.mp4)
 
 本仓库是一个 fork-style 的研究代码快照：它把 MolmoSpaces 代码库和 MolmoSpaces x MimicGen 集成层放在同一个仓库中，目标是支持 Pick-and-Place 轨迹生成，以及 bimanual YAM 的浏览器可视化和键盘遥操作。
 

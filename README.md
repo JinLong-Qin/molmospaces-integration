@@ -10,12 +10,17 @@
 
 [Open MP4](media/heterogeneous_generated_examples.mp4)
 
-### Source Candidates and Pilot Outcomes
+### Source Candidates
 
-| Source candidates | Pilot outcomes |
-| --- | --- |
-| [![Foodlike source candidates](media/gif/foodlike_source_candidates.gif)](media/foodlike_source_candidates.mp4) | [![Foodlike pilot outcomes](media/gif/foodlike_pilot_outcomes.gif)](media/foodlike_pilot_outcomes.mp4) |
-| [Open MP4](media/foodlike_source_candidates.mp4) | [Open MP4](media/foodlike_pilot_outcomes.mp4) |
+[![Foodlike source candidates](media/gif/foodlike_source_candidates.gif)](media/foodlike_source_candidates_grid.mp4)
+
+[Open MP4](media/foodlike_source_candidates_grid.mp4)
+
+### Pilot Outcomes
+
+[![Foodlike pilot outcomes](media/gif/foodlike_pilot_outcomes.gif)](media/foodlike_pilot_outcomes.mp4)
+
+[Open MP4](media/foodlike_pilot_outcomes.mp4)
 
 This repository is a fork-style research snapshot that combines the MolmoSpaces codebase with a MolmoSpaces x MimicGen integration layer for Pick-and-Place trajectory generation and bimanual YAM browser/keyboard teleoperation.
 
