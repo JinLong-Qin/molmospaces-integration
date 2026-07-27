@@ -23,7 +23,7 @@ The MolmoSpaces source tree, examples, documentation, resources, package metadat
 
 The MimicGen method, upstream codebase, documentation, and datasets are credited to the original NVIDIA / NVlabs project and paper authors. This repository does not vendor the MimicGen source tree; `tools/setup_mimicgen_dependency.sh` fetches it as an external dependency.
 
-## MolmoSpaces x MimicGen Integration
+## MolmoSpaces Integration
 
 - Integration author: Kunyu Yang
 - GitHub: https://github.com/yanggoumao2

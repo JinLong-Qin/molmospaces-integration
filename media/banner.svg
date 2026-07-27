@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 320" role="img" aria-labelledby="title desc">
-  <title id="title">MolmoSpaces x MimicGen</title>
-  <desc id="desc">Centered banner for the public GitHub README.</desc>
+  <title id="title">MolmoSpaces Integration</title>
+  <desc id="desc">Banner for MolmoSpaces Integration.</desc>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#0f172a"/>
@@ -23,8 +23,8 @@
   <path d="M0 244 C 180 212, 300 292, 470 252 S 780 172, 980 214 S 1230 292, 1400 228 L 1400 320 L 0 320 Z" fill="#ffffff" fill-opacity="0.07"/>
 
   <g filter="url(#shadow)">
-    <text x="700" y="126" text-anchor="middle" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="58" font-weight="800" fill="url(#text)">MolmoSpaces x MimicGen</text>
-    <text x="700" y="178" text-anchor="middle" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="24" font-weight="500" fill="#e2e8f0">Pick-and-Place trajectory generation · bimanual YAM browser/keyboard teleoperation</text>
-    <text x="700" y="220" text-anchor="middle" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" font-weight="400" fill="#cbd5e1">Public research snapshot · install · replay · generate · inspect</text>
+    <text x="700" y="126" text-anchor="middle" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="58" font-weight="800" fill="url(#text)">MolmoSpaces Integration</text>
+    <text x="700" y="178" text-anchor="middle" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="24" font-weight="500" fill="#e2e8f0">Pick-and-Place · bimanual YAM teleoperation · MimicGen cross-subtask</text>
+    <text x="700" y="220" text-anchor="middle" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" font-weight="400" fill="#cbd5e1">install · replay · generate · inspect</text>
   </g>
 </svg>
