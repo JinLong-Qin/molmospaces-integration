@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  A new user can clone this repository, install MolmoSpaces, fetch MimicGen and robomimic, place the official MolmoBot-Data shard under <code>runtime/</code>, and run the included source-replay and generation scripts.
+  This repository is intended to be reproducible and continuously maintained. A new user can clone it, install MolmoSpaces, fetch MimicGen and robomimic, place the official MolmoBot-Data shard under <code>runtime/</code>, and run the included source-replay, datagen-info, source-HDF5 conversion, rollout-generation, and collection scripts.
 </p>
 
 <p align="center">
@@ -170,6 +170,15 @@ A successful replay only verifies source-trajectory replay. It is not yet a gene
 
 ## Pick-and-Place Integration Workflow
 
+The Pick-and-Place pipeline is organized as a reproducible sequence:
+
+1. inspect or prepare source-candidate metadata;
+2. replay source trajectories and collect MimicGen datagen information;
+3. convert selected sources into a robomimic/MimicGen source HDF5;
+4. parse the source HDF5 with MimicGen;
+5. generate MolmoSpaces rollouts and save videos;
+6. optionally collect accepted rollouts with action-hash deduplication.
+
 Collect MimicGen datagen information:
 
 ```bash
@@ -245,8 +254,9 @@ The browser teleoperation path is a control and observation bridge. It is not by
 - Homogeneous foodlike-to-bowl pilot: strict automatic success `13/100`; reviewed visual success `15/100` after two one-frame trace-glitch cases.
 - Uniform collector live snapshot: non-deduplicated progress in `results/collector_uniform_summary_live.json`.
 - High-yield deduplicated collector live snapshot: unique accepted progress in `results/collector_highyield_dedup_summary_live.json`.
+- Source-pool utilities and manifests are included so users can reproduce the source replay, datagen-info extraction, source-HDF5 conversion, rollout generation, and collection workflow locally after placing the official data shard under `runtime/`.
 
-These snapshots are progress evidence, not a final 100-success dataset.
+These snapshots are progress evidence. The repository will keep evolving as additional source sets, collection scripts, and cleaned datasets are prepared.
 
 <details>
 <summary>Demo media</summary>

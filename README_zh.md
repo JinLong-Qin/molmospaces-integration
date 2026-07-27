@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  新用户可以 clone 仓库，安装 MolmoSpaces，拉取 MimicGen 和 robomimic，把官方 MolmoBot-Data shard 放到 <code>runtime/</code>，然后运行本仓库提供的 source replay 和 generation 脚本。
+  本仓库目标是可复现并持续维护。新用户可以 clone 仓库，安装 MolmoSpaces，拉取 MimicGen 和 robomimic，把官方 MolmoBot-Data shard 放到 <code>runtime/</code>，然后运行 source replay、datagen-info、source-HDF5 转换、rollout generation 和 collection 脚本。
 </p>
 
 <p align="center">
@@ -170,6 +170,15 @@ $MOLMOSPACES_PYTHON src/pnp/replay_source_episode.py --seed-index 0 --save-video
 
 ## Pick-and-Place 集成流程
 
+Pick-and-Place pipeline 被整理成可复现的顺序流程：
+
+1. 检查或准备 source candidate 元数据；
+2. 回放 source trajectory 并收集 MimicGen datagen 信息；
+3. 把选中 source 转成 robomimic/MimicGen source HDF5；
+4. 用 MimicGen 解析 source HDF5；
+5. 在 MolmoSpaces 中生成 rollout 并保存视频；
+6. 可选：用 action-hash 去重收集 accepted rollouts。
+
 收集 MimicGen datagen 信息：
 
 ```bash
@@ -245,8 +254,9 @@ $MOLMOSPACES_PYTHON src/bimanual_yam/browser_keyboard_teleop.py --host 127.0.0.1
 - homogeneous foodlike-to-bowl pilot：严格自动成功 `13/100`；人工复核视觉成功 `15/100`，其中包含两个 one-frame trace-glitch case。
 - uniform collector live snapshot：见 `results/collector_uniform_summary_live.json`，未去重。
 - high-yield deduplicated collector live snapshot：见 `results/collector_highyield_dedup_summary_live.json`，按 action hash 去重。
+- 仓库包含 source-pool、source replay、datagen-info、source-HDF5 转换、rollout generation 和 collection 的脚本入口；用户放置官方 shard 后可以按流程本地复现。
 
-这些 snapshot 是进展证据，不是最终 100-success 数据集。
+这些 snapshot 是进展证据。仓库会随着更多 source set、collection 脚本和 cleaned dataset 的整理继续维护。
 
 <details>
 <summary>演示媒体</summary>
