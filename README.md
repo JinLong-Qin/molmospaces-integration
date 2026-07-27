@@ -2,78 +2,47 @@
 
 [English](README.md) | [中文](README_zh.md)
 
-## Demo Results
+MolmoSpaces x MimicGen is a fork-style research snapshot that combines the upstream MolmoSpaces codebase with an integration layer for Pick-and-Place trajectory generation and bimanual YAM browser/keyboard teleoperation.
 
-### Generated Rollout Examples
+This repository is organized so that a new user can clone it, install MolmoSpaces, fetch MimicGen and robomimic, place the official MolmoBot-Data shard under `runtime/`, and run the included source-replay and generation scripts.
 
-[![Generated rollout examples](media/gif/heterogeneous_generated_examples.gif)](media/heterogeneous_generated_examples.mp4)
+## What is included
 
-[Open MP4](media/heterogeneous_generated_examples.mp4)
+- Upstream MolmoSpaces source snapshot.
+- Pick-and-Place MimicGen integration scripts under `src/pnp/`.
+- Bimanual YAM browser visualization and keyboard teleoperation scripts under `src/bimanual_yam/`.
+- Lightweight manifests and result summaries under `results/`.
+- Small README demo media under `media/`.
+- Public documentation and attribution files.
 
-### Source Candidates
+Large runtime data are intentionally excluded from Git: official shards, generated HDF5 files, rollout directories, simulator logs, PID files, caches, and internal planning ledgers.
 
-[![Foodlike source candidates](media/gif/foodlike_source_candidates.gif)](media/foodlike_source_candidates_grid.mp4)
+## Quick Start
 
-[Open MP4](media/foodlike_source_candidates_grid.mp4)
-
-### Pilot Outcomes
-
-[![Foodlike pilot outcomes](media/gif/foodlike_pilot_outcomes.gif)](media/foodlike_pilot_outcomes.mp4)
-
-[Open MP4](media/foodlike_pilot_outcomes.mp4)
-
-This repository is a fork-style research snapshot that combines the MolmoSpaces codebase with a MolmoSpaces x MimicGen integration layer for Pick-and-Place trajectory generation and bimanual YAM browser/keyboard teleoperation.
-
-The goal is that a new user can clone this repository, install the MolmoSpaces environment, fetch the external MimicGen dependency, download the official MolmoBot-Data shard, and run the included integration scripts.
-
-## Attribution
-
-- Upstream MolmoSpaces: Allen Institute for AI, Apache License 2.0. The upstream source and license are retained in this repository.
-- Upstream MimicGen: NVIDIA / NVlabs. MimicGen was introduced by Ajay Mandlekar, Soroush Nasiriany, Bowen Wen, Iretiayo Akinola, Yashraj Narang, Linxi Fan, Yuke Zhu, and Dieter Fox. MimicGen code is released under the NVIDIA Source Code License, and MimicGen datasets are released under CC-BY 4.0.
-- MolmoSpaces x MimicGen integration and release organization: Kunyu Yang, Institute of Trustworthy Embodied Intelligence, Fudan University.
-- Details: `AUTHORS.md`.
-
-## Repository Layout
-
-```text
-molmo_spaces/             Upstream MolmoSpaces Python package
-scripts/                  Upstream MolmoSpaces scripts
-configs/, examples/, docs/ Upstream configuration, examples, and documentation
-src/pnp/                  Pick-and-Place MimicGen integration scripts
-src/bimanual_yam/         Bimanual YAM diagnostics and browser keyboard teleoperation
-results/                  Lightweight JSON manifests and result summaries
-media/                    Small public demo videos for the GitHub README
-docs/experiments.md       Public experiment notes and evidence boundaries
-docs/upstream_molmospaces_readme.md  Original upstream MolmoSpaces README
-tools/setup_mimicgen_dependency.sh   Helper to fetch MimicGen into vendor/
-```
-
-The repository intentionally excludes local runtime state and large artifacts: `.venv`, `work/`, official data shards, generated HDF5 files, full rollout video directories, simulator logs, PID files, cache directories, and internal planning ledgers. The only tracked videos are the small public demos in `media/`.
-
-## Clone
-
-```bash
-git clone git@github.com:yanggoumao2/molmospaces-mimicgen.git
-cd molmospaces-mimicgen
-```
-
-HTTPS also works:
+### 1. Clone
 
 ```bash
 git clone https://github.com/yanggoumao2/molmospaces-mimicgen.git
 cd molmospaces-mimicgen
 ```
 
-## Install MolmoSpaces
+SSH also works:
 
-Use Python 3.11. The upstream package is installable from this repository root.
+```bash
+git clone git@github.com:yanggoumao2/molmospaces-mimicgen.git
+cd molmospaces-mimicgen
+```
+
+### 2. Create a Python environment
+
+MolmoSpaces uses Python 3.11.
 
 With conda:
 
 ```bash
 conda create -n molmospaces-mimicgen python=3.11
 conda activate molmospaces-mimicgen
-pip install -e ".[mujoco]"
+python -m pip install --upgrade pip setuptools wheel
 ```
 
 With `uv`:
@@ -81,84 +50,99 @@ With `uv`:
 ```bash
 uv venv --python 3.11 .venv
 source .venv/bin/activate
-uv pip install -e ".[mujoco]"
+uv pip install --upgrade pip setuptools wheel
 ```
 
-Optional extras follow upstream MolmoSpaces conventions, for example `.[mujoco,grasp,housegen]`. See `docs/upstream_molmospaces_readme.md` for upstream installation details.
+### 3. Install MolmoSpaces
 
-## Fetch MimicGen
+For the MuJoCo-based Pick-and-Place integration:
 
-The integration scripts need MimicGen and robomimic code. Fetch MimicGen into `vendor/mimicgen`:
+```bash
+pip install -e ".[mujoco]"
+```
+
+Optional upstream extras can be installed as needed, for example:
+
+```bash
+pip install -e ".[mujoco,grasp,housegen]"
+```
+
+See `docs/upstream_molmospaces_readme.md` for upstream MolmoSpaces installation details.
+
+### 4. Fetch MimicGen and robomimic
+
+The integration scripts use MimicGen and robomimic. Fetch both into `vendor/`:
 
 ```bash
 bash tools/setup_mimicgen_dependency.sh
-export MIMICGEN_ROOT=$PWD/vendor/mimicgen
 ```
 
-If you already have a local MimicGen checkout, point `MIMICGEN_ROOT` to it instead.
+Install them in editable mode when their package metadata is available:
 
-## Environment Variables
+```bash
+pip install -e vendor/robomimic
+pip install -e vendor/mimicgen
+```
 
-Set these before running the integration scripts:
+Set dependency roots:
+
+```bash
+export MIMICGEN_ROOT=$PWD/vendor/mimicgen
+export ROBOMIMIC_ROOT=$PWD/vendor/robomimic
+```
+
+If existing local checkouts are used instead, point `MIMICGEN_ROOT` and `ROBOMIMIC_ROOT` to those directories.
+
+### 5. Set runtime paths
 
 ```bash
 export MOLMOSPACES_ROOT=$PWD
-export MOLMOSPACES_PYTHON=${MOLMOSPACES_PYTHON:-python}
-export MIMICGEN_ROOT=${MIMICGEN_ROOT:-$PWD/vendor/mimicgen}
-# optional, if using a local NLTK data cache
-export MOLMOSPACES_NLTK_DATA=/path/to/nltk_data
-```
-
-Create the runtime work directory:
-
-```bash
+export MOLMOSPACES_PYTHON=python
 export MOLMOSPACES_PNP_WORKDIR=$PWD/runtime/mimicgen_pick_and_place
+
 mkdir -p "$MOLMOSPACES_PNP_WORKDIR"/{artifacts/seeds,artifacts/mimicgen_pnp,data/molmobot_data/FrankaPickAndPlaceOmniCamConfig/val_shards,logs}
 ```
 
-## Data
+Optional NLTK cache:
 
-Download the official MolmoBot Pick-and-Place validation shard into:
+```bash
+export MOLMOSPACES_NLTK_DATA=/path/to/nltk_data
+```
+
+### 6. Place the MolmoBot-Data shard
+
+Download the official MolmoBot Pick-and-Place validation shard and place it here:
 
 ```text
 runtime/mimicgen_pick_and_place/data/molmobot_data/FrankaPickAndPlaceOmniCamConfig/val_shards/00000.tar
 ```
 
-The repository includes lightweight manifests and summaries in `results/`, but not the official shard, generated HDF5 files, generated rollouts, or videos.
+This repository includes lightweight manifests and summaries, but not official data shards or generated artifacts.
 
-Primary included manifests:
+### 7. Run a smoke check
 
-```text
-results/pnp_seed_manifest.json
-results/pnp_seed_manifest_homogeneous_foodlike_bowl_10candidate_v3.json
-```
-
-Copy a manifest into the runtime artifact directory when needed:
+Copy a manifest into the runtime work directory:
 
 ```bash
 cp results/pnp_seed_manifest_homogeneous_foodlike_bowl_10candidate_v3.json \
   "$MOLMOSPACES_PNP_WORKDIR/artifacts/seeds/"
 ```
 
-## Pick-and-Place Integration
-
-Inspect candidate source trajectories:
+Inspect source candidates:
 
 ```bash
 $MOLMOSPACES_PYTHON src/pnp/inspect_source_candidates.py
 ```
 
-Build a homogeneous foodlike-to-bowl manifest:
-
-```bash
-$MOLMOSPACES_PYTHON src/pnp/make_homogeneous_manifest.py
-```
-
-Replay a source trajectory:
+Replay one source trajectory:
 
 ```bash
 $MOLMOSPACES_PYTHON src/pnp/replay_source_episode.py --seed-index 0 --save-videos
 ```
+
+A successful replay only verifies source-trajectory replay. It is not yet a generated MimicGen rollout.
+
+## Pick-and-Place Integration Workflow
 
 Collect MimicGen datagen information:
 
@@ -236,7 +220,45 @@ The browser teleoperation path is a control and observation bridge. It is not by
 - Uniform collector live snapshot: non-deduplicated progress in `results/collector_uniform_summary_live.json`.
 - High-yield deduplicated collector live snapshot: unique accepted progress in `results/collector_highyield_dedup_summary_live.json`.
 
-Do not claim final 100-success completion from these snapshots alone.
+These snapshots are progress evidence, not a final 100-success dataset.
+
+<details>
+<summary>Demo media</summary>
+
+### Generated Rollout Examples
+
+[![Generated rollout examples](media/gif/heterogeneous_generated_examples.gif)](media/heterogeneous_generated_examples.mp4)
+
+[Open MP4](media/heterogeneous_generated_examples.mp4)
+
+### Source Candidates
+
+[![Foodlike source candidates](media/gif/foodlike_source_candidates.gif)](media/foodlike_source_candidates_grid.mp4)
+
+[Open MP4](media/foodlike_source_candidates_grid.mp4)
+
+### Pilot Outcomes
+
+[![Foodlike pilot outcomes](media/gif/foodlike_pilot_outcomes.gif)](media/foodlike_pilot_outcomes.mp4)
+
+[Open MP4](media/foodlike_pilot_outcomes.mp4)
+
+</details>
+
+## Repository Layout
+
+```text
+molmo_spaces/             Upstream MolmoSpaces Python package
+scripts/                  Upstream MolmoSpaces scripts
+configs/, examples/, docs/ Upstream configuration, examples, and documentation
+src/pnp/                  Pick-and-Place MimicGen integration scripts
+src/bimanual_yam/         Bimanual YAM diagnostics and browser keyboard teleoperation
+results/                  Lightweight JSON manifests and result summaries
+media/                    Small public demo videos for the GitHub README
+docs/experiments.md       Public experiment notes and evidence boundaries
+docs/upstream_molmospaces_readme.md  Original upstream MolmoSpaces README
+tools/setup_mimicgen_dependency.sh   Helper to fetch MimicGen and robomimic into vendor/
+```
 
 ## Evidence Boundaries
 
@@ -244,6 +266,13 @@ Do not claim final 100-success completion from these snapshots alone.
 - Replay success and parser success are prerequisites, not generated-demo success.
 - Accepted generated demonstrations require a real MolmoSpaces simulator rollout, `final_success=true`, post-hold stability, and saved artifacts.
 - Large generated artifacts are intentionally kept outside Git.
+
+## Attribution
+
+- Upstream MolmoSpaces: Allen Institute for AI, Apache License 2.0. The upstream source and license are retained in this repository.
+- Upstream MimicGen: NVIDIA / NVlabs. MimicGen was introduced by Ajay Mandlekar, Soroush Nasiriany, Bowen Wen, Iretiayo Akinola, Yashraj Narang, Linxi Fan, Yuke Zhu, and Dieter Fox. MimicGen code is released under the NVIDIA Source Code License, and MimicGen datasets are released under CC-BY 4.0.
+- MolmoSpaces x MimicGen integration and release organization: Kunyu Yang, Institute of Trustworthy Embodied Intelligence, Fudan University.
+- Details: `AUTHORS.md`.
 
 ## License
 

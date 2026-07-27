@@ -6,11 +6,12 @@ import numpy as np
 signal.signal(signal.SIGALRM, lambda *_: (_ for _ in ()).throw(TimeoutError("hard timeout")))
 signal.alarm(2400)
 ROOT = Path(os.environ.get("MOLMOSPACES_ROOT", "."))
-MIM = Path(os.environ.get("MIMICGEN_ROOT", "../mimicgen"))
+MIMICGEN_ROOT = Path(os.environ.get("MIMICGEN_ROOT", "vendor/mimicgen"))
+ROBOMIMIC_ROOT = Path(os.environ.get("ROBOMIMIC_ROOT", "vendor/robomimic"))
 sys.path.insert(0, str(ROOT))
-sys.path.insert(0, str(MIM / "vendor/mimicgen"))
-sys.path.insert(0, str(MIM / "vendor/robomimic"))
-WORK = ROOT / "runtime/mimicgen_pick_and_place"
+sys.path.insert(0, str(MIMICGEN_ROOT))
+sys.path.insert(0, str(ROBOMIMIC_ROOT))
+WORK = Path(os.environ.get("MOLMOSPACES_PNP_WORKDIR", str(ROOT / "runtime/mimicgen_pick_and_place")))
 T0 = time.monotonic()
 def log(s): print(f"[{time.monotonic()-T0:7.1f}s] {s}", flush=True)
 

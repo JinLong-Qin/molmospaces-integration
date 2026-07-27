@@ -3,9 +3,10 @@ import json, os, sys
 from pathlib import Path
 import numpy as np
 
-MIM = Path(os.environ.get('MIMICGEN_ROOT', '../mimicgen'))
-sys.path.insert(0, str(MIM/'vendor/mimicgen'))
-sys.path.insert(0, str(MIM/'vendor/robomimic'))
+MIMICGEN_ROOT = Path(os.environ.get('MIMICGEN_ROOT', 'vendor/mimicgen'))
+ROBOMIMIC_ROOT = Path(os.environ.get('ROBOMIMIC_ROOT', 'vendor/robomimic'))
+sys.path.insert(0, str(MIMICGEN_ROOT))
+sys.path.insert(0, str(ROBOMIMIC_ROOT))
 from mimicgen.utils.file_utils import parse_source_dataset
 
 SRC = Path(os.environ.get('PNP_SOURCE_HDF5', 'runtime/mimicgen_pick_and_place/artifacts/seeds/robomimic_pnp_seed00_aligned.hdf5'))
