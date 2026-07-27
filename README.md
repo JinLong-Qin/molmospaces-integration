@@ -1,5 +1,30 @@
 # MolmoSpaces x MimicGen
 
+[English](README.md) | [中文](README_zh.md)
+
+## Demo Videos
+
+### Pick-and-Place Overview
+
+<video src="media/pnp_overview.mp4" controls muted playsinline width="100%"></video>
+
+### Generated Rollout Examples
+
+<video src="media/heterogeneous_generated_examples.mp4" controls muted playsinline width="100%"></video>
+
+### Source Candidates and Pilot Outcomes
+
+<table>
+  <tr>
+    <td width="50%">
+      <video src="media/foodlike_source_candidates.mp4" controls muted playsinline width="100%"></video>
+    </td>
+    <td width="50%">
+      <video src="media/foodlike_pilot_outcomes.mp4" controls muted playsinline width="100%"></video>
+    </td>
+  </tr>
+</table>
+
 This repository is a fork-style research snapshot that combines the MolmoSpaces codebase with a MolmoSpaces x MimicGen integration layer for Pick-and-Place trajectory generation and bimanual YAM browser/keyboard teleoperation.
 
 The goal is that a new user can clone this repository, install the MolmoSpaces environment, fetch the external MimicGen dependency, download the official MolmoBot-Data shard, and run the included integration scripts without needing the private 4090 work directory.
@@ -19,12 +44,13 @@ configs/, examples/, docs/ Upstream configuration, examples, and documentation
 src/pnp/                  Pick-and-Place MimicGen integration scripts
 src/bimanual_yam/         Bimanual YAM diagnostics and browser keyboard teleoperation
 results/                  Lightweight JSON manifests and result summaries
+media/                    Small public demo videos for the GitHub README
 docs/experiments.md       Public experiment notes and evidence boundaries
 docs/upstream_molmospaces_readme.md  Original upstream MolmoSpaces README
 tools/setup_mimicgen_dependency.sh   Helper to fetch MimicGen into vendor/
 ```
 
-The repository intentionally excludes private runtime state and large artifacts: `.venv`, `work/`, official data shards, generated HDF5 files, videos, simulator logs, PID files, cache directories, and internal planning ledgers.
+The repository intentionally excludes private runtime state and large artifacts: `.venv`, `work/`, official data shards, generated HDF5 files, full rollout video directories, simulator logs, PID files, cache directories, and internal planning ledgers. The only tracked videos are the small public demos in `media/`.
 
 ## Clone
 
