@@ -3,6 +3,7 @@
 This is a diagnostic smoke only. It does not execute a policy, step the task,
 collect a demonstration, check collision-free paths, or claim task success.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -139,7 +140,9 @@ def solve_object_grasp(
         include_flipped=True,
         grasp_libraries=["droid"],
     )
-    order = rank_grasps(robot.robot_view, obj, grasps, gripper, env.current_robot.exp_config.policy_config)
+    order = rank_grasps(
+        robot.robot_view, obj, grasps, gripper, env.current_robot.exp_config.policy_config
+    )
     attempts = 0
     for rank, candidate_index in enumerate(order[:max_candidates]):
         attempts += 1
@@ -213,17 +216,15 @@ def diagnose_object_position_only(
     robot = env.current_robot
     robot.robot_view.set_qpos_dict({key: value.copy() for key, value in q0.items()})
     mujoco.mj_fwdPosition(env.current_model, env.current_data)
-    grasps = get_pickup_grasps(
-        env, obj, include_flipped=True, grasp_libraries=["droid"]
+    grasps = get_pickup_grasps(env, obj, include_flipped=True, grasp_libraries=["droid"])
+    order = rank_grasps(
+        robot.robot_view, obj, grasps, gripper, env.current_robot.exp_config.policy_config
     )
-    order = rank_grasps(robot.robot_view, obj, grasps, gripper, env.current_robot.exp_config.policy_config)
     index = int(order[0])
     grasp = grasps[index].copy()
     pregrasp = grasp.copy()
     pregrasp[:3, 3] -= pregrasp_offset * pregrasp[:3, 2]
-    result = solve_position_only_pair(
-        env, gripper, arm, pregrasp, grasp, q0, base_pose
-    )
+    result = solve_position_only_pair(env, gripper, arm, pregrasp, grasp, q0, base_pose)
     result["candidate_index"] = index
     return result
 
@@ -314,9 +315,7 @@ def solve_box_opening_grid(
         interior = tcp_pose.copy()
         approach[:3, 3] = staging_xyz
         interior[:3, 3] = interior_xyz
-        result = solve_position_only_pair(
-            env, gripper, arm, approach, interior, q0, base_pose
-        )
+        result = solve_position_only_pair(env, gripper, arm, approach, interior, q0, base_pose)
         if result["success"]:
             result.update(
                 {
@@ -365,7 +364,9 @@ def capture_state(env, label: str, object_names: list[str], out_dir: Path) -> di
     return result
 
 
-def assign_sides(robot_view, objects_by_uid: dict[str, Any]) -> tuple[dict[str, str], dict[str, Any]]:
+def assign_sides(
+    robot_view, objects_by_uid: dict[str, Any]
+) -> tuple[dict[str, str], dict[str, Any]]:
     base_from_world = np.linalg.inv(robot_view.base.pose)
     positions = {}
     for uid, obj in objects_by_uid.items():
@@ -419,7 +420,9 @@ def main() -> None:
 
         if len(sampler._added_pickup_names) != 2:
             raise RuntimeError(f"expected 2 added pickups, got {sampler._added_pickup_names}")
-        uid_to_name = dict(zip(sampler._added_pickup_uids, sampler._added_pickup_names, strict=True))
+        uid_to_name = dict(
+            zip(sampler._added_pickup_uids, sampler._added_pickup_names, strict=True)
+        )
         if set(uid_to_name) != set(PICKUP_UIDS):
             raise RuntimeError(f"unexpected pickup UID mapping: {uid_to_name}")
         objects_by_uid = {
@@ -450,9 +453,7 @@ def main() -> None:
             }
 
         object_names = [uid_to_name[uid] for uid in PICKUP_UIDS] + [box_name]
-        report["visibility"] = {
-            "initial": capture_state(env, "initial", object_names, out_dir)
-        }
+        report["visibility"] = {"initial": capture_state(env, "initial", object_names, out_dir)}
 
         q0 = copy_qpos(robot_view)
         base_pose = robot_view.base.pose.copy()
@@ -482,9 +483,7 @@ def main() -> None:
                     pregrasp_offset,
                 )
                 droid_result["uid"] = uid
-                report["diagnostics"]["droid_orientation"]["objects"][side][relation] = (
-                    droid_result
-                )
+                report["diagnostics"]["droid_orientation"]["objects"][side][relation] = droid_result
                 report["ik"]["objects"][side][relation] = diagnose_object_position_only(
                     env,
                     objects_by_uid[uid],
@@ -510,9 +509,7 @@ def main() -> None:
                 base_pose,
                 place_offset,
             )
-            report["diagnostics"]["droid_orientation"]["box"][side]["uid"] = assignment[
-                side
-            ]
+            report["diagnostics"]["droid_orientation"]["box"][side]["uid"] = assignment[side]
             report["ik"]["box"][side] = solve_box_opening_grid(
                 env, box, gripper, arm, q0, base_pose
             )
@@ -544,15 +541,13 @@ def main() -> None:
 
         asset_pass = all(report["assets"][uid]["valid_droid_grasp"] for uid in PICKUP_UIDS)
         ik_pass = all(
-            report["ik"]["objects"][side]["own"]["success"]
-            and report["ik"]["box"][side]["success"]
+            report["ik"]["objects"][side]["own"]["success"] and report["ik"]["box"][side]["success"]
             for side in ("left", "right")
         )
         threshold = args.visibility_threshold
         initial = report["visibility"]["initial"]["cameras"]
         initial_top_pass = all(
-            initial["exo_camera"]["visibility"].get(name, 0.0) >= threshold
-            for name in object_names
+            initial["exo_camera"]["visibility"].get(name, 0.0) >= threshold for name in object_names
         )
         all_images_nonblank = all(item["nonblank"] for item in initial.values())
         camera_pass = False

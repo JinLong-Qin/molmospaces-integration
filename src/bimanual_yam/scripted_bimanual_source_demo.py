@@ -7,6 +7,7 @@ only task-specific additions are: two gripper-sized THOR pickup assets, explicit
 left/right workspace placement, a sequential dual-arm oracle, and strict 2/2
 success/replay metadata.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -52,7 +53,9 @@ def to_jsonable(value: Any) -> Any:
 
 
 def copy_qpos(robot_view):
-    return {k: np.asarray(v, dtype=np.float64).copy() for k, v in robot_view.get_qpos_dict().items()}
+    return {
+        k: np.asarray(v, dtype=np.float64).copy() for k, v in robot_view.get_qpos_dict().items()
+    }
 
 
 def hold_action(robot_view):
@@ -65,7 +68,9 @@ def hold_action(robot_view):
     return action
 
 
-def solve_position(robot, robot_view, side: str, position: np.ndarray, qseed, reference: np.ndarray):
+def solve_position(
+    robot, robot_view, side: str, position: np.ndarray, qseed, reference: np.ndarray
+):
     arm, gripper = ARMS[side]
     target = reference.copy()
     target[:3, 3] = np.asarray(position, dtype=np.float64)
@@ -142,12 +147,10 @@ def place_for_arm_assignment(task, sampler) -> dict[str, Any]:
     box_center, box_size = body_aabb(model, data, box.body_id)
     box_bottom = float(box_center[2] - box_size[2] / 2)
     support_top = float(sampler.accepted_initialization["support_top_z"])
-    box_world = (
-        base[:3, 3]
-        + targets_base["box"][0] * forward
-        + targets_base["box"][1] * left
+    box_world = base[:3, 3] + targets_base["box"][0] * forward + targets_base["box"][1] * left
+    box.position = np.array(
+        [box_world[0], box_world[1], box.position[2] + support_top - box_bottom + 0.0005]
     )
-    box.position = np.array([box_world[0], box_world[1], box.position[2] + support_top - box_bottom + 0.0005])
     mujoco.mj_forward(model, data)
     for side, uid in assignment.items():
         obj = create_mlspaces_body(data, uid_to_name[uid])
@@ -162,7 +165,9 @@ def place_for_arm_assignment(task, sampler) -> dict[str, Any]:
     )
     width_pass = all(item["pass"] for item in width_gate.values())
     if not side_pass or not width_pass:
-        raise RuntimeError(f"workspace/graspability gate failed: side={side_pass}, width={width_gate}")
+        raise RuntimeError(
+            f"workspace/graspability gate failed: side={side_pass}, width={width_gate}"
+        )
     return {
         "uid_to_name": uid_to_name,
         "box_name": box_name,
@@ -201,14 +206,16 @@ def strict_success(task, object_names: list[str], box_name: str) -> dict[str, An
                     robot_contact = True
                     body1 = int(data.model.geom_bodyid[contact.geom1])
                     body2 = int(data.model.geom_bodyid[contact.geom2])
-                    robot_contact_pairs.append({
-                        "geom1_id": int(contact.geom1),
-                        "geom1_name": data.model.geom(int(contact.geom1)).name,
-                        "body1_name": data.model.body(body1).name,
-                        "geom2_id": int(contact.geom2),
-                        "geom2_name": data.model.geom(int(contact.geom2)).name,
-                        "body2_name": data.model.body(body2).name,
-                    })
+                    robot_contact_pairs.append(
+                        {
+                            "geom1_id": int(contact.geom1),
+                            "geom1_name": data.model.geom(int(contact.geom1)).name,
+                            "body1_name": data.model.body(body1).name,
+                            "geom2_id": int(contact.geom2),
+                            "geom2_name": data.model.geom(int(contact.geom2)).name,
+                            "body2_name": data.model.body(body2).name,
+                        }
+                    )
         supported = object_supported_by_box(task, name, box_name)
         per_object[name] = {
             "supported_by_box": bool(supported),
@@ -219,7 +226,12 @@ def strict_success(task, object_names: list[str], box_name: str) -> dict[str, An
             "pass": bool(supported and not robot_contact),
             "position": obj.position.copy(),
         }
-    return {"per_object": per_object, "count": sum(v["pass"] for v in per_object.values()), "total": len(per_object), "success": all(v["pass"] for v in per_object.values())}
+    return {
+        "per_object": per_object,
+        "count": sum(v["pass"] for v in per_object.values()),
+        "total": len(per_object),
+        "success": all(v["pass"] for v in per_object.values()),
+    }
 
 
 class Recorder:
@@ -248,14 +260,28 @@ class Recorder:
         data = self.env.current_data
         self.history_states.append(snapshot_physics(self.env))
         self.history_actions.append({k: np.asarray(v).copy() for k, v in action.items()})
-        self.records.append({
-            "sim_step": self.sim_step,
-            "phase": phase,
-            "active_side": active_side,
-            "left_tcp": pose_mat_to_7d(self.rv.get_move_group("left_gripper").leaf_frame_to_world),
-            "right_tcp": pose_mat_to_7d(self.rv.get_move_group("right_gripper").leaf_frame_to_world),
-            "object_poses": {name: np.concatenate([create_mlspaces_body(data, name).position, create_mlspaces_body(data, name).quat]) for name in self.object_names},
-        })
+        self.records.append(
+            {
+                "sim_step": self.sim_step,
+                "phase": phase,
+                "active_side": active_side,
+                "left_tcp": pose_mat_to_7d(
+                    self.rv.get_move_group("left_gripper").leaf_frame_to_world
+                ),
+                "right_tcp": pose_mat_to_7d(
+                    self.rv.get_move_group("right_gripper").leaf_frame_to_world
+                ),
+                "object_poses": {
+                    name: np.concatenate(
+                        [
+                            create_mlspaces_body(data, name).position,
+                            create_mlspaces_body(data, name).quat,
+                        ]
+                    )
+                    for name in self.object_names
+                },
+            }
+        )
 
     def materialize_history(self):
         """Build task sensor history offline from the successful state trace."""
@@ -271,9 +297,9 @@ class Recorder:
 
     def execute(self, action, phase: str, active_side: str):
         if self.probe_trace_enabled:
-            self.probe_trace.append((
-                {k: np.asarray(v).copy() for k, v in action.items()}, phase, active_side
-            ))
+            self.probe_trace.append(
+                ({k: np.asarray(v).copy() for k, v in action.items()}, phase, active_side)
+            )
         self.robot.update_control(action)
         self.robot.compute_control()
         self.env.step(1)
@@ -291,8 +317,16 @@ class Recorder:
             action[gripper] = np.array([gripper_command], dtype=np.float64)
             self.execute(action, phase, side)
 
-    def ramp(self, side: str, start_q: np.ndarray, end_q: np.ndarray,
-             start_gripper: float, end_gripper: float, steps: int, phase: str):
+    def ramp(
+        self,
+        side: str,
+        start_q: np.ndarray,
+        end_q: np.ndarray,
+        start_gripper: float,
+        end_gripper: float,
+        steps: int,
+        phase: str,
+    ):
         """Execute a smooth joint/gripper ramp for contact-robust motion."""
         arm, gripper = ARMS[side]
         for i in range(1, steps + 1):
@@ -388,18 +422,22 @@ def grasp_diagnostics(env, rv, side: str, obj, target_pose: np.ndarray) -> dict[
         if obj_root not in (body1, body2):
             continue
         other = body2 if body1 == obj_root else body1
-        contacts.append({
-            "geom1": model.geom(int(contact.geom1)).name,
-            "geom2": model.geom(int(contact.geom2)).name,
-            "other_is_robot": bool(other == robot_root),
-            "distance": float(contact.dist),
-        })
+        contacts.append(
+            {
+                "geom1": model.geom(int(contact.geom1)).name,
+                "geom2": model.geom(int(contact.geom2)).name,
+                "other_is_robot": bool(other == robot_root),
+                "distance": float(contact.dist),
+            }
+        )
     mg = rv.get_move_group(gripper)
     return {
         "tcp_position": tcp[:3, 3],
         "target_position": target_pose[:3, 3],
         "tcp_position_error_m": float(np.linalg.norm(tcp[:3, 3] - target_pose[:3, 3])),
-        "tcp_rotation_error_rad": float(reach_mod.R.from_matrix(tcp[:3, :3] @ target_pose[:3, :3].T).magnitude()),
+        "tcp_rotation_error_rad": float(
+            reach_mod.R.from_matrix(tcp[:3, :3] @ target_pose[:3, :3].T).magnitude()
+        ),
         "gripper_joint_pos": mg.joint_pos.copy(),
         "gripper_inter_finger_dist_m": float(mg.inter_finger_dist),
         "gripper_ctrl": mg.ctrl.copy(),
@@ -409,7 +447,9 @@ def grasp_diagnostics(env, rv, side: str, obj, target_pose: np.ndarray) -> dict[
     }
 
 
-def execute_pick_place(recorder: Recorder, side: str, object_name: str, box_name: str, slot_y: float):
+def execute_pick_place(
+    recorder: Recorder, side: str, object_name: str, box_name: str, slot_y: float
+):
     env, rv = recorder.env, recorder.rv
     obj = create_mlspaces_body(env.current_data, object_name)
     box = create_mlspaces_body(env.current_data, box_name)
@@ -424,9 +464,7 @@ def execute_pick_place(recorder: Recorder, side: str, object_name: str, box_name
     # fixed during transport was over-constrained: a held rigid object may be
     # reoriented with the wrist while preserving its local grasp transform.
     robot = env.current_robot
-    grasps = reach_mod.get_pickup_grasps(
-        env, obj, include_flipped=True, grasp_libraries=["droid"]
-    )
+    grasps = reach_mod.get_pickup_grasps(env, obj, include_flipped=True, grasp_libraries=["droid"])
     order = reach_mod.rank_grasps(
         rv, obj, grasps, gripper, env.current_robot.exp_config.policy_config
     )
@@ -474,11 +512,13 @@ def execute_pick_place(recorder: Recorder, side: str, object_name: str, box_name
     if preferred is not None:
         preferred_mode, preferred_index = preferred
         candidate_sets.append((preferred_mode, [(preferred_index, grasps[preferred_index])]))
-    candidate_sets.extend([
-        ("yam_native_vertical", list(enumerate(native_candidates))),
-        ("droid_full_pose", ranked_droid),
-        ("yam_tcp_orientation", ranked_droid),
-    ])
+    candidate_sets.extend(
+        [
+            ("yam_native_vertical", list(enumerate(native_candidates))),
+            ("droid_full_pose", ranked_droid),
+            ("yam_tcp_orientation", ranked_droid),
+        ]
+    )
     initial_state = snapshot_physics(env)
     probe_records = []
     grasp_result = None
@@ -516,14 +556,26 @@ def execute_pick_place(recorder: Recorder, side: str, object_name: str, box_name
                 recorder.probe_trace = []
                 recorder.probe_trace_enabled = True
                 pre_gate = recorder.hold_until_pose(
-                    side, np.asarray(pre_solution[arm]), OPEN, pregrasp_pose,
-                    "probe_pregrasp", max_steps=700, min_steps=40, stable_steps=10,
+                    side,
+                    np.asarray(pre_solution[arm]),
+                    OPEN,
+                    pregrasp_pose,
+                    "probe_pregrasp",
+                    max_steps=700,
+                    min_steps=40,
+                    stable_steps=10,
                 )
                 if not pre_gate["converged"]:
                     continue
                 approach_gate = recorder.hold_until_pose(
-                    side, np.asarray(grasp_solution[arm]), OPEN, grasp_pose,
-                    "probe_approach", max_steps=700, min_steps=40, stable_steps=10,
+                    side,
+                    np.asarray(grasp_solution[arm]),
+                    OPEN,
+                    grasp_pose,
+                    "probe_approach",
+                    max_steps=700,
+                    min_steps=40,
+                    stable_steps=10,
                 )
                 if not approach_gate["converged"]:
                     continue
@@ -537,9 +589,16 @@ def execute_pick_place(recorder: Recorder, side: str, object_name: str, box_name
                 close_diag = grasp_diagnostics(env, rv, side, obj, grasp_pose)
                 recorder.ramp(side, grasp_q, lift_q, CLOSED, CLOSED, 360, "probe_lift_ramp")
                 recorder.hold_until_pose(
-                    side, lift_q, CLOSED, lift_pose,
-                    "probe_lift_hold", max_steps=500, pos_tol_m=0.008,
-                    rot_tol_rad=0.08, min_steps=40, stable_steps=10,
+                    side,
+                    lift_q,
+                    CLOSED,
+                    lift_pose,
+                    "probe_lift_hold",
+                    max_steps=500,
+                    pos_tol_m=0.008,
+                    rot_tol_rad=0.08,
+                    min_steps=40,
+                    stable_steps=10,
                 )
                 lift_m = float(obj.position[2] - obj_start[2])
                 probe = {
@@ -575,7 +634,10 @@ def execute_pick_place(recorder: Recorder, side: str, object_name: str, box_name
                         "clean_repeat_lift_m": repeat_lift_m,
                         "repeat_pass": bool(repeat_lift_m >= 0.025),
                     }
-                    print("GRASP_CANDIDATE_REPEAT=" + json.dumps(to_jsonable(repeat_payload)), flush=True)
+                    print(
+                        "GRASP_CANDIDATE_REPEAT=" + json.dumps(to_jsonable(repeat_payload)),
+                        flush=True,
+                    )
                     if repeat_lift_m < 0.025:
                         continue
                     repeated_tcp_pose = rv.get_move_group(gripper).leaf_frame_to_world.copy()
@@ -670,11 +732,13 @@ def execute_pick_place(recorder: Recorder, side: str, object_name: str, box_name
                 # slot_y and y_offsets are absolute lateral offsets in metres.
                 for y_offset in y_offsets:
                     attempts += 1
-                    desired_obj = np.array([
-                        box_center[0] + x_fraction * box_size[0],
-                        box_center[1] + y_offset,
-                        box_opening_reference_z + release_height,
-                    ])
+                    desired_obj = np.array(
+                        [
+                            box_center[0] + x_fraction * box_size[0],
+                            box_center[1] + y_offset,
+                            box_opening_reference_z + release_height,
+                        ]
+                    )
                     place_pose = np.eye(4)
                     place_pose[:3, :3] = target_rotation
                     place_pose[:3, 3] = desired_obj - target_rotation @ local_object_offset
@@ -687,23 +751,41 @@ def execute_pick_place(recorder: Recorder, side: str, object_name: str, box_name
                     preplace_pose[2, 3] += preplace_dz
                     clearance_pose = preplace_pose.copy()
                     clearance_pose[2, 3] += preplace_dz
-                    q_preplace_result = reach_mod.solve_ik(robot, gripper, arm, preplace_pose, placement_seed, base)
-                    q_place_result = reach_mod.solve_ik(robot, gripper, arm, place_pose, placement_seed, base)
+                    q_preplace_result = reach_mod.solve_ik(
+                        robot, gripper, arm, preplace_pose, placement_seed, base
+                    )
+                    q_place_result = reach_mod.solve_ik(
+                        robot, gripper, arm, place_pose, placement_seed, base
+                    )
                     # Clearance is optional and expensive; solve it only after the
                     # mandatory place/preplace pair exists.
                     q_clearance_result = None
                     if q_preplace_result is not None and q_place_result is not None:
-                        q_clearance_result = reach_mod.solve_ik(robot, gripper, arm, clearance_pose, placement_seed, base)
-                    if attempts % 12 == 0 or (q_preplace_result is not None and q_place_result is not None):
-                        print("PLACEMENT_SEARCH=" + json.dumps(to_jsonable({
-                            "side": side, "attempt": attempts,
-                            "release_height": release_height,
-                            "x_fraction": x_fraction, "y_offset": y_offset,
-                            "preplace_dz": preplace_dz,
-                            "preplace_ok": q_preplace_result is not None,
-                            "place_ok": q_place_result is not None,
-                            "clearance_ok": q_clearance_result is not None,
-                        })), flush=True)
+                        q_clearance_result = reach_mod.solve_ik(
+                            robot, gripper, arm, clearance_pose, placement_seed, base
+                        )
+                    if attempts % 12 == 0 or (
+                        q_preplace_result is not None and q_place_result is not None
+                    ):
+                        print(
+                            "PLACEMENT_SEARCH="
+                            + json.dumps(
+                                to_jsonable(
+                                    {
+                                        "side": side,
+                                        "attempt": attempts,
+                                        "release_height": release_height,
+                                        "x_fraction": x_fraction,
+                                        "y_offset": y_offset,
+                                        "preplace_dz": preplace_dz,
+                                        "preplace_ok": q_preplace_result is not None,
+                                        "place_ok": q_place_result is not None,
+                                        "clearance_ok": q_clearance_result is not None,
+                                    }
+                                )
+                            ),
+                            flush=True,
+                        )
                     # A vertical clearance solution is optional. The strict physical
                     # release gate already requires box support and zero robot contact
                     # for two consecutive checks, and fails immediately if support is
@@ -752,10 +834,20 @@ def execute_pick_place(recorder: Recorder, side: str, object_name: str, box_name
             recorder.execute(action, phase, active_side)
         repeat_lift = float(obj.position[2] - repeat_start_z)
         post_plan_repeats.append(repeat_lift)
-        print("POST_PLAN_GRASP_REPEAT=" + json.dumps(to_jsonable({
-            "side": side, "repeat_index": repeat_index,
-            "lift_m": repeat_lift, "pass": bool(repeat_lift >= 0.025),
-        })), flush=True)
+        print(
+            "POST_PLAN_GRASP_REPEAT="
+            + json.dumps(
+                to_jsonable(
+                    {
+                        "side": side,
+                        "repeat_index": repeat_index,
+                        "lift_m": repeat_lift,
+                        "pass": bool(repeat_lift >= 0.025),
+                    }
+                )
+            ),
+            flush=True,
+        )
     recorder.record_enabled = True
     if any(value < 0.025 for value in post_plan_repeats):
         raise RuntimeError(
@@ -777,12 +869,18 @@ def execute_pick_place(recorder: Recorder, side: str, object_name: str, box_name
     lift_convergence = {
         "converged": True,
         "steps": len(grasp_result["formal_command_trace"]),
-        "position_error_m": float(np.linalg.norm(
-            rv.get_move_group(gripper).leaf_frame_to_world[:3, 3] - grasp_result["lift_pose"][:3, 3]
-        )),
-        "rotation_error_rad": float(reach_mod.R.from_matrix(
-            rv.get_move_group(gripper).leaf_frame_to_world[:3, :3] @ grasp_result["lift_pose"][:3, :3].T
-        ).magnitude()),
+        "position_error_m": float(
+            np.linalg.norm(
+                rv.get_move_group(gripper).leaf_frame_to_world[:3, 3]
+                - grasp_result["lift_pose"][:3, 3]
+            )
+        ),
+        "rotation_error_rad": float(
+            reach_mod.R.from_matrix(
+                rv.get_move_group(gripper).leaf_frame_to_world[:3, :3]
+                @ grasp_result["lift_pose"][:3, :3].T
+            ).magnitude()
+        ),
     }
     if lift_m < 0.025:
         failure = {
@@ -822,10 +920,19 @@ def execute_pick_place(recorder: Recorder, side: str, object_name: str, box_name
     release_waypoints = [q_place.copy()]
     final_alignment = np.asarray(place_result["desired_object_position"]) - obj.position.copy()
     final_alignment[2] = 0.0
-    print("PRE_RELEASE_ALIGNMENT_FINAL=" + json.dumps(to_jsonable({
-        "side": side, "delta_m": final_alignment,
-        "xy_error_m": float(np.linalg.norm(final_alignment[:2])),
-    })), flush=True)
+    print(
+        "PRE_RELEASE_ALIGNMENT_FINAL="
+        + json.dumps(
+            to_jsonable(
+                {
+                    "side": side,
+                    "delta_m": final_alignment,
+                    "xy_error_m": float(np.linalg.norm(final_alignment[:2])),
+                }
+            )
+        ),
+        flush=True,
+    )
     # Do not substitute an arbitrary center-distance threshold for the real
     # receptacle gate. The left wrist saturates near y=-0.37 m, but the held
     # object may still be over the physical opening. Release and let the strict
@@ -847,12 +954,26 @@ def execute_pick_place(recorder: Recorder, side: str, object_name: str, box_name
     # feedback. Losing box support after first contact is an immediate failure.
     for release_check in range(60):
         recorder.hold(side, release_gate_q, OPEN, 40, "release_hold")
-        release_gate = strict_success(recorder.task, [object_name], box_name)["per_object"][object_name]
-        print("RELEASE_GATE=" + json.dumps(to_jsonable({
-            "side": side, "check": release_check, **release_gate,
-        })), flush=True)
+        release_gate = strict_success(recorder.task, [object_name], box_name)["per_object"][
+            object_name
+        ]
+        print(
+            "RELEASE_GATE="
+            + json.dumps(
+                to_jsonable(
+                    {
+                        "side": side,
+                        "check": release_check,
+                        **release_gate,
+                    }
+                )
+            ),
+            flush=True,
+        )
         if support_seen and not release_gate["supported_by_box"]:
-            raise RuntimeError(f"box support lost during release separation for {side}/{object_name}: {release_gate}")
+            raise RuntimeError(
+                f"box support lost during release separation for {side}/{object_name}: {release_gate}"
+            )
         support_seen = support_seen or release_gate["supported_by_box"]
         if release_gate["pass"]:
             release_stable_checks += 1
@@ -866,7 +987,9 @@ def execute_pick_place(recorder: Recorder, side: str, object_name: str, box_name
                 # and correctly failed the box-support gate in v53.
                 separation_target = q_preplace if release_check < 30 else q_clearance
                 next_q = release_gate_q + 0.10 * (separation_target - release_gate_q)
-                recorder.ramp(side, release_gate_q, next_q, OPEN, OPEN, 40, "release_separation_microstep")
+                recorder.ramp(
+                    side, release_gate_q, next_q, OPEN, OPEN, 40, "release_separation_microstep"
+                )
                 release_gate_q = next_q
     if release_stable_checks < 2:
         raise RuntimeError(f"strict release gate failed for {side}/{object_name}: {release_gate}")
@@ -875,7 +998,9 @@ def execute_pick_place(recorder: Recorder, side: str, object_name: str, box_name
     # avoids a fresh IK solve at a joint-limit-sensitive release endpoint.
     retreat_q = release_gate_q.copy()
     for waypoint_index, waypoint_q in enumerate(reversed(release_waypoints[:-1])):
-        recorder.ramp(side, retreat_q, waypoint_q, OPEN, OPEN, 180, f"post_release_unwind_{waypoint_index}")
+        recorder.ramp(
+            side, retreat_q, waypoint_q, OPEN, OPEN, 180, f"post_release_unwind_{waypoint_index}"
+        )
         retreat_q = waypoint_q.copy()
     recorder.ramp(side, retreat_q, q_preplace, OPEN, OPEN, 240, "post_release_retreat")
     recorder.hold(side, q_preplace, OPEN, 100, "post_release_retreat_hold")
@@ -888,7 +1013,13 @@ def execute_pick_place(recorder: Recorder, side: str, object_name: str, box_name
     }
 
 
-def append_oracle_group(h5_path: Path, recorder: Recorder, layout: dict[str, Any], final: dict[str, Any], provenance: str):
+def append_oracle_group(
+    h5_path: Path,
+    recorder: Recorder,
+    layout: dict[str, Any],
+    final: dict[str, Any],
+    provenance: str,
+):
     string_dtype = h5py.string_dtype("utf-8")
     with h5py.File(h5_path, "a") as f:
         traj = f["traj_0"]
@@ -898,18 +1029,36 @@ def append_oracle_group(h5_path: Path, recorder: Recorder, layout: dict[str, Any
         root.attrs["coordination_mode"] = "sequential"
         root.attrs["strict_2of2_success"] = bool(final["success"])
         root.attrs["control_stride"] = CONTROL_STRIDE
-        root.create_dataset("sim_step", data=np.asarray([r["sim_step"] for r in recorder.records], dtype=np.int64))
-        root.create_dataset("phase", data=np.asarray([r["phase"] for r in recorder.records], dtype=string_dtype))
-        root.create_dataset("active_side", data=np.asarray([r["active_side"] for r in recorder.records], dtype=string_dtype))
-        root.create_dataset("left_tcp_pose", data=np.stack([r["left_tcp"] for r in recorder.records]))
-        root.create_dataset("right_tcp_pose", data=np.stack([r["right_tcp"] for r in recorder.records]))
+        root.create_dataset(
+            "sim_step", data=np.asarray([r["sim_step"] for r in recorder.records], dtype=np.int64)
+        )
+        root.create_dataset(
+            "phase", data=np.asarray([r["phase"] for r in recorder.records], dtype=string_dtype)
+        )
+        root.create_dataset(
+            "active_side",
+            data=np.asarray([r["active_side"] for r in recorder.records], dtype=string_dtype),
+        )
+        root.create_dataset(
+            "left_tcp_pose", data=np.stack([r["left_tcp"] for r in recorder.records])
+        )
+        root.create_dataset(
+            "right_tcp_pose", data=np.stack([r["right_tcp"] for r in recorder.records])
+        )
         for name in recorder.object_names:
-            root.create_dataset(f"object_pose/{name}", data=np.stack([r["object_poses"][name] for r in recorder.records]))
+            root.create_dataset(
+                f"object_pose/{name}",
+                data=np.stack([r["object_poses"][name] for r in recorder.records]),
+            )
         commands = root.create_group("replay_commands")
         for key in ("left_arm", "right_arm", "left_gripper", "right_gripper"):
-            commands.create_dataset(key, data=np.stack([a[key] for a in recorder.commands]), compression="gzip")
+            commands.create_dataset(
+                key, data=np.stack([a[key] for a in recorder.commands]), compression="gzip"
+            )
         root.create_dataset("layout_json", data=json.dumps(to_jsonable(layout)), dtype=string_dtype)
-        root.create_dataset("final_success_json", data=json.dumps(to_jsonable(final)), dtype=string_dtype)
+        root.create_dataset(
+            "final_success_json", data=json.dumps(to_jsonable(final)), dtype=string_dtype
+        )
 
 
 def initialize_episode_caches(task):
@@ -954,7 +1103,9 @@ def run_capture(args):
         initialize_episode_caches(task)
         layout = place_for_arm_assignment(task, sampler)
         env = task.env
-        object_names = [layout["uid_to_name"][layout["assignment"][side]] for side in ("left", "right")]
+        object_names = [
+            layout["uid_to_name"][layout["assignment"][side]] for side in ("left", "right")
+        ]
         settled_positions = settle_relocated_layout(task, object_names, layout["box_name"])
         layout["settled_world_positions"] = settled_positions
         layout["settle_steps_before_planning"] = 600
@@ -962,13 +1113,21 @@ def run_capture(args):
         execution = {}
         for side, slot in (("left", +0.055), ("right", -0.055)):
             uid = layout["assignment"][side]
-            execution[side] = execute_pick_place(recorder, side, layout["uid_to_name"][uid], layout["box_name"], slot)
+            execution[side] = execute_pick_place(
+                recorder, side, layout["uid_to_name"][uid], layout["box_name"], slot
+            )
         final = strict_success(task, object_names, layout["box_name"])
         if not final["success"]:
             raise RuntimeError(f"strict 2/2 failed before history materialization: {final}")
         recorder.materialize_history()
         history = task.get_history()
-        prepared = prepare_episode_for_saving(history, task.sensor_suite, fps=sampler.config.fps, save_dir=str(args.output_dir), episode_idx=0)
+        prepared = prepare_episode_for_saving(
+            history,
+            task.sensor_suite,
+            fps=sampler.config.fps,
+            save_dir=str(args.output_dir),
+            episode_idx=0,
+        )
         if prepared is None:
             raise RuntimeError("prepare_episode_for_saving returned None")
         h5_path = Path(save_trajectories([prepared], str(args.output_dir), fps=sampler.config.fps))
@@ -988,7 +1147,9 @@ def run_capture(args):
             "evidence_boundary": "One scripted-expert source candidate; not MimicGen expansion, policy learning, or unseen-reset policy success.",
         }
         args.output_dir.mkdir(parents=True, exist_ok=True)
-        (args.output_dir / "capture_manifest.json").write_text(json.dumps(to_jsonable(manifest), indent=2, ensure_ascii=False) + "\n")
+        (args.output_dir / "capture_manifest.json").write_text(
+            json.dumps(to_jsonable(manifest), indent=2, ensure_ascii=False) + "\n"
+        )
         print(json.dumps(to_jsonable(manifest), indent=2, ensure_ascii=False), flush=True)
         if not final["success"]:
             raise SystemExit(2)
@@ -1010,7 +1171,12 @@ def run_capture(args):
                     save_file_suffix="_failure_diagnostic",
                 )
                 (args.output_dir / "failure_diagnostic.json").write_text(
-                    json.dumps({"error_type": type(exc).__name__, "error": str(exc)}, indent=2, ensure_ascii=False) + "\n"
+                    json.dumps(
+                        {"error_type": type(exc).__name__, "error": str(exc)},
+                        indent=2,
+                        ensure_ascii=False,
+                    )
+                    + "\n"
                 )
                 print(f"FAILURE_DIAGNOSTIC_VIDEO_SAVED={args.output_dir}", flush=True)
             except Exception as diagnostic_exc:
@@ -1024,14 +1190,25 @@ def run_capture(args):
 def run_replay(args, h5_path: Path):
     with h5py.File(h5_path, "r") as f:
         root = f["traj_0/mimicgen_yam"]
-        commands = {key: root[f"replay_commands/{key}"][...] for key in ("left_arm", "right_arm", "left_gripper", "right_gripper")}
-        source_layout = json.loads(root["layout_json"][()].decode() if isinstance(root["layout_json"][()], bytes) else root["layout_json"][()])
-        expected_final = {name: root[f"object_pose/{name}"][-1, :3] for name in root["object_pose"].keys()}
+        commands = {
+            key: root[f"replay_commands/{key}"][...]
+            for key in ("left_arm", "right_arm", "left_gripper", "right_gripper")
+        }
+        source_layout = json.loads(
+            root["layout_json"][()].decode()
+            if isinstance(root["layout_json"][()], bytes)
+            else root["layout_json"][()]
+        )
+        expected_final = {
+            name: root[f"object_pose/{name}"][-1, :3] for name in root["object_pose"].keys()
+        }
     sampler = task = None
     try:
         sampler, task, attempts = sample_task(args)
         layout = place_for_arm_assignment(task, sampler)
-        object_names = [layout["uid_to_name"][layout["assignment"][side]] for side in ("left", "right")]
+        object_names = [
+            layout["uid_to_name"][layout["assignment"][side]] for side in ("left", "right")
+        ]
         settle_relocated_layout(task, object_names, layout["box_name"], steps=600)
         reset_errors = {}
         for side in ("left", "right"):
@@ -1046,9 +1223,19 @@ def run_replay(args, h5_path: Path):
         robot = task.env.current_robot
         for index in range(next(iter(lengths.values()))):
             action = {key: commands[key][index] for key in commands}
-            robot.update_control(action); robot.compute_control(); task.env.step(1)
+            robot.update_control(action)
+            robot.compute_control()
+            task.env.step(1)
         final = strict_success(task, object_names, layout["box_name"])
-        final_errors = {name: float(np.linalg.norm(create_mlspaces_body(task.env.current_data, name).position - expected_final[name])) for name in object_names}
+        final_errors = {
+            name: float(
+                np.linalg.norm(
+                    create_mlspaces_body(task.env.current_data, name).position
+                    - expected_final[name]
+                )
+            )
+            for name in object_names
+        }
         payload = {
             "fresh_deterministic_reset": True,
             "attempts": attempts,
@@ -1059,8 +1246,12 @@ def run_replay(args, h5_path: Path):
             "final_position_errors_m": final_errors,
             "final_match": all(v <= 0.03 for v in final_errors.values()),
         }
-        payload["replay_gate_pass"] = bool(payload["reset_match"] and final["success"] and payload["final_match"])
-        (args.output_dir / "replay_result.json").write_text(json.dumps(to_jsonable(payload), indent=2, ensure_ascii=False) + "\n")
+        payload["replay_gate_pass"] = bool(
+            payload["reset_match"] and final["success"] and payload["final_match"]
+        )
+        (args.output_dir / "replay_result.json").write_text(
+            json.dumps(to_jsonable(payload), indent=2, ensure_ascii=False) + "\n"
+        )
         print(json.dumps(to_jsonable(payload), indent=2, ensure_ascii=False), flush=True)
         if not payload["replay_gate_pass"]:
             raise SystemExit(2)

@@ -12,7 +12,11 @@ parser.add_argument("--seed-index", type=int, default=0)
 parser.add_argument("--save-videos", action="store_true")
 args = parser.parse_args()
 T0 = time.monotonic()
-def log(s): print(f"[{time.monotonic()-T0:7.1f}s] {s}", flush=True)
+
+
+def log(s):
+    print(f"[{time.monotonic() - T0:7.1f}s] {s}", flush=True)
+
 
 manifest = json.loads((WORK / "artifacts/seeds/pnp_seed_manifest.json").read_text())
 seed_meta = manifest["seeds"][args.seed_index]
@@ -22,11 +26,16 @@ HOUSE_ID = int(seed_meta["house_id"])
 
 import h5py
 import numpy as np
+
 with h5py.File(H5) as h:
     g = h[TRAJ]
     obs_scene = json.loads(bytes(g["obs_scene"][()]).rstrip(b"\0"))
-    recorded_commanded_actions = [json.loads(bytes(x).rstrip(b"\0")) for x in g["actions/commanded_action"][:]]
-    assert recorded_commanded_actions[0] == {}, "reset observation should carry empty previous action"
+    recorded_commanded_actions = [
+        json.loads(bytes(x).rstrip(b"\0")) for x in g["actions/commanded_action"][:]
+    ]
+    assert recorded_commanded_actions[0] == {}, (
+        "reset observation should carry empty previous action"
+    )
     actions = recorded_commanded_actions[1:]
     phases = np.asarray(g["obs/extra/policy_phase"][:], dtype=int)
     seed_obj = np.asarray(g["obs/extra/obj_start"][0], dtype=float)
@@ -34,12 +43,23 @@ with h5py.File(H5) as h:
     seed_panda_all = np.asarray(g["env_states/articulations/panda"][:], dtype=float)
     seed_panda = seed_panda_all[0]
     orig_success = bool(g["success"][-1])
-log("selected PNP seed={:02d} house={} {}: T={} object={} place={} orig_success={}".format(args.seed_index, HOUSE_ID, TRAJ, len(actions), obs_scene.get("object_name"), obs_scene.get("place_receptacle_name"), orig_success))
+log(
+    "selected PNP seed={:02d} house={} {}: T={} object={} place={} orig_success={}".format(
+        args.seed_index,
+        HOUSE_ID,
+        TRAJ,
+        len(actions),
+        obs_scene.get("object_name"),
+        obs_scene.get("place_receptacle_name"),
+        orig_success,
+    )
+)
 log("task: {}".format(obs_scene.get("task_description")))
 
 if "MOLMOSPACES_NLTK_DATA" in os.environ:
     os.environ.setdefault("NLTK_DATA", os.environ["MOLMOSPACES_NLTK_DATA"])
 import nltk
+
 _nltk_download = nltk.download
 nltk.download = lambda *a, **k: True
 try:
@@ -47,7 +67,11 @@ try:
 finally:
     nltk.download = _nltk_download
 
-from scripts.benchmarks.create_json_benchmark import extract_frozen_config, frozen_config_to_episode_spec
+from scripts.benchmarks.create_json_benchmark import (
+    extract_frozen_config,
+    frozen_config_to_episode_spec,
+)
+
 frozen = extract_frozen_config(obs_scene)
 spec = frozen_config_to_episode_spec(
     frozen_config=frozen,
@@ -59,7 +83,9 @@ spec = frozen_config_to_episode_spec(
     source_traj_key=TRAJ,
     source_episode_length=len(recorded_commanded_actions),
     img_resolution=(624, 352),
-    camera_system_class=type(frozen.camera_config).__name__ if hasattr(frozen, "camera_config") else None,
+    camera_system_class=type(frozen.camera_config).__name__
+    if hasattr(frozen, "camera_config")
+    else None,
     task_horizon_sec=30,
 )
 spec.task["task_cls"] = spec.task["task_cls"].replace("mujoco_thor.", "molmo_spaces.", 1)
@@ -68,18 +94,30 @@ spec.task["task_type"] = "pick_and_place"
 # This replay override affects only the acceptance threshold used by the eval wrapper; scene/action replay remains from source.
 spec.task["max_place_receptacle_pos_displacement"] = 0.15
 spec.task["max_place_receptacle_rot_displacement"] = float(np.radians(60))
-log("EpisodeSpec pickup={} place={} base={} cameras={}".format(spec.task.get("pickup_obj_name"), spec.task.get("place_receptacle_name"), spec.task.get("robot_base_pose"), len(spec.cameras)))
+log(
+    "EpisodeSpec pickup={} place={} base={} cameras={}".format(
+        spec.task.get("pickup_obj_name"),
+        spec.task.get("place_receptacle_name"),
+        spec.task.get("robot_base_pose"),
+        len(spec.cameras),
+    )
+)
 
 from molmo_spaces.evaluation.configs.evaluation_configs import JsonBenchmarkEvalConfig
 from molmo_spaces.configs.robot_configs import FrankaRobotConfig
 from molmo_spaces.configs.policy_configs import DummyPolicyConfig
 from molmo_spaces.policy.dummy_policy import DummyPolicy
+
+
 class EvalCfg(JsonBenchmarkEvalConfig):
     robot_config: FrankaRobotConfig = FrankaRobotConfig()
     policy_config: DummyPolicyConfig = DummyPolicyConfig(policy_cls=DummyPolicy)
     task_horizon: int = 500
+
+
 cfg = EvalCfg()
 from molmo_spaces.tasks.json_eval_task_sampler import JsonEvalTaskSampler
+
 log("constructing JsonEvalTaskSampler")
 sampler = JsonEvalTaskSampler(exp_config=cfg, episode_spec=spec)
 task = sampler.sample_task(house_index=HOUSE_ID)
@@ -102,6 +140,7 @@ except KeyError:
     rid = None
 robot = env.current_robot
 from molmo_spaces.utils.pose import pose_mat_to_7d
+
 actual_obj = np.r_[data.xpos[bid], data.xquat[bid]]
 actual_base = np.asarray(pose_mat_to_7d(robot.robot_view.base.pose), dtype=float)
 arm = np.asarray(robot.robot_view.get_move_group("arm").joint_pos, dtype=float)
@@ -110,7 +149,9 @@ obj_err = float(np.max(np.abs(actual_obj - seed_obj)))
 base_err = float(np.max(np.abs(actual_base - seed_base)))
 arm_err = float(np.max(np.abs(arm - seed_panda[:7])))
 grip_err = float(np.max(np.abs(grip - seed_panda[7:9])))
-log(f"INITIAL_GATE obj_maxerr={obj_err:.3e} base_maxerr={base_err:.3e} arm_maxerr={arm_err:.3e} gripper_maxerr={grip_err:.3e}")
+log(
+    f"INITIAL_GATE obj_maxerr={obj_err:.3e} base_maxerr={base_err:.3e} arm_maxerr={arm_err:.3e} gripper_maxerr={grip_err:.3e}"
+)
 if obj_err > 2e-4 or base_err > 2e-4 or arm_err > 2e-4 or grip_err > 2e-4:
     raise RuntimeError("initial-state gate failed")
 
@@ -130,7 +171,10 @@ for action_i, act in enumerate(actions):
     if first_success < 0 and success:
         first_success = obs_i
     info0 = task.get_info()[0]
-    qpos = np.r_[np.asarray(robot.robot_view.get_move_group("arm").joint_pos, dtype=float), np.asarray(robot.robot_view.get_move_group("gripper").joint_pos, dtype=float)]
+    qpos = np.r_[
+        np.asarray(robot.robot_view.get_move_group("arm").joint_pos, dtype=float),
+        np.asarray(robot.robot_view.get_move_group("gripper").joint_pos, dtype=float),
+    ]
     qerr_same = float(np.max(np.abs(qpos - seed_panda_all[obs_i, :9])))
     pickup_pos = np.asarray(data.xpos[bid], dtype=float).copy()
     place_pos = np.asarray(data.xpos[rid], dtype=float).copy() if rid is not None else np.zeros(3)
@@ -141,21 +185,34 @@ for action_i, act in enumerate(actions):
         "success": success,
         "position_error": float(info0.get("position_error", -1)),
         "supported_by_receptacle": bool(info0.get("supported_by_receptacle", False)),
-        "robot_contact": bool(info0.get("robot_contact", False)) if "robot_contact" in info0 else None,
+        "robot_contact": bool(info0.get("robot_contact", False))
+        if "robot_contact" in info0
+        else None,
         "pickup_pos": pickup_pos.tolist(),
         "place_pos": place_pos.tolist(),
         "qerr_same": qerr_same,
     }
     trace.append(row)
     if success != prev_success:
-        log("SUCCESS_TRANSITION obs={} {}->{} poserr={:.6f} supported={} robot_contact={}".format(obs_i, prev_success, success, row["position_error"], row["supported_by_receptacle"], row["robot_contact"]))
+        log(
+            "SUCCESS_TRANSITION obs={} {}->{} poserr={:.6f} supported={} robot_contact={}".format(
+                obs_i,
+                prev_success,
+                success,
+                row["position_error"],
+                row["supported_by_receptacle"],
+                row["robot_contact"],
+            )
+        )
         prev_success = success
 final = bool(task.judge_success())
 log(f"VERDICT first_success={first_success} final={final} original={orig_success}")
 
 out = WORK / f"artifacts/replay_pnp_exact/seed_{args.seed_index:02d}"
 out.mkdir(parents=True, exist_ok=True)
-success_persistent = first_success >= 0 and all(r["success"] for r in trace if r["obs_i"] >= first_success)
+success_persistent = first_success >= 0 and all(
+    r["success"] for r in trace if r["obs_i"] >= first_success
+)
 result = {
     "seed": f"seed_{args.seed_index:02d}",
     "house_id": HOUSE_ID,
@@ -165,24 +222,48 @@ result = {
     "place_receptacle_name": place,
     "observations": len(recorded_commanded_actions),
     "actions_replayed": len(actions),
-    "initial_gate": {"obj_maxerr": obj_err, "base_maxerr": base_err, "arm_maxerr": arm_err, "gripper_maxerr": grip_err},
+    "initial_gate": {
+        "obj_maxerr": obj_err,
+        "base_maxerr": base_err,
+        "arm_maxerr": arm_err,
+        "gripper_maxerr": grip_err,
+    },
     "first_success_obs": first_success,
     "final_success": final,
     "original_success": orig_success,
     "success_persistent_to_end": success_persistent,
-    "trajectory_fidelity": {"max_joint_error_rad": max(r["qerr_same"] for r in trace), "final_joint_error_rad": trace[-1]["qerr_same"]},
+    "trajectory_fidelity": {
+        "max_joint_error_rad": max(r["qerr_same"] for r in trace),
+        "final_joint_error_rad": trace[-1]["qerr_same"],
+    },
 }
 (out / "replay_result.json").write_text(json.dumps(result, indent=2, ensure_ascii=False))
 (out / "step_trace.json").write_text(json.dumps(trace, indent=2, ensure_ascii=False))
 if args.save_videos:
     from molmo_spaces.utils.save_utils import save_videos_from_raw_observations
+
     raw = [batch[0] for batch in task.observation_cache]
-    save_videos_from_raw_observations(raw, save_dir=str(out), fps=1000/66, episode_idx=0, save_file_suffix=f"_pnp_seed_{args.seed_index:02d}", sensor_suite=task.sensor_suite)
+    save_videos_from_raw_observations(
+        raw,
+        save_dir=str(out),
+        fps=1000 / 66,
+        episode_idx=0,
+        save_file_suffix=f"_pnp_seed_{args.seed_index:02d}",
+        sensor_suite=task.sensor_suite,
+    )
 log("saved result{}: {}".format(" and videos" if args.save_videos else "", out))
 try:
     task.close()
 except Exception as e:
     log(f"close warning: {type(e).__name__}: {e}")
 accepted = final and success_persistent
-log("ACCEPTANCE final={} success_persistent={} max_joint_error={:.6g} final_joint_error={:.6g} pass={}".format(final, success_persistent, result["trajectory_fidelity"]["max_joint_error_rad"], result["trajectory_fidelity"]["final_joint_error_rad"], accepted))
+log(
+    "ACCEPTANCE final={} success_persistent={} max_joint_error={:.6g} final_joint_error={:.6g} pass={}".format(
+        final,
+        success_persistent,
+        result["trajectory_fidelity"]["max_joint_error_rad"],
+        result["trajectory_fidelity"]["final_joint_error_rad"],
+        accepted,
+    )
+)
 raise SystemExit(0 if accepted else 2)

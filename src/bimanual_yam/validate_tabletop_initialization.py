@@ -9,6 +9,7 @@ Provenance is intentionally explicit:
 This is not an untouched upstream task preset.  It rejects shelf/cabinet/counter
 candidates and lets the official retry loop continue with another island candidate.
 """
+
 from __future__ import annotations
 
 from typing import Any
@@ -27,7 +28,11 @@ from check_dual_object_reachability import (
     solve_box_opening_grid,
     to_jsonable,
 )
-from molmo_spaces.tasks.task_sampler_errors import HouseInvalidForTask, RetriableError, RobotPlacementError
+from molmo_spaces.tasks.task_sampler_errors import (
+    HouseInvalidForTask,
+    RetriableError,
+    RobotPlacementError,
+)
 from molmo_spaces.utils.mj_model_and_data_utils import body_aabb, body_base_pos
 from molmo_spaces.utils.mujoco_scene_utils import get_supporting_geom
 from molmo_spaces.utils.pose import pose_mat_to_7d
@@ -433,9 +438,7 @@ class FloorPlan1IslandDualPickupSampler(DualPickupDiagnosticSampler):
         if not box_name:
             self._reject("missing_place_receptacle", {})
 
-        objects_by_uid = {
-            uid: om.get_object_by_name(name) for uid, name in uid_to_name.items()
-        }
+        objects_by_uid = {uid: om.get_object_by_name(name) for uid, name in uid_to_name.items()}
         box = om.get_object_by_name(box_name)
         workspace_positions = [obj.position.copy() for obj in objects_by_uid.values()]
         workspace_positions.append(box.position.copy())
@@ -468,8 +471,7 @@ class FloorPlan1IslandDualPickupSampler(DualPickupDiagnosticSampler):
         # after placement because it is contact-derived, so do not reinterpret
         # that transient None as a different support.
         placement_support_pass = (
-            self._candidate_support_geom_id is not None
-            and max_abs_bottom_delta_m <= 0.03
+            self._candidate_support_geom_id is not None and max_abs_bottom_delta_m <= 0.03
         )
         if not placement_support_pass:
             self._reject(
@@ -507,9 +509,7 @@ class FloorPlan1IslandDualPickupSampler(DualPickupDiagnosticSampler):
         )
         geometry_pass = (
             MIN_FACING_COSINE <= facing_cosine
-            and WORKSPACE_DISTANCE_RANGE_M[0]
-            <= workspace_distance
-            <= WORKSPACE_DISTANCE_RANGE_M[1]
+            and WORKSPACE_DISTANCE_RANGE_M[0] <= workspace_distance <= WORKSPACE_DISTANCE_RANGE_M[1]
             and workspace_diameter <= MAX_WORKSPACE_DIAMETER_M
         )
         if not geometry_pass:

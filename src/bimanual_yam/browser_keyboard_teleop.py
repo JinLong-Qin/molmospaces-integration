@@ -10,6 +10,7 @@ The policy math and lifecycle mirror MolmoSpaces Keyboard_Policy:
 Only the input/display transport and the minimal single-arm -> active-arm generalization are new.
 No browser reset/save controls are exposed in this gate.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -115,7 +116,11 @@ class SharedFrame:
         with self.condition:
             self.sequence += 1
             self.captured_at = time.time()
-            self.payload = HEADER.pack(self.sequence, self.captured_at, len(status_bytes)) + status_bytes + jpeg
+            self.payload = (
+                HEADER.pack(self.sequence, self.captured_at, len(status_bytes))
+                + status_bytes
+                + jpeg
+            )
             self.condition.notify_all()
 
     def snapshot_after(self, sequence: int, timeout: float = 1.0):
@@ -183,7 +188,9 @@ class SharedControl:
                 raise ValueError("non-finite control")
             if np.max(np.abs(navigation)) > 1.0 or np.max(np.abs(rotation)) > 1.0:
                 raise ValueError("control outside [-1,1]")
-            if set(gripper_open) != set(ARMS) or not all(isinstance(gripper_open[x], bool) for x in ARMS):
+            if set(gripper_open) != set(ARMS) or not all(
+                isinstance(gripper_open[x], bool) for x in ARMS
+            ):
                 raise ValueError("invalid gripper state")
         except (KeyError, TypeError, ValueError, OverflowError):
             with self.lock:
@@ -219,7 +226,15 @@ class SharedControl:
 class BrowserBimanualKeyboardPolicy(InferencePolicy):
     """Minimal bimanual generalization of official MolmoSpaces Keyboard_Policy."""
 
-    def __init__(self, config, task, shared_control: SharedControl, timeout_s: float, step_size: float, rot_step: float):
+    def __init__(
+        self,
+        config,
+        task,
+        shared_control: SharedControl,
+        timeout_s: float,
+        step_size: float,
+        rot_step: float,
+    ):
         super().__init__(config, task)
         self.shared_control = shared_control
         self.timeout_s = timeout_s
@@ -227,7 +242,9 @@ class BrowserBimanualKeyboardPolicy(InferencePolicy):
         self.rot_step = rot_step
         self.current_position: dict[str, np.ndarray] = {}
         self.current_rotation: dict[str, np.ndarray] = {}
-        self.last_snapshot = ControlSnapshot(-1, "left", np.zeros(3), np.zeros(3), {"left": True, "right": True}, False)
+        self.last_snapshot = ControlSnapshot(
+            -1, "left", np.zeros(3), np.zeros(3), {"left": True, "right": True}, False
+        )
         self.ik_status = "hold"
         self.last_policy_latency_ms = 0.0
         self.last_axes: dict[str, list[float]] = {}
@@ -283,7 +300,9 @@ class BrowserBimanualKeyboardPolicy(InferencePolicy):
             "left_gripper": np.array([GRIPPER_MAX if snapshot.gripper_open["left"] else 0.0]),
             "right_gripper": np.array([GRIPPER_MAX if snapshot.gripper_open["right"] else 0.0]),
         }
-        if not snapshot.input_fresh or (not np.any(snapshot.navigation) and not np.any(snapshot.rotation)):
+        if not snapshot.input_fresh or (
+            not np.any(snapshot.navigation) and not np.any(snapshot.rotation)
+        ):
             self.ik_status = "hold"
             self.last_policy_latency_ms = (time.perf_counter() - started) * 1000.0
             return action
@@ -291,7 +310,11 @@ class BrowserBimanualKeyboardPolicy(InferencePolicy):
         side = snapshot.active_arm
         arm, gripper = f"{side}_arm", f"{side}_gripper"
         vf_world, vr_world, up_world = model_input["visual_axes_world"]
-        desired_world = snapshot.navigation[0] * vf_world + snapshot.navigation[1] * vr_world + snapshot.navigation[2] * up_world
+        desired_world = (
+            snapshot.navigation[0] * vf_world
+            + snapshot.navigation[1] * vr_world
+            + snapshot.navigation[2] * up_world
+        )
         desired_robot = model_input["T_world_robot"][:3, :3].T @ desired_world
 
         # Exact official Keyboard_Policy position/rotation update form.
@@ -329,7 +352,13 @@ class BrowserBimanualKeyboardPolicy(InferencePolicy):
 
     def get_info(self) -> dict:
         info = super().get_info()
-        info.update({"policy_name": "browser_bimanual_keyboard_official_aligned", "step_size": self.step_size, "rot_step": self.rot_step})
+        info.update(
+            {
+                "policy_name": "browser_bimanual_keyboard_official_aligned",
+                "step_size": self.step_size,
+                "rot_step": self.rot_step,
+            }
+        )
         return info
 
 
@@ -344,7 +373,9 @@ def compose_frame(observation, width: int, height: int, quality: int) -> bytes:
     panels = []
     for camera_name in CAMERAS:
         frame = obs[camera_name]
-        image = Image.fromarray(np.asarray(frame, dtype=np.uint8)).resize((width, height), Image.Resampling.BILINEAR)
+        image = Image.fromarray(np.asarray(frame, dtype=np.uint8)).resize(
+            (width, height), Image.Resampling.BILINEAR
+        )
         draw = ImageDraw.Draw(image)
         draw.rectangle((0, 0, 190, 24), fill=(0, 0, 0))
         draw.text((7, 5), camera_name, fill=(255, 255, 255))
@@ -358,13 +389,22 @@ def compose_frame(observation, width: int, height: int, quality: int) -> bytes:
 
 
 def trim_task_caches(task, keep: int = 2) -> None:
-    for name in ("observation_cache", "reward_cache", "terminal_cache", "truncated_cache", "success_cache", "action_cache"):
+    for name in (
+        "observation_cache",
+        "reward_cache",
+        "terminal_cache",
+        "truncated_cache",
+        "success_cache",
+        "action_cache",
+    ):
         cache = getattr(task, name, None)
         if isinstance(cache, list) and len(cache) > keep:
             del cache[:-keep]
 
 
-async def run_server(shared_frame: SharedFrame, shared_control: SharedControl, host: str, port: int) -> None:
+async def run_server(
+    shared_frame: SharedFrame, shared_control: SharedControl, host: str, port: int
+) -> None:
     async def process_request(connection: ServerConnection, request):
         if request.path == "/healthz":
             return connection.respond(200, "OK\n")
@@ -399,7 +439,9 @@ async def run_server(shared_frame: SharedFrame, shared_control: SharedControl, h
         async def send_frames() -> None:
             sequence = -1
             while True:
-                sequence, payload, stopped = await asyncio.to_thread(shared_frame.snapshot_after, sequence)
+                sequence, payload, stopped = await asyncio.to_thread(
+                    shared_frame.snapshot_after, sequence
+                )
                 if stopped:
                     return
                 if payload:
@@ -412,28 +454,52 @@ async def run_server(shared_frame: SharedFrame, shared_control: SharedControl, h
         finally:
             shared_control.disconnect()
 
-    async with serve(handler, host, port, compression=None, max_size=1_000_000, process_request=process_request, ping_interval=20, ping_timeout=20) as server:
+    async with serve(
+        handler,
+        host,
+        port,
+        compression=None,
+        max_size=1_000_000,
+        process_request=process_request,
+        ping_interval=20,
+        ping_timeout=20,
+    ) as server:
         print(f"teleop=http://{host}:{port}", flush=True)
         await server.serve_forever()
 
 
 def exercise_protocol_logic() -> dict[str, Any]:
-    shared = SharedControl(); shared.begin_session()
-    valid = {"type":"control","sequence":1,"active_arm":"left","navigation":[1,0,0],"rotation":[0,0,0],"gripper_open":{"left":True,"right":True},"release_all":False}
+    shared = SharedControl()
+    shared.begin_session()
+    valid = {
+        "type": "control",
+        "sequence": 1,
+        "active_arm": "left",
+        "navigation": [1, 0, 0],
+        "rotation": [0, 0, 0],
+        "gripper_open": {"left": True, "right": True},
+        "release_all": False,
+    }
     accepted = shared.apply(valid, now=10.0)
     fresh = shared.snapshot(0.4, now=10.2)
     stale = shared.snapshot(0.4, now=10.5)
-    out_of_order = shared.apply({**valid,"sequence":1}, now=10.6)
-    invalid = shared.apply({**valid,"sequence":2,"rotation":[0,2,0]}, now=10.7)
-    release = shared.apply({**valid,"sequence":3,"release_all":True}, now=10.8)
+    out_of_order = shared.apply({**valid, "sequence": 1}, now=10.6)
+    invalid = shared.apply({**valid, "sequence": 2, "rotation": [0, 2, 0]}, now=10.7)
+    release = shared.apply({**valid, "sequence": 3, "release_all": True}, now=10.8)
     released = shared.snapshot(0.4, now=10.9)
     result = {
         "accepted": accepted,
-        "fresh_nonzero": bool(fresh.input_fresh and np.linalg.norm(fresh.navigation)>0),
-        "stale_zero": bool(not stale.input_fresh and np.allclose(stale.navigation,0) and np.allclose(stale.rotation,0)),
+        "fresh_nonzero": bool(fresh.input_fresh and np.linalg.norm(fresh.navigation) > 0),
+        "stale_zero": bool(
+            not stale.input_fresh
+            and np.allclose(stale.navigation, 0)
+            and np.allclose(stale.rotation, 0)
+        ),
         "out_of_order_rejected": not out_of_order,
         "invalid_rejected": not invalid,
-        "release_zero": bool(release and np.allclose(released.navigation,0) and np.allclose(released.rotation,0)),
+        "release_zero": bool(
+            release and np.allclose(released.navigation, 0) and np.allclose(released.rotation, 0)
+        ),
     }
     result["pass"] = all(result.values())
     return result
@@ -441,98 +507,244 @@ def exercise_protocol_logic() -> dict[str, Any]:
 
 def exercise_visual_mapping() -> dict[str, Any]:
     class Camera:
-        forward=np.array([0.0,0.0,-1.0]); up=np.array([1.0,0.0,0.0])
-    vf,vr,wu=visual_basis(Camera())
-    checks={
-        "w_is_image_up": bool(np.dot(vf, Camera.up)>0.999),
+        forward = np.array([0.0, 0.0, -1.0])
+        up = np.array([1.0, 0.0, 0.0])
+
+    vf, vr, wu = visual_basis(Camera())
+    checks = {
+        "w_is_image_up": bool(np.dot(vf, Camera.up) > 0.999),
         "s_is_opposite_w": bool(np.allclose(-vf, -Camera.up)),
-        "d_is_image_right": bool(np.linalg.norm(vr)==1.0),
-        "e_is_world_up": bool(np.allclose(wu,[0,0,1])),
+        "d_is_image_right": bool(np.linalg.norm(vr) == 1.0),
+        "e_is_world_up": bool(np.allclose(wu, [0, 0, 1])),
         "official_step_size": OFFICIAL_STEP_SIZE,
         "official_rot_step": OFFICIAL_ROT_STEP,
     }
-    checks["pass"] = all(checks[k] for k in ("w_is_image_up","s_is_opposite_w","d_is_image_right","e_is_world_up"))
+    checks["pass"] = all(
+        checks[k] for k in ("w_is_image_up", "s_is_opposite_w", "d_is_image_right", "e_is_world_up")
+    )
     return checks
 
 
-def run_sim_smoke(task, env, config, timeout_s: float, step_size: float, rot_step: float) -> dict[str, Any]:
-    shared=SharedControl(); shared.begin_session()
-    policy=BrowserBimanualKeyboardPolicy(config,task,shared,timeout_s,step_size,rot_step)
+def run_sim_smoke(
+    task, env, config, timeout_s: float, step_size: float, rot_step: float
+) -> dict[str, Any]:
+    shared = SharedControl()
+    shared.begin_session()
+    policy = BrowserBimanualKeyboardPolicy(config, task, shared, timeout_s, step_size, rot_step)
     task.register_policy(policy)
-    observation,_=task.reset(); mujoco.mj_forward(env.current_model,env.current_data)
-    base={"type":"control","active_arm":"left","gripper_open":{"left":True,"right":True},"release_all":False}
-    checks={"protocol":exercise_protocol_logic(),"mapping":exercise_visual_mapping(),"commands":{}}
-    commands={"forward":([1,0,0],[0,0,0]),"back":([-1,0,0],[0,0,0]),"left":([0,-1,0],[0,0,0]),"right":([0,1,0],[0,0,0]),"raise":([0,0,1],[0,0,0]),"lower":([0,0,-1],[0,0,0]),"roll":([0,0,0],[1,0,0]),"pitch":([0,0,0],[0,1,0]),"yaw":([0,0,0],[0,0,1])}
-    sequence=0
+    observation, _ = task.reset()
+    mujoco.mj_forward(env.current_model, env.current_data)
+    base = {
+        "type": "control",
+        "active_arm": "left",
+        "gripper_open": {"left": True, "right": True},
+        "release_all": False,
+    }
+    checks = {
+        "protocol": exercise_protocol_logic(),
+        "mapping": exercise_visual_mapping(),
+        "commands": {},
+    }
+    commands = {
+        "forward": ([1, 0, 0], [0, 0, 0]),
+        "back": ([-1, 0, 0], [0, 0, 0]),
+        "left": ([0, -1, 0], [0, 0, 0]),
+        "right": ([0, 1, 0], [0, 0, 0]),
+        "raise": ([0, 0, 1], [0, 0, 0]),
+        "lower": ([0, 0, -1], [0, 0, 0]),
+        "roll": ([0, 0, 0], [1, 0, 0]),
+        "pitch": ([0, 0, 0], [0, 1, 0]),
+        "yaw": ([0, 0, 0], [0, 0, 1]),
+    }
+    sequence = 0
     for side in ARMS:
-        checks["commands"][side]={}
-        for name,(navigation,rotation) in commands.items():
-            sequence+=1
-            shared.begin_session(); policy.reset()
-            shared.apply({**base,"sequence":sequence,"active_arm":side,"navigation":navigation,"rotation":rotation},now=time.monotonic())
-            q_before={k:v.copy() for k,v in env.current_robot.robot_view.get_qpos_dict().items()}
-            action=policy.get_action(observation)
-            inactive="right" if side=="left" else "left"
-            finite=all(np.isfinite(v).all() for v in action.values())
-            inactive_held=np.allclose(action[f"{inactive}_arm"],q_before[f"{inactive}_arm"])
-            ik_status=policy.ik_status
-            checks["commands"][side][name]={"ik_status":ik_status,"policy_latency_ms":policy.last_policy_latency_ms,"finite":finite,"inactive_held":bool(inactive_held),"pass":bool(ik_status=="success" and finite and inactive_held)}
+        checks["commands"][side] = {}
+        for name, (navigation, rotation) in commands.items():
+            sequence += 1
+            shared.begin_session()
+            policy.reset()
+            shared.apply(
+                {
+                    **base,
+                    "sequence": sequence,
+                    "active_arm": side,
+                    "navigation": navigation,
+                    "rotation": rotation,
+                },
+                now=time.monotonic(),
+            )
+            q_before = {
+                k: v.copy() for k, v in env.current_robot.robot_view.get_qpos_dict().items()
+            }
+            action = policy.get_action(observation)
+            inactive = "right" if side == "left" else "left"
+            finite = all(np.isfinite(v).all() for v in action.values())
+            inactive_held = np.allclose(action[f"{inactive}_arm"], q_before[f"{inactive}_arm"])
+            ik_status = policy.ik_status
+            checks["commands"][side][name] = {
+                "ik_status": ik_status,
+                "policy_latency_ms": policy.last_policy_latency_ms,
+                "finite": finite,
+                "inactive_held": bool(inactive_held),
+                "pass": bool(ik_status == "success" and finite and inactive_held),
+            }
             shared.disconnect()
-    command_pass=all(item["pass"] for side_results in checks["commands"].values() for item in side_results.values())
-    checks["strict_pass"]=bool(checks["protocol"]["pass"] and checks["mapping"]["pass"] and command_pass)
-    checks["official_alignment"]={"base_class":"InferencePolicy","lifecycle":"policy.get_action(observation) -> task.step(action)","step_size":step_size,"rot_step":rot_step,"ik_defaults":"official MlSpacesKinematics.ik defaults","position_update":"current_position += current_rotation @ delta_position","rotation_update":"R.from_euler('xyz', delta) @ current_rotation"}
+    command_pass = all(
+        item["pass"]
+        for side_results in checks["commands"].values()
+        for item in side_results.values()
+    )
+    checks["strict_pass"] = bool(
+        checks["protocol"]["pass"] and checks["mapping"]["pass"] and command_pass
+    )
+    checks["official_alignment"] = {
+        "base_class": "InferencePolicy",
+        "lifecycle": "policy.get_action(observation) -> task.step(action)",
+        "step_size": step_size,
+        "rot_step": rot_step,
+        "ik_defaults": "official MlSpacesKinematics.ik defaults",
+        "position_update": "current_position += current_rotation @ delta_position",
+        "rotation_update": "R.from_euler('xyz', delta) @ current_rotation",
+    }
     return checks
 
 
 def main() -> None:
-    parser=argparse.ArgumentParser()
-    parser.add_argument("--house-index",type=int,default=1); parser.add_argument("--seed",type=int,default=101)
-    parser.add_argument("--host",default="127.0.0.1"); parser.add_argument("--port",type=int,default=8765)
-    parser.add_argument("--control-hz",type=float,default=25.0); parser.add_argument("--render-fps",type=float,default=8.0)
-    parser.add_argument("--input-timeout-ms",type=float,default=400.0)
-    parser.add_argument("--step-size",type=float,default=OFFICIAL_STEP_SIZE); parser.add_argument("--rot-step",type=float,default=OFFICIAL_ROT_STEP)
-    parser.add_argument("--width",type=int,default=320); parser.add_argument("--height",type=int,default=180); parser.add_argument("--jpeg-quality",type=int,default=75)
-    parser.add_argument("--duration",type=float,default=0.0); parser.add_argument("--smoke",action="store_true"); parser.add_argument("--report",type=Path)
-    parser.add_argument("--initialization-report",type=Path)
-    parser.add_argument("--initialization-max-attempts",type=int,default=8)
-    args=parser.parse_args()
-    if args.host not in ("127.0.0.1","localhost","::1"): raise ValueError("loopback only")
-    if args.step_size != OFFICIAL_STEP_SIZE or args.rot_step != OFFICIAL_ROT_STEP: raise ValueError("Gate 1D-2C requires official step_size=0.005 and rot_step=0.02")
-    shared_frame=SharedFrame(); shared_control=SharedControl(); stop_event=threading.Event()
-    signal.signal(signal.SIGTERM,lambda *_:stop_event.set()); signal.signal(signal.SIGINT,lambda *_:stop_event.set())
-    sampler=None
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--house-index", type=int, default=1)
+    parser.add_argument("--seed", type=int, default=101)
+    parser.add_argument("--host", default="127.0.0.1")
+    parser.add_argument("--port", type=int, default=8765)
+    parser.add_argument("--control-hz", type=float, default=25.0)
+    parser.add_argument("--render-fps", type=float, default=8.0)
+    parser.add_argument("--input-timeout-ms", type=float, default=400.0)
+    parser.add_argument("--step-size", type=float, default=OFFICIAL_STEP_SIZE)
+    parser.add_argument("--rot-step", type=float, default=OFFICIAL_ROT_STEP)
+    parser.add_argument("--width", type=int, default=320)
+    parser.add_argument("--height", type=int, default=180)
+    parser.add_argument("--jpeg-quality", type=int, default=75)
+    parser.add_argument("--duration", type=float, default=0.0)
+    parser.add_argument("--smoke", action="store_true")
+    parser.add_argument("--report", type=Path)
+    parser.add_argument("--initialization-report", type=Path)
+    parser.add_argument("--initialization-max-attempts", type=int, default=8)
+    args = parser.parse_args()
+    if args.host not in ("127.0.0.1", "localhost", "::1"):
+        raise ValueError("loopback only")
+    if args.step_size != OFFICIAL_STEP_SIZE or args.rot_step != OFFICIAL_ROT_STEP:
+        raise ValueError("Gate 1D-2C requires official step_size=0.005 and rot_step=0.02")
+    shared_frame = SharedFrame()
+    shared_control = SharedControl()
+    stop_event = threading.Event()
+    signal.signal(signal.SIGTERM, lambda *_: stop_event.set())
+    signal.signal(signal.SIGINT, lambda *_: stop_event.set())
+    sampler = None
     try:
-        sampler,task,attempt_records=sample_strict_tabletop_task(args.house_index,args.seed,args.initialization_max_attempts,policy_dt_ms=40,task_horizon=100000)
-        config=sampler.config
-        env=sampler.env
-        initialization=sampler.accepted_initialization
-        if not initialization or not initialization.get("strict_pass",False):
+        sampler, task, attempt_records = sample_strict_tabletop_task(
+            args.house_index,
+            args.seed,
+            args.initialization_max_attempts,
+            policy_dt_ms=40,
+            task_horizon=100000,
+        )
+        config = sampler.config
+        env = sampler.env
+        initialization = sampler.accepted_initialization
+        if not initialization or not initialization.get("strict_pass", False):
             raise RuntimeError("tabletop initialization did not pass strict acceptance gate")
         if args.initialization_report:
-            args.initialization_report.parent.mkdir(parents=True,exist_ok=True)
-            args.initialization_report.write_text(json.dumps(to_jsonable({"gate":"1D-2C-tabletop-initialization","house_index":args.house_index,"base_seed":args.seed,"accepted":initialization,"attempt_records":attempt_records,"evidence_boundary":"Official FloorPlan1 geometry and official placement flow with additive island/bimanual acceptance gate; not an untouched upstream preset, human demo, grasp, packing success, or replay."}),indent=2,ensure_ascii=False)+"\n")
+            args.initialization_report.parent.mkdir(parents=True, exist_ok=True)
+            args.initialization_report.write_text(
+                json.dumps(
+                    to_jsonable(
+                        {
+                            "gate": "1D-2C-tabletop-initialization",
+                            "house_index": args.house_index,
+                            "base_seed": args.seed,
+                            "accepted": initialization,
+                            "attempt_records": attempt_records,
+                            "evidence_boundary": "Official FloorPlan1 geometry and official placement flow with additive island/bimanual acceptance gate; not an untouched upstream preset, human demo, grasp, packing success, or replay.",
+                        }
+                    ),
+                    indent=2,
+                    ensure_ascii=False,
+                )
+                + "\n"
+            )
         if args.smoke:
-            result=run_sim_smoke(task,env,config,args.input_timeout_ms/1000,args.step_size,args.rot_step)
-            report={"gate":"1D-2C-official-aligned","house_index":args.house_index,"seed":args.seed,"result":result,"evidence_boundary":"Official-aligned control technical smoke; not operator visual confirmation, grasp, packing, saved demo, or replay."}
-            if args.report: args.report.parent.mkdir(parents=True,exist_ok=True); args.report.write_text(json.dumps(to_jsonable(report),indent=2,ensure_ascii=False)+"\n")
-            print(json.dumps(to_jsonable(report),indent=2,ensure_ascii=False))
-            if not result["strict_pass"]: raise SystemExit(2)
+            result = run_sim_smoke(
+                task, env, config, args.input_timeout_ms / 1000, args.step_size, args.rot_step
+            )
+            report = {
+                "gate": "1D-2C-official-aligned",
+                "house_index": args.house_index,
+                "seed": args.seed,
+                "result": result,
+                "evidence_boundary": "Official-aligned control technical smoke; not operator visual confirmation, grasp, packing, saved demo, or replay.",
+            }
+            if args.report:
+                args.report.parent.mkdir(parents=True, exist_ok=True)
+                args.report.write_text(
+                    json.dumps(to_jsonable(report), indent=2, ensure_ascii=False) + "\n"
+                )
+            print(json.dumps(to_jsonable(report), indent=2, ensure_ascii=False))
+            if not result["strict_pass"]:
+                raise SystemExit(2)
             return
-        policy=BrowserBimanualKeyboardPolicy(config,task,shared_control,args.input_timeout_ms/1000,args.step_size,args.rot_step)
+        policy = BrowserBimanualKeyboardPolicy(
+            config,
+            task,
+            shared_control,
+            args.input_timeout_ms / 1000,
+            args.step_size,
+            args.rot_step,
+        )
         task.register_policy(policy)
-        observation,_=task.reset(); mujoco.mj_forward(env.current_model,env.current_data)
-        thread=threading.Thread(target=lambda:asyncio.run(run_server(shared_frame,shared_control,args.host,args.port)),daemon=True); thread.start()
-        started=time.monotonic(); period=1/args.control_hz; next_render=0.0; step=0
+        observation, _ = task.reset()
+        mujoco.mj_forward(env.current_model, env.current_data)
+        thread = threading.Thread(
+            target=lambda: asyncio.run(
+                run_server(shared_frame, shared_control, args.host, args.port)
+            ),
+            daemon=True,
+        )
+        thread.start()
+        started = time.monotonic()
+        period = 1 / args.control_hz
+        next_render = 0.0
+        step = 0
         while not stop_event.is_set():
-            cycle=time.monotonic(); action=policy.get_action(observation); observation,*_=task.step(action); trim_task_caches(task); step+=1
-            if cycle>=next_render:
-                snap=policy.last_snapshot
-                status={"step":step,"input_fresh":snap.input_fresh,"active_arm":snap.active_arm,"ik_status":policy.ik_status,"policy_latency_ms":policy.last_policy_latency_ms,"gripper_open":snap.gripper_open,"rejected_out_of_order":shared_control.rejected_out_of_order,"rejected_invalid":shared_control.rejected_invalid,"visual_axes":policy.last_axes}
-                shared_frame.publish(compose_frame(observation,args.width,args.height,args.jpeg_quality),status); next_render=cycle+1/args.render_fps
-            if args.duration>0 and cycle-started>=args.duration: break
-            stop_event.wait(max(0.0,period-(time.monotonic()-cycle)))
+            cycle = time.monotonic()
+            action = policy.get_action(observation)
+            observation, *_ = task.step(action)
+            trim_task_caches(task)
+            step += 1
+            if cycle >= next_render:
+                snap = policy.last_snapshot
+                status = {
+                    "step": step,
+                    "input_fresh": snap.input_fresh,
+                    "active_arm": snap.active_arm,
+                    "ik_status": policy.ik_status,
+                    "policy_latency_ms": policy.last_policy_latency_ms,
+                    "gripper_open": snap.gripper_open,
+                    "rejected_out_of_order": shared_control.rejected_out_of_order,
+                    "rejected_invalid": shared_control.rejected_invalid,
+                    "visual_axes": policy.last_axes,
+                }
+                shared_frame.publish(
+                    compose_frame(observation, args.width, args.height, args.jpeg_quality), status
+                )
+                next_render = cycle + 1 / args.render_fps
+            if args.duration > 0 and cycle - started >= args.duration:
+                break
+            stop_event.wait(max(0.0, period - (time.monotonic() - cycle)))
     finally:
-        shared_control.disconnect(); shared_frame.stop()
-        if sampler is not None: sampler.close()
+        shared_control.disconnect()
+        shared_frame.stop()
+        if sampler is not None:
+            sampler.close()
 
-if __name__=="__main__": main()
+
+if __name__ == "__main__":
+    main()

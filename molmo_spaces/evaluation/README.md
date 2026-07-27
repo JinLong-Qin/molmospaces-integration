@@ -126,6 +126,7 @@ Extend `InferencePolicy`. Must implement `prepare_model`, `reset`, and `get_acti
 # my_repo/policy.py
 from molmo_spaces.policy.base_policy import InferencePolicy
 
+
 class MyPolicy(InferencePolicy):
     def __init__(self, config, task):
         super().__init__(config, task)
@@ -162,6 +163,7 @@ Extend `BasePolicyConfig`. Define your model's interface.
 from molmo_spaces.configs.policy_configs import BasePolicyConfig
 from molmo_spaces.policy.base_policy import PolicyFactory
 
+
 class MyPolicyConfig(BasePolicyConfig):
     policy_type: str = "learned"
     action_type: str = "joint_pos_rel"
@@ -171,6 +173,7 @@ class MyPolicyConfig(BasePolicyConfig):
     def model_post_init(self, __context):
         if self.policy_cls is None:
             from my_repo.policy import MyPolicy
+
             self.policy_cls = MyPolicy
             self.policy_factory = MyPolicy
 
@@ -189,11 +192,10 @@ Extend `JsonBenchmarkEvalConfig`. This is the minimal config for benchmark eval 
 from molmo_spaces.configs.robot_configs import FrankaRobotConfig
 from molmo_spaces.evaluation.configs.evaluation_configs import JsonBenchmarkEvalConfig
 
+
 class MyEvalConfig(JsonBenchmarkEvalConfig):
     robot_config: FrankaRobotConfig = FrankaRobotConfig()
-    policy_config: MyPolicyConfig = MyPolicyConfig(
-        checkpoint_path="/path/to/default/checkpoint"
-    )
+    policy_config: MyPolicyConfig = MyPolicyConfig(checkpoint_path="/path/to/default/checkpoint")
     policy_dt_ms: float = 200.0  # Match your model's expected control rate
 
     def model_post_init(self, __context):

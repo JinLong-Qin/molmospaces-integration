@@ -27,6 +27,23 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
+def _warp_float_dtype_to_numpy(dtype) -> np.dtype:
+    """Return the NumPy dtype matching a Warp scalar float dtype.
+
+    MuJoCo-Warp arrays can differ by platform/version. Copying NumPy arrays into Warp
+    arrays requires exact dtype agreement on some backends, so normalize at the copy
+    boundary instead of relying on Warp to cast implicitly.
+    """
+    if dtype == wp.float64:
+        return np.dtype(np.float64)
+    return np.dtype(np.float32)
+
+
+def _as_warp_array_like(array: np.ndarray, like: wp.array):
+    """Create a contiguous Warp array with the same scalar dtype as ``like``."""
+    return wp.from_numpy(np.ascontiguousarray(array, dtype=_warp_float_dtype_to_numpy(like.dtype)))
+
+
 @dataclass
 class IKBuffers:
     """Preallocated buffers for the IK solver state"""
@@ -322,11 +339,14 @@ class SimpleWarpKinematics(ParallelKinematics):
                 ),
             )
 
-    def _dicts_to_qpos_arr(self, qpos_dicts: list[dict[str, np.ndarray]]) -> np.ndarray:
-        ret = np.empty((len(qpos_dicts), self._mj_model.nq), dtype=np.float32)
+    def _dicts_to_qpos_arr(
+        self, qpos_dicts: list[dict[str, np.ndarray]], dtype: np.dtype | None = None
+    ) -> np.ndarray:
+        dtype = dtype or np.dtype(np.float32)
+        ret = np.empty((len(qpos_dicts), self._mj_model.nq), dtype=dtype)
         for i, qpos_dict in enumerate(qpos_dicts):
             for mg_id, mg in self._actuated_move_groups.items():
-                ret[i, mg.joint_posadr] = qpos_dict[mg_id]
+                ret[i, mg.joint_posadr] = np.asarray(qpos_dict[mg_id], dtype=dtype)
         return ret
 
     def _qpos_arr_to_dicts(self, qpos_arr: np.ndarray) -> list[dict[str, np.ndarray]]:
@@ -384,9 +404,9 @@ class SimpleWarpKinematics(ParallelKinematics):
         solver_data = self._get_data(batch_size)
         data = solver_data.data
 
-        qpos_arr = self._dicts_to_qpos_arr(qpos_dicts)
+        qpos_arr = self._dicts_to_qpos_arr(qpos_dicts, _warp_float_dtype_to_numpy(data.qpos.dtype))
         with wp.ScopedDevice(self._device):
-            wp.copy(data.qpos, wp.from_numpy(qpos_arr))
+            wp.copy(data.qpos, _as_warp_array_like(qpos_arr, data.qpos))
             mjw.fwd_position(self._mjw_model, data)
 
         dol = {}
@@ -598,7 +618,8 @@ class SimpleWarpKinematics(ParallelKinematics):
                 # if the base is unactuated, the solving happens in base frame so ensure targets are in base frame
                 poses = np.linalg.solve(base_poses, poses)
 
-            wp.copy(ik_args.poses, wp.from_numpy(poses.astype(np.float32), dtype=wp.mat44f))
+            poses = np.ascontiguousarray(poses, dtype=np.float32)
+            wp.copy(ik_args.poses, wp.from_numpy(poses, dtype=wp.mat44f))
             ik_args.leaf_frame_id.fill_(leaf_frame_id)
             ik_args.leaf_frame_type.fill_(leaf_frame_type.value)
             ik_args.damping.fill_(damping)
@@ -608,8 +629,8 @@ class SimpleWarpKinematics(ParallelKinematics):
                 wp.from_numpy(self._create_jacobian_mask(batch_size, unlocked_move_group_ids)),
             )
 
-            q0_arr = self._dicts_to_qpos_arr(q0_dicts)
-            wp.copy(data.qpos, wp.from_numpy(q0_arr))
+            q0_arr = self._dicts_to_qpos_arr(q0_dicts, _warp_float_dtype_to_numpy(data.qpos.dtype))
+            wp.copy(data.qpos, _as_warp_array_like(q0_arr, data.qpos))
 
             for i in range(max_iter):
                 if self._device.startswith("cuda"):

@@ -2,6 +2,7 @@
 
 Diagnostic only. This script doesn't step the task, execute robot actions, or save a demo.
 """
+
 from __future__ import annotations
 
 import argparse

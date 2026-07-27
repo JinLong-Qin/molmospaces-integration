@@ -154,6 +154,8 @@ The retained summaries document these checkpoints:
 
 - Heterogeneous Pick-and-Place whole-source generation: `10/10` accepted generated rollouts with full rollout, `final_success=true`, persistent success, and 30-step post-hold. See `results/whole_source_transformfirst_summary.json`.
 - Homogeneous foodlike-to-bowl pilot: strict automatic success `13/100`; reviewed visual success `15/100` after two one-frame trace-glitch cases.
+- Broad 50-demo source pool for MimicGen cross-demo subtask recombination: `51` strict replay/datagen-info hard-pass candidates, `50` selected demos, and `9286` source action rows. See `results/pnp_50cross_selected_hardpass_indices.json` and `results/robomimic_pnp_50demo_crossmix_aligned.summary.json`.
+- `select_src_per_subtask=True` pilot: this is the route closest to the MimicGen cross-demo recombination idea, but broad random mixing across heterogeneous MolmoSpaces scenes exposed source-compatibility problems. Treat those outputs as diagnostic until a compatibility-filtered subset is validated.
 - Uniform collector live snapshot: nominal `27/100` accepted, but not action-deduplicated. See `results/collector_uniform_summary_live.json`.
 - High-yield deduplicated collector live snapshot: `19/100` unique accepted trajectories at the last included snapshot. See `results/collector_highyield_dedup_summary_live.json`.
 
@@ -163,6 +165,7 @@ The 100-success collection was still in progress at the time of this snapshot. D
 
 - Source trajectories in this release are synthetic planner expert trajectories from MolmoBot-Data, not human demonstrations.
 - Replay success and MimicGen parser success are prerequisites, not generated-demo success.
+- Single-source whole-trajectory generation and `select_src_per_subtask=True` cross-demo generation are different evidence levels; the latter is closer to MimicGen-style subtask recombination but requires stronger source compatibility checks.
 - Accepted generated demos require a real MolmoSpaces simulator rollout, `final_success=true`, post-hold stability, and real saved artifacts.
 - Video files are not tracked in Git; produce them with `--save-videos` or attach them through a release asset / external artifact store.
 

@@ -34,14 +34,19 @@
 
 ## What is included
 
+This repository now tracks the broader MolmoSpaces integration portfolio, not only the current Pick-and-Place MimicGen line.
+
 - Upstream MolmoSpaces source snapshot.
 - Pick-and-Place MimicGen integration scripts under `src/pnp/`.
+- 50-demo cross-subtask MimicGen diagnostic scripts and lightweight evidence under `src/pnp/*50cross*` and `results/50cross_*`.
 - Bimanual YAM browser visualization and keyboard teleoperation scripts under `src/bimanual_yam/`.
-- Lightweight manifests and result summaries under `results/`.
+- Legacy MolmoAct2-to-MolmoSpaces adapter code, diagnostics, and tests under `src/molmoact2_legacy/`.
+- Workline-level documentation under `docs/worklines/`.
+- Lightweight manifests, inventories, and result summaries under `results/`.
 - Small README demo media under `media/`.
 - Public documentation and attribution files.
 
-Large runtime data are intentionally excluded from Git: official shards, generated HDF5 files, rollout directories, simulator logs, PID files, caches, and internal planning ledgers.
+Large runtime data are intentionally excluded from Git: official shards, generated HDF5 files, rollout directories, simulator logs, PID files, caches, videos, local machine paths, and internal planning ledgers. When a workline used such files, the repository keeps a lightweight inventory or regeneration entrypoint instead of committing the raw artifact.
 
 ## Quick Start
 
@@ -168,6 +173,19 @@ $MOLMOSPACES_PYTHON src/pnp/replay_source_episode.py --seed-index 0 --save-video
 
 A successful replay only verifies source-trajectory replay. It is not yet a generated MimicGen rollout.
 
+## MolmoSpaces Workline Portfolio
+
+The public workline map is in [`docs/worklines/README.md`](docs/worklines/README.md). It covers:
+
+- MimicGen Pick-and-Place and the 50-demo cross-subtask diagnostic route;
+- bimanual YAM browser/keyboard teleoperation;
+- iTHOR bimanual YAM source-demo infrastructure;
+- completed custom-scene bimanual YAM source baseline;
+- legacy MolmoAct2-to-MolmoSpaces adapter work;
+- bounded official MolmoSpaces reproduction evidence.
+
+Important evidence boundary: MolmoAct2 official `sim_eval` success, MolmoSpaces adapter diagnostics, bimanual browser teleoperation, custom-scene YAM baseline, and Pick-and-Place MimicGen rollouts are separate evidence layers. The documentation deliberately avoids merging them into a single overclaimed success result.
+
 ## Pick-and-Place Integration Workflow
 
 The Pick-and-Place pipeline is organized as a reproducible sequence:
@@ -218,6 +236,42 @@ $MOLMOSPACES_PYTHON src/pnp/generate_pick_place_rollout.py \
   --save-videos
 ```
 
+### 50-demo cross-subtask MimicGen route
+
+The 100-pilot above is a conservative single-source-per-rollout check: each generated
+rollout uses one source demo and transforms that source trajectory into a new layout. To
+exercise the core MimicGen idea more directly, this repository also includes a broader
+50-demo Pick-and-Place source pool for cross-demo subtask recombination:
+
+```bash
+# Select the broad source pool from the official MolmoBot shard.
+$MOLMOSPACES_PYTHON src/pnp/select_pnp_50_source_pool.py
+
+# Collect strict replay + datagen_info for candidate sources.
+bash src/pnp/run_collect_50cross_datagen_parallel.sh
+# or for one candidate:
+$MOLMOSPACES_PYTHON src/pnp/collect_datagen_info_50cross.py \
+  --seed-index 0 \
+  --manifest "$MOLMOSPACES_PNP_WORKDIR/artifacts/seeds/pnp_seed_manifest_50demo_crossmix.json" \
+  --out-root "$MOLMOSPACES_PNP_WORKDIR/artifacts/replay_pnp_exact_50cross"
+
+# Build the 50-demo MimicGen source HDF5 from hard-pass sources.
+$MOLMOSPACES_PYTHON src/pnp/convert_seed_set_to_robomimic_50cross.py \
+  --accepted all \
+  --manifest "$MOLMOSPACES_PNP_WORKDIR/artifacts/seeds/pnp_seed_manifest_50demo_crossmix.json" \
+  --replay-root "$MOLMOSPACES_PNP_WORKDIR/artifacts/replay_pnp_exact_50cross" \
+  --out "$MOLMOSPACES_PNP_WORKDIR/artifacts/seeds/robomimic_pnp_50demo_crossmix_aligned.hdf5"
+
+# Run a bounded official MimicGen select-src-per-subtask pilot.
+bash src/pnp/run_50cross_selectsrc_pilot.sh
+```
+
+This route calls MimicGen with `select_src_per_subtask=True`, so different subtasks in a
+single generated rollout may be sampled from different source demos. Broad random mixing
+across many houses, objects, and receptacles is diagnostic: it can expose geometry,
+contact, IK, and subtask-stitching compatibility problems, and should not be reported as
+a normal final success-rate experiment without compatibility filtering.
+
 Collect successes with the non-deduplicated baseline collector:
 
 ```bash
@@ -252,6 +306,8 @@ The browser teleoperation path is a control and observation bridge. It is not by
 
 - Heterogeneous Pick-and-Place whole-source generation: `10/10` accepted generated rollouts with full rollout, final success, persistent success, and 30-step post-hold. See `results/whole_source_transformfirst_summary.json`.
 - Homogeneous foodlike-to-bowl pilot: strict automatic success `13/100`; reviewed visual success `15/100` after two one-frame trace-glitch cases.
+- 50-demo cross-subtask source pool: `51` strict replay/datagen-info hard-pass candidates were screened, `50` were selected into `robomimic_pnp_50demo_crossmix_aligned.hdf5`, with `9286` total source action rows. See `results/pnp_50cross_selected_hardpass_indices.json` and `results/robomimic_pnp_50demo_crossmix_aligned.summary.json`.
+- Broad random `select_src_per_subtask=True` pilot: first completed samples exposed geometry/contact/source-compatibility issues, so this is treated as diagnostic evidence and the next valid route is compatibility-filtered cross-subtask generation. Lightweight logs and generation traces are under `results/50cross_selectsrc_pilot_20260727_182533/`; large binary videos/HDF5/arrays are intentionally not committed.
 - Uniform collector live snapshot: non-deduplicated progress in `results/collector_uniform_summary_live.json`.
 - High-yield deduplicated collector live snapshot: unique accepted progress in `results/collector_highyield_dedup_summary_live.json`.
 - Source-pool utilities and manifests are included so users can reproduce the source replay, datagen-info extraction, source-HDF5 conversion, rollout generation, and collection workflow locally after placing the official data shard under `runtime/`.

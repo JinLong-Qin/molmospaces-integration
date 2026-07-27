@@ -193,6 +193,7 @@ To see a list of all currently defined experiment configs, run this:
 ```python
 from molmo_spaces.data_generation.main import auto_import_configs
 from molmo_spaces.data_generation.config_registry import list_available_configs
+
 auto_import_configs()
 print(list_available_configs())
 ```
