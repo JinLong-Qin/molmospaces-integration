@@ -6,24 +6,22 @@
 
 ### Pick-and-Place 总览
 
-<video src="media/pnp_overview.mp4" controls muted playsinline width="100%"></video>
+[![Pick-and-Place overview](media/gif/pnp_overview.gif)](media/pnp_overview.mp4)
+
+[打开 MP4](media/pnp_overview.mp4)
 
 ### 生成轨迹示例
 
-<video src="media/heterogeneous_generated_examples.mp4" controls muted playsinline width="100%"></video>
+[![Generated rollout examples](media/gif/heterogeneous_generated_examples.gif)](media/heterogeneous_generated_examples.mp4)
+
+[打开 MP4](media/heterogeneous_generated_examples.mp4)
 
 ### 源轨迹候选与 pilot 结果
 
-<table>
-  <tr>
-    <td width="50%">
-      <video src="media/foodlike_source_candidates.mp4" controls muted playsinline width="100%"></video>
-    </td>
-    <td width="50%">
-      <video src="media/foodlike_pilot_outcomes.mp4" controls muted playsinline width="100%"></video>
-    </td>
-  </tr>
-</table>
+| 源轨迹候选 | Pilot 结果 |
+| --- | --- |
+| [![Foodlike source candidates](media/gif/foodlike_source_candidates.gif)](media/foodlike_source_candidates.mp4) | [![Foodlike pilot outcomes](media/gif/foodlike_pilot_outcomes.gif)](media/foodlike_pilot_outcomes.mp4) |
+| [打开 MP4](media/foodlike_source_candidates.mp4) | [打开 MP4](media/foodlike_pilot_outcomes.mp4) |
 
 本仓库是一个 fork-style 的研究代码快照：它把 MolmoSpaces 代码库和 MolmoSpaces x MimicGen 集成层放在同一个仓库中，目标是支持 Pick-and-Place 轨迹生成，以及 bimanual YAM 的浏览器可视化和键盘遥操作。
 
@@ -32,6 +30,7 @@
 ## 作者与引用
 
 - 上游 MolmoSpaces：Allen Institute for AI，Apache License 2.0。上游源码和 license 已保留在本仓库中。
+- 上游 MimicGen：NVIDIA / NVlabs。MimicGen 论文作者为 Ajay Mandlekar、Soroush Nasiriany、Bowen Wen、Iretiayo Akinola、Yashraj Narang、Linxi Fan、Yuke Zhu 和 Dieter Fox。MimicGen 代码遵循 NVIDIA Source Code License，MimicGen 数据集遵循 CC-BY 4.0。
 - MolmoSpaces x MimicGen 集成、实验流程整理和发布组织：Kunyu Yang，复旦大学可信具身智能研究院。
 - 详细说明见 `AUTHORS.md`。
 

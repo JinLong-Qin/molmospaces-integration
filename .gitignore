@@ -19,6 +19,8 @@ MUJOCO_LOG.TXT
 *.mov
 !media/
 !media/*.mp4
+!media/gif/
+!media/gif/*.gif
 *.npy
 *.npz
 *.tar

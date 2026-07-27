@@ -6,24 +6,22 @@
 
 ### Pick-and-Place Overview
 
-<video src="media/pnp_overview.mp4" controls muted playsinline width="100%"></video>
+[![Pick-and-Place overview](media/gif/pnp_overview.gif)](media/pnp_overview.mp4)
+
+[Open MP4](media/pnp_overview.mp4)
 
 ### Generated Rollout Examples
 
-<video src="media/heterogeneous_generated_examples.mp4" controls muted playsinline width="100%"></video>
+[![Generated rollout examples](media/gif/heterogeneous_generated_examples.gif)](media/heterogeneous_generated_examples.mp4)
+
+[Open MP4](media/heterogeneous_generated_examples.mp4)
 
 ### Source Candidates and Pilot Outcomes
 
-<table>
-  <tr>
-    <td width="50%">
-      <video src="media/foodlike_source_candidates.mp4" controls muted playsinline width="100%"></video>
-    </td>
-    <td width="50%">
-      <video src="media/foodlike_pilot_outcomes.mp4" controls muted playsinline width="100%"></video>
-    </td>
-  </tr>
-</table>
+| Source candidates | Pilot outcomes |
+| --- | --- |
+| [![Foodlike source candidates](media/gif/foodlike_source_candidates.gif)](media/foodlike_source_candidates.mp4) | [![Foodlike pilot outcomes](media/gif/foodlike_pilot_outcomes.gif)](media/foodlike_pilot_outcomes.mp4) |
+| [Open MP4](media/foodlike_source_candidates.mp4) | [Open MP4](media/foodlike_pilot_outcomes.mp4) |
 
 This repository is a fork-style research snapshot that combines the MolmoSpaces codebase with a MolmoSpaces x MimicGen integration layer for Pick-and-Place trajectory generation and bimanual YAM browser/keyboard teleoperation.
 
@@ -32,6 +30,7 @@ The goal is that a new user can clone this repository, install the MolmoSpaces e
 ## Attribution
 
 - Upstream MolmoSpaces: Allen Institute for AI, Apache License 2.0. The upstream source and license are retained in this repository.
+- Upstream MimicGen: NVIDIA / NVlabs. MimicGen was introduced by Ajay Mandlekar, Soroush Nasiriany, Bowen Wen, Iretiayo Akinola, Yashraj Narang, Linxi Fan, Yuke Zhu, and Dieter Fox. MimicGen code is released under the NVIDIA Source Code License, and MimicGen datasets are released under CC-BY 4.0.
 - MolmoSpaces x MimicGen integration and release organization: Kunyu Yang, Institute of Trustworthy Embodied Intelligence, Fudan University.
 - Details: `AUTHORS.md`.
 
