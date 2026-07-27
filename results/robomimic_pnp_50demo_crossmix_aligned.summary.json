@@ -1,7 +1,7 @@
 {
   "out": "artifacts/seeds/robomimic_pnp_50demo_crossmix_aligned.hdf5",
-  "manifest": "/mnt/vqa/yky/project/paper_reproductions/official/molmospaces/work/current/mimicgen_pick_and_place/artifacts/seeds/pnp_seed_manifest_50demo_crossmix.json",
-  "replay_root": "/mnt/vqa/yky/project/paper_reproductions/official/molmospaces/work/current/mimicgen_pick_and_place/artifacts/replay_pnp_exact_50cross",
+  "manifest": "${MOLMOSPACES_PNP_WORKDIR}/artifacts/seeds/pnp_seed_manifest_50demo_crossmix.json",
+  "replay_root": "${MOLMOSPACES_PNP_WORKDIR}/artifacts/replay_pnp_exact_50cross",
   "accepted": [
     0,
     1,
