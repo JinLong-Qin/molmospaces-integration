@@ -1,0 +1,3 @@
+run_dir=logs/collect_50cross_datagen_parallel_20260727_173229
+parallel_workers=4
+cuda_visible_devices=0

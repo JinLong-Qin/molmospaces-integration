@@ -1,0 +1,244 @@
+{
+  "run_dir": "logs/50cross_selectsrc_pilot_20260727_182533",
+  "source_hdf5": "artifacts/seeds/robomimic_pnp_50demo_crossmix_aligned.hdf5",
+  "target_manifest": "artifacts/seeds/pnp_seed_manifest_50demo_crossmix.json",
+  "demo_keys": "demo_0..demo_49",
+  "flags": [
+    "--select-src-per-subtask",
+    "--transform-first-robot-pose",
+    "--post-hold-steps 30",
+    "--save-videos"
+  ],
+  "status": "diagnostic broad random pilot; seeds 0-5 exited 2 with final=false/persist=false; seed 6 started but no exit_code in copied run evidence",
+  "rows": [
+    {
+      "seed": 0,
+      "out_name": "gen_50cross_selectsrc_seed00",
+      "remote_output_dir": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed00",
+      "exit_code": 2,
+      "has_log": true,
+      "final_success": false,
+      "success_persistent_to_end": false,
+      "num_actions": null,
+      "select_src_per_subtask": true,
+      "transform_first_robot_pose": true,
+      "post_hold_steps": 30,
+      "videos": [
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed00/episode_00000000_droid_shoulder_light_randomization_mimicgen_pnp_gen000.mp4",
+          "bytes": 255898
+        },
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed00/episode_00000000_randomized_gopro_analogue_1_mimicgen_pnp_gen000.mp4",
+          "bytes": 252073
+        },
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed00/episode_00000000_randomized_zed2_analogue_1_mimicgen_pnp_gen000.mp4",
+          "bytes": 118559
+        },
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed00/episode_00000000_randomized_zed2_analogue_2_mimicgen_pnp_gen000.mp4",
+          "bytes": 189079
+        },
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed00/episode_00000000_wrist_camera_zed_mini_mimicgen_pnp_gen000.mp4",
+          "bytes": 385079
+        }
+      ],
+      "video_count": 5
+    },
+    {
+      "seed": 1,
+      "out_name": "gen_50cross_selectsrc_seed01",
+      "remote_output_dir": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed01",
+      "exit_code": 2,
+      "has_log": true,
+      "final_success": false,
+      "success_persistent_to_end": false,
+      "num_actions": null,
+      "select_src_per_subtask": true,
+      "transform_first_robot_pose": true,
+      "post_hold_steps": 30,
+      "videos": [
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed01/episode_00000000_droid_shoulder_light_randomization_mimicgen_pnp_gen000.mp4",
+          "bytes": 149477
+        },
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed01/episode_00000000_randomized_gopro_analogue_1_mimicgen_pnp_gen000.mp4",
+          "bytes": 141955
+        },
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed01/episode_00000000_randomized_zed2_analogue_1_mimicgen_pnp_gen000.mp4",
+          "bytes": 152683
+        },
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed01/episode_00000000_randomized_zed2_analogue_2_mimicgen_pnp_gen000.mp4",
+          "bytes": 143191
+        },
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed01/episode_00000000_wrist_camera_zed_mini_mimicgen_pnp_gen000.mp4",
+          "bytes": 233040
+        }
+      ],
+      "video_count": 5
+    },
+    {
+      "seed": 2,
+      "out_name": "gen_50cross_selectsrc_seed02",
+      "remote_output_dir": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed02",
+      "exit_code": 2,
+      "has_log": true,
+      "final_success": false,
+      "success_persistent_to_end": false,
+      "num_actions": null,
+      "select_src_per_subtask": true,
+      "transform_first_robot_pose": true,
+      "post_hold_steps": 30,
+      "videos": [
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed02/episode_00000000_droid_shoulder_light_randomization_mimicgen_pnp_gen000.mp4",
+          "bytes": 438560
+        },
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed02/episode_00000000_randomized_gopro_analogue_1_mimicgen_pnp_gen000.mp4",
+          "bytes": 241200
+        },
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed02/episode_00000000_randomized_zed2_analogue_1_mimicgen_pnp_gen000.mp4",
+          "bytes": 272898
+        },
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed02/episode_00000000_randomized_zed2_analogue_2_mimicgen_pnp_gen000.mp4",
+          "bytes": 235854
+        },
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed02/episode_00000000_wrist_camera_zed_mini_mimicgen_pnp_gen000.mp4",
+          "bytes": 540921
+        }
+      ],
+      "video_count": 5
+    },
+    {
+      "seed": 3,
+      "out_name": "gen_50cross_selectsrc_seed03",
+      "remote_output_dir": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed03",
+      "exit_code": 2,
+      "has_log": true,
+      "final_success": false,
+      "success_persistent_to_end": false,
+      "num_actions": null,
+      "select_src_per_subtask": true,
+      "transform_first_robot_pose": true,
+      "post_hold_steps": 30,
+      "videos": [
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed03/episode_00000000_droid_shoulder_light_randomization_mimicgen_pnp_gen000.mp4",
+          "bytes": 163755
+        },
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed03/episode_00000000_randomized_gopro_analogue_1_mimicgen_pnp_gen000.mp4",
+          "bytes": 265553
+        },
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed03/episode_00000000_randomized_zed2_analogue_1_mimicgen_pnp_gen000.mp4",
+          "bytes": 318441
+        },
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed03/episode_00000000_randomized_zed2_analogue_2_mimicgen_pnp_gen000.mp4",
+          "bytes": 201728
+        },
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed03/episode_00000000_wrist_camera_zed_mini_mimicgen_pnp_gen000.mp4",
+          "bytes": 588171
+        }
+      ],
+      "video_count": 5
+    },
+    {
+      "seed": 4,
+      "out_name": "gen_50cross_selectsrc_seed04",
+      "remote_output_dir": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed04",
+      "exit_code": 2,
+      "has_log": true,
+      "final_success": false,
+      "success_persistent_to_end": false,
+      "num_actions": null,
+      "select_src_per_subtask": true,
+      "transform_first_robot_pose": true,
+      "post_hold_steps": 30,
+      "videos": [
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed04/episode_00000000_droid_shoulder_light_randomization_mimicgen_pnp_gen000.mp4",
+          "bytes": 242584
+        },
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed04/episode_00000000_randomized_gopro_analogue_1_mimicgen_pnp_gen000.mp4",
+          "bytes": 122562
+        },
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed04/episode_00000000_randomized_zed2_analogue_1_mimicgen_pnp_gen000.mp4",
+          "bytes": 101074
+        },
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed04/episode_00000000_randomized_zed2_analogue_2_mimicgen_pnp_gen000.mp4",
+          "bytes": 211827
+        },
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed04/episode_00000000_wrist_camera_zed_mini_mimicgen_pnp_gen000.mp4",
+          "bytes": 554168
+        }
+      ],
+      "video_count": 5
+    },
+    {
+      "seed": 5,
+      "out_name": "gen_50cross_selectsrc_seed05",
+      "remote_output_dir": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed05",
+      "exit_code": 2,
+      "has_log": true,
+      "final_success": false,
+      "success_persistent_to_end": false,
+      "num_actions": null,
+      "select_src_per_subtask": true,
+      "transform_first_robot_pose": true,
+      "post_hold_steps": 30,
+      "videos": [
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed05/episode_00000000_droid_shoulder_light_randomization_mimicgen_pnp_gen000.mp4",
+          "bytes": 234483
+        },
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed05/episode_00000000_randomized_gopro_analogue_1_mimicgen_pnp_gen000.mp4",
+          "bytes": 178715
+        },
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed05/episode_00000000_randomized_zed2_analogue_1_mimicgen_pnp_gen000.mp4",
+          "bytes": 243304
+        },
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed05/episode_00000000_randomized_zed2_analogue_2_mimicgen_pnp_gen000.mp4",
+          "bytes": 264114
+        },
+        {
+          "path": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed05/episode_00000000_wrist_camera_zed_mini_mimicgen_pnp_gen000.mp4",
+          "bytes": 464673
+        }
+      ],
+      "video_count": 5
+    },
+    {
+      "seed": 6,
+      "out_name": "gen_50cross_selectsrc_seed06",
+      "remote_output_dir": "artifacts/mimicgen_pnp/gen_50cross_selectsrc_seed06",
+      "exit_code": null,
+      "has_log": true,
+      "has_generate_result": false,
+      "videos": [],
+      "video_count": 0
+    }
+  ],
+  "strict_success": 0,
+  "completed_rows": 6,
+  "note": "Generated videos and binary arrays remain on the remote workdir; GitHub stores lightweight JSON/log evidence and reproduction scripts."
+}

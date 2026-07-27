@@ -1,0 +1,3 @@
+run_dir=logs/50cross_selectsrc_pilot_20260727_182533
+source_hdf5=artifacts/seeds/robomimic_pnp_50demo_crossmix_aligned.hdf5
+target_manifest=artifacts/seeds/pnp_seed_manifest_50demo_crossmix.json

@@ -1,0 +1,52 @@
+[    0.1s] selected PNP seed=06 house=1716 traj_0 task='Pick up the pocket watch and place it in or on the brown bowl' orig_success=True
+${MOLMOSPACES_ROOT}/molmo_spaces/evaluation/eval_main.py:128: UserWarning: Using objaverse data version 20260131. This is a newer version that may contain different assets than the original benchmark version (20251016_from_20250610).
+  _assert_data_versions_match()
+WARNING: robosuite environments not imported...
+Got error: No module named 'robosuite.models'; 'robosuite' is not a package
+WARNING: robosuite task zoo environments not imported, possibly because robosuite_task_zoo is not installed...
+Got error: No module named 'robosuite.environments'; 'robosuite' is not a package
+ROBOMIMIC WARNING(
+    No private macro file found!
+    It is recommended to use a private macro file
+    To setup, run: python ${ROBOMIMIC_ROOT}/robomimic/scripts/setup_macros.py
+)
+[   12.8s] constructing DataGenerator
+
+DataGenerator: loading dataset at path artifacts/seeds/robomimic_pnp_50demo_crossmix_aligned.hdf5...
+
+  0%|          | 0/50 [00:00<?, ?it/s]
+ 82%|████████▏ | 41/50 [00:00<00:00, 404.97it/s]
+100%|██████████| 50/50 [00:00<00:00, 405.05it/s]
+INFO:molmo_spaces.tasks.task_sampler:Data versions in use: {'robots': {'rby1': '20251224', 'rby1m': '20251224', 'franka_droid': '20260127', 'franka_cap': '20260213', 'floating_rum': '20251110', 'floating_robotiq': '20260208_retry4', 'franka_fr3': '20260303', 'i2rt_yam': '20260223'}, 'scenes': {'ithor': '20251217_with_occupancy', 'refs': '20250923', 'procthor-10k-train': '20251122_with_occupancy', 'procthor-10k-val': '20251217_with_occupancy', 'procthor-10k-test': '20251121_with_occupancy', 'holodeck-objaverse-train': '20251217_with_occupancy', 'holodeck-objaverse-val': '20251217_with_occupancy', 'procthor-objaverse-train': '20251205_with_occupancy', 'procthor-objaverse-val': '20251205_with_occupancy'}, 'objects': {'thor': '20251117', 'objaverse': '20260131', 'objathor_metadata': '20260129'}, 'grasps': {'droid': '20251116', 'droid_objaverse': '20251218'}, 'test_data': {'franka_pick': '20260610', 'franka_pick_and_place': '20260529', 'rby1_door_opening': '20260228', 'rby1_pnp': '20260610', 'rum_open_close': '20260305', 'rum_pick': '20260209', 'test_randomized_data': '20251209', 'thormap': '20251209'}, 'benchmarks': {'molmospaces-bench-v1': '20260408', 'molmospaces-bench-v2': '20260415'}}
+
+DataGenerator: done loading
+
+[   12.9s] running DataGenerator.generate
+INFO:molmo_spaces.tasks.json_eval_task_sampler:Added body to scene: place_receptacle/0/24ee73c87dcf4161a630bb65dee2a7a5
+INFO:molmo_spaces.tasks.json_eval_task_sampler:Added body to scene: place_receptacle/1/c0bc51e9ddfc43cea29e740bf03e9f92
+INFO:molmo_spaces.tasks.json_eval_task_sampler:Added body to scene: place_receptacle/2/5c5c3b9ae7874b709c10ac57dad33195
+INFO:molmo_spaces.tasks.task_sampler:Loaded 4 assets from static blacklist
+INFO:molmo_spaces.env.env:Using MuJoCo renderer: classic
+INFO:OpenGL.acceleratesupport:No OpenGL_accelerate module loaded: No module named 'OpenGL_accelerate'
+INFO:molmo_spaces.tasks.task_sampler:Scene updated: ${MOLMOSPACES_ASSET_CACHE}/L21udC92cWEveWt5L3Byb2plY3QvcGFwZXJfcmVwcm9kdWN0aW9ucy9vZmZpY2lhbC9tb2xtb3NwYWNlcw/scenes/procthor-objaverse-val/val_1716_ceiling.xml
+INFO:molmo_spaces.tasks.json_eval_task_sampler:randomize_scene: episode_spec says: house_index=1716, scene_dataset=procthor-objaverse, data_split=val
+INFO:molmo_spaces.tasks.json_eval_task_sampler:randomize_scene: config says: scene_dataset=procthor-objaverse, data_split=val
+INFO:molmo_spaces.tasks.json_eval_task_sampler:randomize_scene: Setting poses for 79 objects
+INFO:molmo_spaces.tasks.json_eval_task_sampler:Scene setup from episode spec completed.
+INFO:molmo_spaces.env.camera_manager:[CAMERA SETUP] Setting up 5 cameras
+INFO:molmo_spaces.env.camera_manager:[CAMERA SETUP] Set up robot-mounted camera 'wrist_camera_zed_mini'
+INFO:molmo_spaces.env.camera_manager:[CAMERA SETUP] Set up robot-mounted camera 'droid_shoulder_light_randomization'
+INFO:molmo_spaces.env.camera_manager:[CAMERA SETUP] Set up fixed exocentric camera 'randomized_zed2_analogue_1'
+INFO:molmo_spaces.env.camera_manager:[CAMERA SETUP] Set up fixed exocentric camera 'randomized_zed2_analogue_2'
+INFO:molmo_spaces.env.camera_manager:[CAMERA SETUP] Set up fixed exocentric camera 'randomized_gopro_analogue_1'
+INFO:molmo_spaces.env.camera_manager:[CAMERA SETUP] Successfully set up 5 cameras
+INFO:molmo_spaces.tasks.task_sampler:Sampled task 'Pick up the pocket watch and place it in or on the brown bowl'
+Using SCENES_ROOT: ${MOLMOSPACES_ASSET_CACHE}/L21udC92cWEveWt5L3Byb2plY3QvcGFwZXJfcmVwcm9kdWN0aW9ucy9vZmZpY2lhbC9tb2xtb3NwYWNlcw/scenes
+Warp 1.14.0 initialized:
+   CUDA Toolkit 12.9, Driver 12.4
+   Devices:
+     "cpu"      : "x86_64"
+     "cuda:0"   : "NVIDIA GeForce RTX 4090" (24 GiB, sm_89, mempool enabled)
+   Kernel cache:
+     ${WARP_CACHE}
+[   23.3s] INITIAL_GATE {'obj': 9.821767399387227e-08, 'base': 3.0913182236247394e-08, 'arm': 0.0, 'gripper': 0.0}

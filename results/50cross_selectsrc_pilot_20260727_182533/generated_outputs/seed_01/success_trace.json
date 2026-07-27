@@ -1,0 +1,1920 @@
+[
+  {
+    "step": 1,
+    "success": false,
+    "position_error": 0.35171124584061175,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 2,
+    "success": false,
+    "position_error": 0.3517298145607599,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 3,
+    "success": false,
+    "position_error": 0.3518645504272637,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 4,
+    "success": false,
+    "position_error": 0.3518689506491164,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 5,
+    "success": false,
+    "position_error": 0.3518728950694161,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 6,
+    "success": false,
+    "position_error": 0.35187683547043846,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 7,
+    "success": false,
+    "position_error": 0.35188077692682107,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 8,
+    "success": false,
+    "position_error": 0.35188471987020176,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 9,
+    "success": false,
+    "position_error": 0.35188866435552857,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 10,
+    "success": false,
+    "position_error": 0.3518926103903315,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 11,
+    "success": false,
+    "position_error": 0.3518965579760458,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 12,
+    "success": false,
+    "position_error": 0.35190050711333143,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 13,
+    "success": false,
+    "position_error": 0.3519044578026662,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 14,
+    "success": false,
+    "position_error": 0.35190841004474827,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 15,
+    "success": false,
+    "position_error": 0.351912363840059,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 16,
+    "success": false,
+    "position_error": 0.3519130406635407,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 17,
+    "success": false,
+    "position_error": 0.3519132565261245,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 18,
+    "success": false,
+    "position_error": 0.35191334100354155,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 19,
+    "success": false,
+    "position_error": 0.35191339883911255,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 20,
+    "success": false,
+    "position_error": 0.35191347203395473,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 21,
+    "success": false,
+    "position_error": 0.35191343514391527,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 22,
+    "success": false,
+    "position_error": 0.35191334031472365,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 23,
+    "success": false,
+    "position_error": 0.35191339064749627,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 24,
+    "success": false,
+    "position_error": 0.3519131708601382,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 25,
+    "success": false,
+    "position_error": 0.35191346894068065,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 26,
+    "success": false,
+    "position_error": 0.35191339233829044,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 27,
+    "success": false,
+    "position_error": 0.35191346016738123,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 28,
+    "success": false,
+    "position_error": 0.35191344814301573,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 29,
+    "success": false,
+    "position_error": 0.35191320478334287,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 30,
+    "success": false,
+    "position_error": 0.35191341049757696,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 31,
+    "success": false,
+    "position_error": 0.3519134584682071,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 32,
+    "success": false,
+    "position_error": 0.3521355238643231,
+    "supported_by_receptacle": false,
+    "robot_contact": true
+  },
+  {
+    "step": 33,
+    "success": false,
+    "position_error": 0.3563158474531445,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 34,
+    "success": false,
+    "position_error": 0.34948793715798043,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 35,
+    "success": false,
+    "position_error": 0.3498796848459751,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 36,
+    "success": false,
+    "position_error": 0.356305641695565,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 37,
+    "success": false,
+    "position_error": 0.36306678705155004,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 38,
+    "success": false,
+    "position_error": 0.3648295534500168,
+    "supported_by_receptacle": false,
+    "robot_contact": true
+  },
+  {
+    "step": 39,
+    "success": false,
+    "position_error": 0.36641968285103577,
+    "supported_by_receptacle": false,
+    "robot_contact": true
+  },
+  {
+    "step": 40,
+    "success": false,
+    "position_error": 0.36792678977435234,
+    "supported_by_receptacle": false,
+    "robot_contact": true
+  },
+  {
+    "step": 41,
+    "success": false,
+    "position_error": 0.36358182218101476,
+    "supported_by_receptacle": false,
+    "robot_contact": true
+  },
+  {
+    "step": 42,
+    "success": false,
+    "position_error": 0.3636186859616437,
+    "supported_by_receptacle": false,
+    "robot_contact": true
+  },
+  {
+    "step": 43,
+    "success": false,
+    "position_error": 0.3649459746890811,
+    "supported_by_receptacle": false,
+    "robot_contact": true
+  },
+  {
+    "step": 44,
+    "success": false,
+    "position_error": 0.36526194410345525,
+    "supported_by_receptacle": false,
+    "robot_contact": true
+  },
+  {
+    "step": 45,
+    "success": false,
+    "position_error": 0.36513133046789115,
+    "supported_by_receptacle": false,
+    "robot_contact": true
+  },
+  {
+    "step": 46,
+    "success": false,
+    "position_error": 0.3649121275824685,
+    "supported_by_receptacle": false,
+    "robot_contact": true
+  },
+  {
+    "step": 47,
+    "success": false,
+    "position_error": 0.36471461602986643,
+    "supported_by_receptacle": false,
+    "robot_contact": true
+  },
+  {
+    "step": 48,
+    "success": false,
+    "position_error": 0.3646156029273495,
+    "supported_by_receptacle": false,
+    "robot_contact": true
+  },
+  {
+    "step": 49,
+    "success": false,
+    "position_error": 0.3645166587324278,
+    "supported_by_receptacle": false,
+    "robot_contact": true
+  },
+  {
+    "step": 50,
+    "success": false,
+    "position_error": 0.3590881912900592,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 51,
+    "success": false,
+    "position_error": 0.35501498579808555,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 52,
+    "success": false,
+    "position_error": 0.3506715995121681,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 53,
+    "success": false,
+    "position_error": 0.34975095060686634,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 54,
+    "success": false,
+    "position_error": 0.34976096472641416,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 55,
+    "success": false,
+    "position_error": 0.3498460175272111,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 56,
+    "success": false,
+    "position_error": 0.3500630807129079,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 57,
+    "success": false,
+    "position_error": 0.3505946328409655,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 58,
+    "success": false,
+    "position_error": 0.3517059501966582,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 59,
+    "success": false,
+    "position_error": 0.35322357851186936,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 60,
+    "success": false,
+    "position_error": 0.3535250752023469,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 61,
+    "success": false,
+    "position_error": 0.3535269753005448,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 62,
+    "success": false,
+    "position_error": 0.3528158105082042,
+    "supported_by_receptacle": false,
+    "robot_contact": true
+  },
+  {
+    "step": 63,
+    "success": false,
+    "position_error": 0.32908755361701036,
+    "supported_by_receptacle": false,
+    "robot_contact": true
+  },
+  {
+    "step": 64,
+    "success": false,
+    "position_error": 0.3121239790590522,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 65,
+    "success": false,
+    "position_error": 0.30837040597896603,
+    "supported_by_receptacle": false,
+    "robot_contact": true
+  },
+  {
+    "step": 66,
+    "success": false,
+    "position_error": 0.30799346955980944,
+    "supported_by_receptacle": false,
+    "robot_contact": true
+  },
+  {
+    "step": 67,
+    "success": false,
+    "position_error": 0.3053175592574666,
+    "supported_by_receptacle": false,
+    "robot_contact": true
+  },
+  {
+    "step": 68,
+    "success": false,
+    "position_error": 0.30341530236634284,
+    "supported_by_receptacle": false,
+    "robot_contact": true
+  },
+  {
+    "step": 69,
+    "success": false,
+    "position_error": 0.3034487639147194,
+    "supported_by_receptacle": false,
+    "robot_contact": true
+  },
+  {
+    "step": 70,
+    "success": false,
+    "position_error": 0.30345253034738473,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 71,
+    "success": false,
+    "position_error": 0.30345076403851223,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 72,
+    "success": false,
+    "position_error": 0.30344879339665276,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 73,
+    "success": false,
+    "position_error": 0.303446504877531,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 74,
+    "success": false,
+    "position_error": 0.3034447789663002,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 75,
+    "success": false,
+    "position_error": 0.3034428225793784,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 76,
+    "success": false,
+    "position_error": 0.3034410453608585,
+    "supported_by_receptacle": false,
+    "robot_contact": true
+  },
+  {
+    "step": 77,
+    "success": false,
+    "position_error": 0.3034400401332764,
+    "supported_by_receptacle": false,
+    "robot_contact": true
+  },
+  {
+    "step": 78,
+    "success": false,
+    "position_error": 0.30343984964964754,
+    "supported_by_receptacle": false,
+    "robot_contact": true
+  },
+  {
+    "step": 79,
+    "success": false,
+    "position_error": 0.3034393490226055,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 80,
+    "success": false,
+    "position_error": 0.3034391426983456,
+    "supported_by_receptacle": false,
+    "robot_contact": true
+  },
+  {
+    "step": 81,
+    "success": false,
+    "position_error": 0.30343899043824685,
+    "supported_by_receptacle": false,
+    "robot_contact": true
+  },
+  {
+    "step": 82,
+    "success": false,
+    "position_error": 0.3034385207937138,
+    "supported_by_receptacle": false,
+    "robot_contact": true
+  },
+  {
+    "step": 83,
+    "success": false,
+    "position_error": 0.30343809526621257,
+    "supported_by_receptacle": false,
+    "robot_contact": true
+  },
+  {
+    "step": 84,
+    "success": false,
+    "position_error": 0.30343792743306164,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 85,
+    "success": false,
+    "position_error": 0.30343735067215505,
+    "supported_by_receptacle": false,
+    "robot_contact": true
+  },
+  {
+    "step": 86,
+    "success": false,
+    "position_error": 0.3035907219271614,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 87,
+    "success": false,
+    "position_error": 0.3035896496973578,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 88,
+    "success": false,
+    "position_error": 0.30358884847280354,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 89,
+    "success": false,
+    "position_error": 0.30358788282624527,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 90,
+    "success": false,
+    "position_error": 0.3035869117305374,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 91,
+    "success": false,
+    "position_error": 0.3035856298702271,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 92,
+    "success": false,
+    "position_error": 0.3035848856306753,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 93,
+    "success": false,
+    "position_error": 0.30358383318328386,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 94,
+    "success": false,
+    "position_error": 0.3035828676684602,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 95,
+    "success": false,
+    "position_error": 0.3035817389608093,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 96,
+    "success": false,
+    "position_error": 0.30358081551039184,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 97,
+    "success": false,
+    "position_error": 0.3035796850625445,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 98,
+    "success": false,
+    "position_error": 0.30357871139850445,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 99,
+    "success": false,
+    "position_error": 0.3035776386383304,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 100,
+    "success": false,
+    "position_error": 0.30357651813251607,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 101,
+    "success": false,
+    "position_error": 0.3035753534563099,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 102,
+    "success": false,
+    "position_error": 0.30357450418894416,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 103,
+    "success": false,
+    "position_error": 0.3035733138435681,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 104,
+    "success": false,
+    "position_error": 0.30357226539598337,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 105,
+    "success": false,
+    "position_error": 0.30357127295666597,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 106,
+    "success": false,
+    "position_error": 0.3035700758346582,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 107,
+    "success": false,
+    "position_error": 0.3035690055420526,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 108,
+    "success": false,
+    "position_error": 0.3035678718817447,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 109,
+    "success": false,
+    "position_error": 0.30356682170190474,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 110,
+    "success": false,
+    "position_error": 0.3035657316403144,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 111,
+    "success": false,
+    "position_error": 0.3035647212730108,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 112,
+    "success": false,
+    "position_error": 0.30356346185321037,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 113,
+    "success": false,
+    "position_error": 0.3035624031102575,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 114,
+    "success": false,
+    "position_error": 0.30356135173450305,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 115,
+    "success": false,
+    "position_error": 0.3035602397838275,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 116,
+    "success": false,
+    "position_error": 0.3035589135344319,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 117,
+    "success": false,
+    "position_error": 0.3035576414286387,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 118,
+    "success": false,
+    "position_error": 0.30355669514110417,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 119,
+    "success": false,
+    "position_error": 0.3035555492484505,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 120,
+    "success": false,
+    "position_error": 0.30355441506834246,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 121,
+    "success": false,
+    "position_error": 0.3035530171257683,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 122,
+    "success": false,
+    "position_error": 0.3035520909702054,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 123,
+    "success": false,
+    "position_error": 0.3035508846525481,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 124,
+    "success": false,
+    "position_error": 0.3035497040483097,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 125,
+    "success": false,
+    "position_error": 0.3035485518704135,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 126,
+    "success": false,
+    "position_error": 0.3035474032047887,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 127,
+    "success": false,
+    "position_error": 0.30354609621589734,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 128,
+    "success": false,
+    "position_error": 0.30354470142190504,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 129,
+    "success": false,
+    "position_error": 0.3035434546808373,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 130,
+    "success": false,
+    "position_error": 0.30354249330927274,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 131,
+    "success": false,
+    "position_error": 0.30354119369195054,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 132,
+    "success": false,
+    "position_error": 0.30353998613048105,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 133,
+    "success": false,
+    "position_error": 0.30353873980954127,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 134,
+    "success": false,
+    "position_error": 0.30353741503303233,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 135,
+    "success": false,
+    "position_error": 0.30353625448451815,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 136,
+    "success": false,
+    "position_error": 0.30353489605062656,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 137,
+    "success": false,
+    "position_error": 0.30353369547322373,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 138,
+    "success": false,
+    "position_error": 0.3035323834757744,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 139,
+    "success": false,
+    "position_error": 0.30353108732420075,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 140,
+    "success": false,
+    "position_error": 0.3035297180009664,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 141,
+    "success": false,
+    "position_error": 0.3035284764474824,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 142,
+    "success": false,
+    "position_error": 0.30352721711170094,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 143,
+    "success": false,
+    "position_error": 0.3035255745995151,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 144,
+    "success": false,
+    "position_error": 0.30352441238399397,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 145,
+    "success": false,
+    "position_error": 0.3035229993993669,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 146,
+    "success": false,
+    "position_error": 0.30352154584074853,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 147,
+    "success": false,
+    "position_error": 0.30352013897541585,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 148,
+    "success": false,
+    "position_error": 0.3035187961989738,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 149,
+    "success": false,
+    "position_error": 0.30351735236623334,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 150,
+    "success": false,
+    "position_error": 0.3035159274174717,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 151,
+    "success": false,
+    "position_error": 0.30351458920237206,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 152,
+    "success": false,
+    "position_error": 0.3035132078665512,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 153,
+    "success": false,
+    "position_error": 0.3035118131350032,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 154,
+    "success": false,
+    "position_error": 0.30351009851624333,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 155,
+    "success": false,
+    "position_error": 0.3035088075711547,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 156,
+    "success": false,
+    "position_error": 0.303507380095974,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 157,
+    "success": false,
+    "position_error": 0.3035059873040993,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 158,
+    "success": false,
+    "position_error": 0.30350440854824967,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 159,
+    "success": false,
+    "position_error": 0.3035028870062737,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 160,
+    "success": false,
+    "position_error": 0.30350145110730686,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 161,
+    "success": false,
+    "position_error": 0.3035000570231752,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 162,
+    "success": false,
+    "position_error": 0.30349840554527674,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 163,
+    "success": false,
+    "position_error": 0.3034968981819901,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 164,
+    "success": false,
+    "position_error": 0.3034951760903999,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 165,
+    "success": false,
+    "position_error": 0.3034937673635305,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 166,
+    "success": false,
+    "position_error": 0.3034921850846679,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 167,
+    "success": false,
+    "position_error": 0.30349065289616295,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 168,
+    "success": false,
+    "position_error": 0.30348884947096444,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 169,
+    "success": false,
+    "position_error": 0.303487657440046,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 170,
+    "success": false,
+    "position_error": 0.3034858852937976,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 171,
+    "success": false,
+    "position_error": 0.30348459402264893,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 172,
+    "success": false,
+    "position_error": 0.3034831799741591,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 173,
+    "success": false,
+    "position_error": 0.3034817422721261,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 174,
+    "success": false,
+    "position_error": 0.3034799286423411,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 175,
+    "success": false,
+    "position_error": 0.3034786131104825,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 176,
+    "success": false,
+    "position_error": 0.30347715692662725,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 177,
+    "success": false,
+    "position_error": 0.3034755983502766,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 178,
+    "success": false,
+    "position_error": 0.3034741168496691,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 179,
+    "success": false,
+    "position_error": 0.3034724692381605,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 180,
+    "success": false,
+    "position_error": 0.30347070059992554,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 181,
+    "success": false,
+    "position_error": 0.3034694416499981,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 182,
+    "success": false,
+    "position_error": 0.3034678761401661,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 183,
+    "success": false,
+    "position_error": 0.3034662843730276,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 184,
+    "success": false,
+    "position_error": 0.3034645332515087,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 185,
+    "success": false,
+    "position_error": 0.3034631490897155,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 186,
+    "success": false,
+    "position_error": 0.30346157987652056,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 187,
+    "success": false,
+    "position_error": 0.3034599655404513,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 188,
+    "success": false,
+    "position_error": 0.3034580801222333,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 189,
+    "success": false,
+    "position_error": 0.3034568646119702,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 190,
+    "success": false,
+    "position_error": 0.30345492198022317,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 191,
+    "success": false,
+    "position_error": 0.3034534865556111,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 192,
+    "success": false,
+    "position_error": 0.30345192022076795,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 193,
+    "success": false,
+    "position_error": 0.3034502563666521,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 194,
+    "success": false,
+    "position_error": 0.30344856084509786,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 195,
+    "success": false,
+    "position_error": 0.30344701359689985,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 196,
+    "success": false,
+    "position_error": 0.303445589942398,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 197,
+    "success": false,
+    "position_error": 0.3034437610059708,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 198,
+    "success": false,
+    "position_error": 0.30344248711390254,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 199,
+    "success": false,
+    "position_error": 0.3034409650018901,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 200,
+    "success": false,
+    "position_error": 0.3034396523096383,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 201,
+    "success": false,
+    "position_error": 0.30343812011166094,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 202,
+    "success": false,
+    "position_error": 0.30343654675468734,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 203,
+    "success": false,
+    "position_error": 0.30343506041545787,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 204,
+    "success": false,
+    "position_error": 0.30343352880720165,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 205,
+    "success": false,
+    "position_error": 0.30343209635570645,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 206,
+    "success": false,
+    "position_error": 0.3034304229000533,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 207,
+    "success": false,
+    "position_error": 0.30342924751402656,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 208,
+    "success": false,
+    "position_error": 0.3034281753287731,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 209,
+    "success": false,
+    "position_error": 0.3034267608042036,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 210,
+    "success": false,
+    "position_error": 0.3034258245951964,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 211,
+    "success": false,
+    "position_error": 0.30342473197389275,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 212,
+    "success": false,
+    "position_error": 0.3034236030767019,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 213,
+    "success": false,
+    "position_error": 0.30342246612313506,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 214,
+    "success": false,
+    "position_error": 0.3034213477608656,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 215,
+    "success": false,
+    "position_error": 0.3034202155422019,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 216,
+    "success": false,
+    "position_error": 0.30341874499965726,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 217,
+    "success": false,
+    "position_error": 0.3034179453637744,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 218,
+    "success": false,
+    "position_error": 0.30341655145461655,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 219,
+    "success": false,
+    "position_error": 0.3034156013607978,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 220,
+    "success": false,
+    "position_error": 0.30341445122339117,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 221,
+    "success": false,
+    "position_error": 0.30341298221562774,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 222,
+    "success": false,
+    "position_error": 0.30341200125148937,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 223,
+    "success": false,
+    "position_error": 0.30341087778120457,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 224,
+    "success": false,
+    "position_error": 0.3034096366068155,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 225,
+    "success": false,
+    "position_error": 0.30340848079227634,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 226,
+    "success": false,
+    "position_error": 0.3034071746984326,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 227,
+    "success": false,
+    "position_error": 0.30340574858276703,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 228,
+    "success": false,
+    "position_error": 0.3034048174940942,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 229,
+    "success": false,
+    "position_error": 0.3034035323720481,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 230,
+    "success": false,
+    "position_error": 0.3034023153280785,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 231,
+    "success": false,
+    "position_error": 0.3034008583756389,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 232,
+    "success": false,
+    "position_error": 0.30339983359616873,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 233,
+    "success": false,
+    "position_error": 0.3033986058134186,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 234,
+    "success": false,
+    "position_error": 0.3033973980787632,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 235,
+    "success": false,
+    "position_error": 0.30339620578355486,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 236,
+    "success": false,
+    "position_error": 0.3033949305913346,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 237,
+    "success": false,
+    "position_error": 0.3033936038840359,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 238,
+    "success": false,
+    "position_error": 0.30339220428811053,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 239,
+    "success": false,
+    "position_error": 0.3033908158264609,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 240,
+    "success": false,
+    "position_error": 0.3033898292852202,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 241,
+    "success": false,
+    "position_error": 0.30338832894761936,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 242,
+    "success": false,
+    "position_error": 0.3033872417112651,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 243,
+    "success": false,
+    "position_error": 0.3033860049205881,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 244,
+    "success": false,
+    "position_error": 0.30338458794058454,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 245,
+    "success": false,
+    "position_error": 0.30338331624946235,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 246,
+    "success": false,
+    "position_error": 0.30338198980575193,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 247,
+    "success": false,
+    "position_error": 0.3033806624298574,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 248,
+    "success": false,
+    "position_error": 0.3033793313064965,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 249,
+    "success": false,
+    "position_error": 0.3033779670112189,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 250,
+    "success": false,
+    "position_error": 0.3033766719706801,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 251,
+    "success": false,
+    "position_error": 0.3033750477425974,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 252,
+    "success": false,
+    "position_error": 0.3033734878272014,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 253,
+    "success": false,
+    "position_error": 0.30337174300994363,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 254,
+    "success": false,
+    "position_error": 0.30337011971039907,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 255,
+    "success": false,
+    "position_error": 0.3033684535960681,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 256,
+    "success": false,
+    "position_error": 0.30336658620701407,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 257,
+    "success": false,
+    "position_error": 0.3033649289529716,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 258,
+    "success": false,
+    "position_error": 0.30336323173455515,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 259,
+    "success": false,
+    "position_error": 0.3033615904884517,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 260,
+    "success": false,
+    "position_error": 0.30335964730088705,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 261,
+    "success": false,
+    "position_error": 0.3033578279706699,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 262,
+    "success": false,
+    "position_error": 0.30335629046149304,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 263,
+    "success": false,
+    "position_error": 0.30335441190256596,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 264,
+    "success": false,
+    "position_error": 0.30335271039236034,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 265,
+    "success": false,
+    "position_error": 0.30335088065083937,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 266,
+    "success": false,
+    "position_error": 0.303349196835736,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 267,
+    "success": false,
+    "position_error": 0.30334735147570413,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 268,
+    "success": false,
+    "position_error": 0.3033454930156605,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 269,
+    "success": false,
+    "position_error": 0.30334373292491,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 270,
+    "success": false,
+    "position_error": 0.3033418448354688,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 271,
+    "success": false,
+    "position_error": 0.3033399603350162,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 272,
+    "success": false,
+    "position_error": 0.30333821246041914,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 273,
+    "success": false,
+    "position_error": 0.30333641069791994,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  },
+  {
+    "step": 274,
+    "success": false,
+    "position_error": 0.3033345917214021,
+    "supported_by_receptacle": false,
+    "robot_contact": false
+  }
+]

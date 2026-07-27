@@ -1,0 +1,182 @@
+{
+  "out_name": "gen_50cross_selectsrc_seed01",
+  "source_hdf5": "artifacts/seeds/robomimic_pnp_50demo_crossmix_aligned.hdf5",
+  "target_manifest": "artifacts/seeds/pnp_seed_manifest_50demo_crossmix.json",
+  "source_demo_keys": [
+    "demo_0",
+    "demo_1",
+    "demo_2",
+    "demo_3",
+    "demo_4",
+    "demo_5",
+    "demo_6",
+    "demo_7",
+    "demo_8",
+    "demo_9",
+    "demo_10",
+    "demo_11",
+    "demo_12",
+    "demo_13",
+    "demo_14",
+    "demo_15",
+    "demo_16",
+    "demo_17",
+    "demo_18",
+    "demo_19",
+    "demo_20",
+    "demo_21",
+    "demo_22",
+    "demo_23",
+    "demo_24",
+    "demo_25",
+    "demo_26",
+    "demo_27",
+    "demo_28",
+    "demo_29",
+    "demo_30",
+    "demo_31",
+    "demo_32",
+    "demo_33",
+    "demo_34",
+    "demo_35",
+    "demo_36",
+    "demo_37",
+    "demo_38",
+    "demo_39",
+    "demo_40",
+    "demo_41",
+    "demo_42",
+    "demo_43",
+    "demo_44",
+    "demo_45",
+    "demo_46",
+    "demo_47",
+    "demo_48",
+    "demo_49"
+  ],
+  "generation_env_seed_index": 1,
+  "generation_env_house_id": 1379,
+  "is_mimicgen_generate_call": true,
+  "same_initial_state_smoke": false,
+  "select_src_per_subtask": true,
+  "interpolate_from_last_target_pose": true,
+  "transform_first_robot_pose": true,
+  "stop_on_success": false,
+  "omit_final_residual": false,
+  "post_hold_steps": 30,
+  "generated_success_any": false,
+  "final_success": false,
+  "first_success_step": -1,
+  "success_persistent_to_end": false,
+  "num_actions_executed": 274,
+  "src_demo_inds": [
+    39,
+    10,
+    43,
+    13,
+    10,
+    9,
+    35
+  ],
+  "task_spec": {
+    "subtask_1": {
+      "object_ref": "pickup_obj",
+      "subtask_term_signal": "pregrasp_done",
+      "subtask_term_offset_range": [
+        0,
+        0
+      ],
+      "selection_strategy": "random",
+      "selection_strategy_kwargs": null,
+      "action_noise": 0.0,
+      "num_interpolation_steps": 0,
+      "num_fixed_steps": 0,
+      "apply_noise_during_interpolation": false
+    },
+    "subtask_2": {
+      "object_ref": "pickup_obj",
+      "subtask_term_signal": "grasp_done",
+      "subtask_term_offset_range": [
+        0,
+        0
+      ],
+      "selection_strategy": "random",
+      "selection_strategy_kwargs": null,
+      "action_noise": 0.0,
+      "num_interpolation_steps": 0,
+      "num_fixed_steps": 0,
+      "apply_noise_during_interpolation": false
+    },
+    "subtask_3": {
+      "object_ref": "pickup_obj",
+      "subtask_term_signal": "gripper_closed",
+      "subtask_term_offset_range": [
+        0,
+        0
+      ],
+      "selection_strategy": "random",
+      "selection_strategy_kwargs": null,
+      "action_noise": 0.0,
+      "num_interpolation_steps": 0,
+      "num_fixed_steps": 0,
+      "apply_noise_during_interpolation": false
+    },
+    "subtask_4": {
+      "object_ref": "pickup_obj",
+      "subtask_term_signal": "lift_done",
+      "subtask_term_offset_range": [
+        0,
+        0
+      ],
+      "selection_strategy": "random",
+      "selection_strategy_kwargs": null,
+      "action_noise": 0.0,
+      "num_interpolation_steps": 0,
+      "num_fixed_steps": 0,
+      "apply_noise_during_interpolation": false
+    },
+    "subtask_5": {
+      "object_ref": "place_receptacle",
+      "subtask_term_signal": "preplace_done",
+      "subtask_term_offset_range": [
+        0,
+        0
+      ],
+      "selection_strategy": "random",
+      "selection_strategy_kwargs": null,
+      "action_noise": 0.0,
+      "num_interpolation_steps": 0,
+      "num_fixed_steps": 0,
+      "apply_noise_during_interpolation": false
+    },
+    "subtask_6": {
+      "object_ref": "place_receptacle",
+      "subtask_term_signal": "place_success",
+      "subtask_term_offset_range": [
+        0,
+        0
+      ],
+      "selection_strategy": "random",
+      "selection_strategy_kwargs": null,
+      "action_noise": 0.0,
+      "num_interpolation_steps": 0,
+      "num_fixed_steps": 0,
+      "apply_noise_during_interpolation": false
+    },
+    "subtask_7": {
+      "object_ref": "place_receptacle",
+      "subtask_term_signal": null,
+      "subtask_term_offset_range": [
+        0,
+        0
+      ],
+      "selection_strategy": "random",
+      "selection_strategy_kwargs": null,
+      "action_noise": 0.0,
+      "num_interpolation_steps": 0,
+      "num_fixed_steps": 0,
+      "apply_noise_during_interpolation": false
+    }
+  },
+  "notes": "Full-rollout PnP generation from the configured source dataset; stop_on_success must be false for acceptance."
+}
