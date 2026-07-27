@@ -26,26 +26,28 @@
   <a href="media/foodlike_pilot_outcomes.mp4">Pilot outcomes</a>
 </p>
 
-## Worklines
+<p align="center"><em>Previews are compact; open the MP4 links for full-size demos.</em></p>
 
-This repository contains multiple integration worklines. Each has its own README under `docs/worklines/` with details.
+## What is included
 
-| Workline | README | Code | Results | Status |
+This repository is a MolmoSpaces integration workline portfolio. The top-level README lists every public workline so a new reader does not need to browse subdirectories to discover what is here.
+
+| Workline | Canonical README | Code entrypoint | Evidence / inventory | Status |
 |---|---|---|---|---|
-| MimicGen Pick-and-Place | [`docs/worklines/mimicgen_pick_and_place/README.md`](docs/worklines/mimicgen_pick_and_place/README.md) | [`src/pnp/`](src/pnp/) | [`results/workline_index/mimicgen_pick_and_place.md`](results/workline_index/mimicgen_pick_and_place.md) | Active |
-| 50-demo MimicGen cross-subtask | [`docs/worklines/mimicgen_50cross/README.md`](docs/worklines/mimicgen_50cross/README.md) | [`src/pnp/*50cross*`](src/pnp/) | [`results/50cross_selectsrc_pilot_20260727_182533/`](results/50cross_selectsrc_pilot_20260727_182533/) | Diagnostic |
-| Bimanual YAM browser teleop | [`docs/worklines/bimanual_yam_browser_teleop/README.md`](docs/worklines/bimanual_yam_browser_teleop/README.md) | [`src/bimanual_yam/`](src/bimanual_yam/) | [`results/workline_index/ithor_bimanual_yam.md`](results/workline_index/ithor_bimanual_yam.md) | Infrastructure |
+| MimicGen Pick-and-Place | [`docs/worklines/mimicgen_pick_and_place/README.md`](docs/worklines/mimicgen_pick_and_place/README.md) | [`src/pnp/`](src/pnp/) | [`results/workline_index/mimicgen_pick_and_place.md`](results/workline_index/mimicgen_pick_and_place.md) | Active / primary |
+| 50-demo MimicGen cross-subtask route | [`docs/worklines/mimicgen_50cross/README.md`](docs/worklines/mimicgen_50cross/README.md) | [`src/pnp/*50cross*`](src/pnp/) | [`results/50cross_selectsrc_pilot_20260727_182533/`](results/50cross_selectsrc_pilot_20260727_182533/) | Diagnostic |
+| Bimanual YAM browser teleoperation | [`docs/worklines/bimanual_yam_browser_teleop/README.md`](docs/worklines/bimanual_yam_browser_teleop/README.md) | [`src/bimanual_yam/`](src/bimanual_yam/) | [`results/workline_index/ithor_bimanual_yam.md`](results/workline_index/ithor_bimanual_yam.md) | Infrastructure |
 | iTHOR bimanual YAM | [`docs/worklines/ithor_bimanual_yam/README.md`](docs/worklines/ithor_bimanual_yam/README.md) | [`src/bimanual_yam/`](src/bimanual_yam/) | [`results/workline_index/ithor_bimanual_yam.md`](results/workline_index/ithor_bimanual_yam.md) | In progress |
-| Custom-scene bimanual YAM baseline | [`docs/worklines/bimanual_yam_source_baseline/README.md`](docs/worklines/bimanual_yam_source_baseline/README.md) | — | [`results/workline_index/bimanual_yam_source_baseline.md`](results/workline_index/bimanual_yam_source_baseline.md) | Completed |
-| MolmoAct2 → MolmoSpaces legacy | [`docs/worklines/molmoact2_legacy/README.md`](docs/worklines/molmoact2_legacy/README.md) | [`src/molmoact2_legacy/`](src/molmoact2_legacy/) | [`results/workline_index/molmoact2_integration_legacy.md`](results/workline_index/molmoact2_integration_legacy.md) | Legacy |
-| MolmoSpaces bounded reproduction | [`docs/worklines/molmospaces_official_reproduction/README.md`](docs/worklines/molmospaces_official_reproduction/README.md) | — | [`results/workline_index/molmospaces_official_reproduction.md`](results/workline_index/molmospaces_official_reproduction.md) | Completed |
-| MimicGen single-arm groundwork | [`docs/worklines/mimicgen_single_arm/README.md`](docs/worklines/mimicgen_single_arm/README.md) | Superseded by [`src/pnp/`](src/pnp/) | [`results/workline_index/mimicgen_single_arm.md`](results/workline_index/mimicgen_single_arm.md) | Historical |
+| Completed custom-scene bimanual YAM baseline | [`docs/worklines/bimanual_yam_source_baseline/README.md`](docs/worklines/bimanual_yam_source_baseline/README.md) | Inventory / regeneration entrypoints | [`results/workline_index/bimanual_yam_source_baseline.md`](results/workline_index/bimanual_yam_source_baseline.md) | Completed evidence package |
+| MolmoAct2 → MolmoSpaces legacy | [`docs/worklines/molmoact2_legacy/README.md`](docs/worklines/molmoact2_legacy/README.md) | [`src/molmoact2_legacy/`](src/molmoact2_legacy/) | [`results/workline_index/molmoact2_integration_legacy.md`](results/workline_index/molmoact2_integration_legacy.md) | Legacy / ended |
+| Bounded official MolmoSpaces reproduction | [`docs/worklines/molmospaces_official_reproduction/README.md`](docs/worklines/molmospaces_official_reproduction/README.md) | Upstream MolmoSpaces entrypoints | [`results/workline_index/molmospaces_official_reproduction.md`](results/workline_index/molmospaces_official_reproduction.md) | Completed bounded reproduction |
+| MimicGen single-arm groundwork | [`docs/worklines/mimicgen_single_arm/README.md`](docs/worklines/mimicgen_single_arm/README.md) | Superseded by [`src/pnp/`](src/pnp/) | [`results/workline_index/mimicgen_single_arm.md`](results/workline_index/mimicgen_single_arm.md) | Historical groundwork |
 
-Large runtime data (official shards, generated HDF5, rollout directories, simulation logs, videos) are excluded from Git.
+Also included: the upstream MolmoSpaces source snapshot, lightweight manifests and summaries under `results/`, small README demo media under `media/`, public documentation, and attribution files.
+
+Large runtime data are excluded from Git: official shards, generated HDF5 files, rollout directories, simulator logs, PID files, caches, videos, local machine paths, and internal planning ledgers. Worklines that use such files keep a README, lightweight inventory, or regeneration entrypoint instead of committing the raw artifact.
 
 ## Quick Start
-
-Clone the repository, install MolmoSpaces and dependencies, place the official MolmoBot-Data shard, and run a smoke check.
 
 ### 1. Clone
 
@@ -54,9 +56,18 @@ git clone https://github.com/yanggoumao2/molmospaces-integration.git
 cd molmospaces-integration
 ```
 
+SSH also works:
+
+```bash
+git clone git@github.com:yanggoumao2/molmospaces-integration.git
+cd molmospaces-integration
+```
+
 ### 2. Create a Python environment
 
-MolmoSpaces requires Python 3.11.
+MolmoSpaces uses Python 3.11.
+
+With conda:
 
 ```bash
 conda create -n molmospaces-integration python=3.11
@@ -64,7 +75,7 @@ conda activate molmospaces-integration
 python -m pip install --upgrade pip setuptools wheel
 ```
 
-Or with `uv`:
+With `uv`:
 
 ```bash
 uv venv --python 3.11 .venv
@@ -74,32 +85,43 @@ uv pip install --upgrade pip setuptools wheel
 
 ### 3. Install MolmoSpaces
 
+For the MuJoCo-based Pick-and-Place integration:
+
 ```bash
 pip install -e ".[mujoco]"
 ```
 
-For additional extras (house generation, grasping):
+Optional upstream extras can be installed as needed, for example:
 
 ```bash
 pip install -e ".[mujoco,grasp,housegen]"
 ```
 
-See `docs/upstream_molmospaces_readme.md` for upstream installation details.
+See `docs/upstream_molmospaces_readme.md` for upstream MolmoSpaces installation details.
 
 ### 4. Fetch MimicGen and robomimic
 
-The integration scripts depend on MimicGen and robomimic. Fetch both into `vendor/`:
+The integration scripts use MimicGen and robomimic. Fetch both into `vendor/`:
 
 ```bash
 bash tools/setup_mimicgen_dependency.sh
+```
+
+Install them in editable mode when their package metadata is available:
+
+```bash
 pip install -e vendor/robomimic
 pip install -e vendor/mimicgen
 ```
+
+Set dependency roots:
 
 ```bash
 export MIMICGEN_ROOT=$PWD/vendor/mimicgen
 export ROBOMIMIC_ROOT=$PWD/vendor/robomimic
 ```
+
+If existing local checkouts are used instead, point `MIMICGEN_ROOT` and `ROBOMIMIC_ROOT` to those directories.
 
 ### 5. Set runtime paths
 
@@ -111,38 +133,63 @@ export MOLMOSPACES_PNP_WORKDIR=$PWD/runtime/mimicgen_pick_and_place
 mkdir -p "$MOLMOSPACES_PNP_WORKDIR"/{artifacts/seeds,artifacts/mimicgen_pnp,data/molmobot_data/FrankaPickAndPlaceOmniCamConfig/val_shards,logs}
 ```
 
+Optional NLTK cache:
+
+```bash
+export MOLMOSPACES_NLTK_DATA=/path/to/nltk_data
+```
+
 ### 6. Place the MolmoBot-Data shard
 
-Download the official MolmoBot Pick-and-Place validation shard and place it at:
+Download the official MolmoBot Pick-and-Place validation shard and place it here:
 
 ```text
 runtime/mimicgen_pick_and_place/data/molmobot_data/FrankaPickAndPlaceOmniCamConfig/val_shards/00000.tar
 ```
 
-### 7. Smoke check
+The repository includes lightweight manifests and summaries but not official data shards or generated artifacts.
 
-Copy a seed manifest and inspect source candidates:
+### 7. Run a smoke check
+
+Copy a manifest into the runtime work directory:
 
 ```bash
 cp results/pnp_seed_manifest_homogeneous_foodlike_bowl_10candidate_v3.json \
   "$MOLMOSPACES_PNP_WORKDIR/artifacts/seeds/"
+```
 
+Inspect source candidates:
+
+```bash
 $MOLMOSPACES_PYTHON src/pnp/inspect_source_candidates.py
 ```
 
-Replay one source trajectory to verify the replay pipeline:
+Replay one source trajectory to verify the replay pipeline works:
 
 ```bash
 $MOLMOSPACES_PYTHON src/pnp/replay_source_episode.py --seed-index 0 --save-videos
 ```
 
-## Pick-and-Place Workflow
+## MolmoSpaces Workline Portfolio
 
-The Pick-and-Place pipeline generates MimicGen rollouts from MolmoBot-Data source trajectories: collect datagen info, convert to robomimic HDF5, parse with MimicGen, and generate rollouts in new layouts through spatial transforms.
+The workline table above is mirrored in [`docs/worklines/README.md`](docs/worklines/README.md). Each workline has a canonical README with details, even when its raw HDF5/videos are excluded from Git.
 
-### 1. Collect MimicGen datagen information
+MolmoAct2 official `sim_eval` success, MolmoSpaces adapter diagnostics, bimanual browser teleoperation, custom-scene YAM baseline, iTHOR source-demo infrastructure, and Pick-and-Place MimicGen rollouts are separate evidence layers and should not be conflated.
 
-Replay a source trajectory and extract the observations and actions needed by MimicGen:
+## Pick-and-Place Integration Workflow
+
+The Pick-and-Place pipeline generates MimicGen rollouts from MolmoBot-Data source trajectories in a reproducible sequence:
+
+1. inspect or prepare source-candidate metadata;
+2. replay source trajectories and collect MimicGen datagen information;
+3. convert selected sources into a robomimic/MimicGen source HDF5;
+4. parse the source HDF5 with MimicGen;
+5. generate MolmoSpaces rollouts and save videos;
+6. optionally collect accepted rollouts with action-hash deduplication.
+
+### Collect MimicGen datagen information
+
+Replay source trajectories to extract the observations and actions MimicGen needs for spatial transform:
 
 ```bash
 $MOLMOSPACES_PYTHON src/pnp/collect_homogeneous_datagen_info.py \
@@ -151,7 +198,7 @@ $MOLMOSPACES_PYTHON src/pnp/collect_homogeneous_datagen_info.py \
   --out-root "$MOLMOSPACES_PNP_WORKDIR/artifacts/replay_pnp_exact_homogeneous_foodlike_bowl_10candidate_v3"
 ```
 
-### 2. Convert sources to robomimic HDF5
+### Convert sources to a robomimic/MimicGen source HDF5
 
 Bundle selected source trajectories into a single robomimic-compatible HDF5:
 
@@ -161,16 +208,18 @@ $MOLMOSPACES_PYTHON src/pnp/convert_seed_set_to_robomimic.py \
   --out "$MOLMOSPACES_PNP_WORKDIR/artifacts/seeds/robomimic_pnp_foodlike_bowl_10demo_aligned.hdf5"
 ```
 
-### 3. Parse source dataset with MimicGen
+### Parse the source HDF5 with MimicGen
+
+Load the source HDF5 into MimicGen's dataset format and inspect properties:
 
 ```bash
 PNP_SOURCE_HDF5="$MOLMOSPACES_PNP_WORKDIR/artifacts/seeds/robomimic_pnp_foodlike_bowl_10demo_aligned.hdf5" \
 $MOLMOSPACES_PYTHON src/pnp/parse_source_dataset.py
 ```
 
-### 4. Generate a rollout
+### Generate a MolmoSpaces rollout
 
-Transform a source trajectory into a new scene layout using MimicGen's spatial transform:
+Transform a source trajectory into a new scene layout using MimicGen's object-centric spatial transform:
 
 ```bash
 $MOLMOSPACES_PYTHON src/pnp/generate_pick_place_rollout.py \
@@ -185,16 +234,21 @@ $MOLMOSPACES_PYTHON src/pnp/generate_pick_place_rollout.py \
   --save-videos
 ```
 
-### 50-demo cross-subtask route
+### 50-demo cross-subtask MimicGen route
 
-The cross-subtask route uses a broader 50-demo source pool and calls MimicGen with `select_src_per_subtask=True`, so different subtasks in a single generated rollout can be sampled from different source demos:
+The workflow above uses one source demo per rollout. The cross-subtask route uses a broader 50-demo source pool and calls MimicGen with `select_src_per_subtask=True`, allowing different subtasks in a single rollout to be sampled from different source demos:
 
 ```bash
 # Select the broad source pool from the official MolmoBot shard.
 $MOLMOSPACES_PYTHON src/pnp/select_pnp_50_source_pool.py
 
-# Collect strict replay + datagen_info for candidates.
+# Collect strict replay + datagen_info for candidate sources.
 bash src/pnp/run_collect_50cross_datagen_parallel.sh
+# or for one candidate:
+$MOLMOSPACES_PYTHON src/pnp/collect_datagen_info_50cross.py \
+  --seed-index 0 \
+  --manifest "$MOLMOSPACES_PNP_WORKDIR/artifacts/seeds/pnp_seed_manifest_50demo_crossmix.json" \
+  --out-root "$MOLMOSPACES_PNP_WORKDIR/artifacts/replay_pnp_exact_50cross"
 
 # Build the 50-demo MimicGen source HDF5 from hard-pass sources.
 $MOLMOSPACES_PYTHON src/pnp/convert_seed_set_to_robomimic_50cross.py \
@@ -207,15 +261,19 @@ $MOLMOSPACES_PYTHON src/pnp/convert_seed_set_to_robomimic_50cross.py \
 bash src/pnp/run_50cross_selectsrc_pilot.sh
 ```
 
-Batch collection of accepted rollouts:
+Broad random mixing across many houses, objects, and receptacles can expose geometry, contact, IK, and subtask-stitching compatibility problems. This route is diagnostic; a compatibility-filtered cross-subtask route is the next step toward a scalable success-rate experiment.
+
+### Batch collection
+
+Collect successes with the non-deduplicated baseline collector (collects any rollout that meets the success criteria, may include duplicates):
 
 ```bash
-# Non-deduplicated collector.
 TARGET_SUCCESS=100 MAX_ATTEMPTS=800 bash src/pnp/collect_uniform_successes.sh
 ```
 
+Collect successes with action-hash deduplication (skips rollouts whose action sequence matches a previously collected trajectory):
+
 ```bash
-# Action-hash deduplicated collector.
 PREVIOUS_COLLECTOR_RUN=logs/collect_uniform_successes_YYYYMMDD_HHMMSS \
 TARGET_SUCCESS=100 MAX_ATTEMPTS=500 \
 bash src/pnp/collect_unique_highyield_successes.sh
@@ -223,7 +281,7 @@ bash src/pnp/collect_unique_highyield_successes.sh
 
 ## Bimanual YAM Browser Teleoperation
 
-Browser-based teleoperation utilities for bimanual YAM scenes — an in-browser viewer and keyboard control bridge.
+Browser-based teleoperation utilities for bimanual YAM scenes: a read-only in-browser viewer for real-time observation, and keyboard teleoperation for interactive control.
 
 Read-only browser stream:
 
@@ -237,14 +295,39 @@ Keyboard teleoperation:
 $MOLMOSPACES_PYTHON src/bimanual_yam/browser_keyboard_teleop.py --host 127.0.0.1 --port 8765
 ```
 
-## Results
+The browser teleoperation path provides a control and observation bridge for bimanual YAM scenes.
 
-- **Heterogeneous PnP whole-source generation**: `10/10` accepted generated rollouts, each satisfying full rollout, `final_success=true`, persistent success, and 30-step post-hold (`results/whole_source_transformfirst_summary.json`).
-- **Homogeneous foodlike-to-bowl pilot**: `13/100` auto-accepted, `15/100` visual-reviewed after two one-frame trace-glitch cases.
-- **50-demo cross-subtask source pool**: `50` hard-pass sources, `9286` total action rows (`robomimic_pnp_50demo_crossmix_aligned.hdf5`). See `results/pnp_50cross_selected_hardpass_indices.json`, `results/robomimic_pnp_50demo_crossmix_aligned.summary.json`.
-- **`select_src_per_subtask=True` pilot**: broad random mixing across houses, objects, and receptacles exposed geometry and compatibility issues. Logs under `results/50cross_selectsrc_pilot_20260727_182533/`.
-- **Uniform collector snapshot**: `results/collector_uniform_summary_live.json`.
-- **High-yield dedup collector snapshot**: `results/collector_highyield_dedup_summary_live.json`.
+## Included Results Snapshot
+
+- **Heterogeneous Pick-and-Place whole-source generation**: `10/10` accepted generated rollouts with full rollout, final success, persistent success, and 30-step post-hold. See `results/whole_source_transformfirst_summary.json`.
+- **Homogeneous foodlike-to-bowl pilot**: strict automatic success `13/100`; reviewed visual success `15/100` after two one-frame trace-glitch cases.
+- **50-demo cross-subtask source pool**: `51` strict replay/datagen-info hard-pass candidates were screened, `50` were selected into `robomimic_pnp_50demo_crossmix_aligned.hdf5`, with `9286` total source action rows. See `results/pnp_50cross_selected_hardpass_indices.json` and `results/robomimic_pnp_50demo_crossmix_aligned.summary.json`.
+- **Broad random `select_src_per_subtask=True` pilot**: first completed samples exposed geometry/contact/source-compatibility issues. Lightweight logs and generation traces are under `results/50cross_selectsrc_pilot_20260727_182533/`; large binary videos/HDF5/arrays are excluded from Git.
+- **Uniform collector live snapshot**: non-deduplicated progress in `results/collector_uniform_summary_live.json`.
+- **High-yield deduplicated collector live snapshot**: unique accepted progress in `results/collector_highyield_dedup_summary_live.json`.
+
+<details>
+<summary>Demo media</summary>
+
+### Generated Rollout Examples
+
+[![Generated rollout examples](media/gif/heterogeneous_generated_examples.gif)](media/heterogeneous_generated_examples.mp4)
+
+[Open MP4](media/heterogeneous_generated_examples.mp4)
+
+### Source Candidates
+
+[![Foodlike source candidates](media/gif/foodlike_source_candidates.gif)](media/foodlike_source_candidates_grid.mp4)
+
+[Open MP4](media/foodlike_source_candidates_grid.mp4)
+
+### Pilot Outcomes
+
+[![Foodlike pilot outcomes](media/gif/foodlike_pilot_outcomes.gif)](media/foodlike_pilot_outcomes.mp4)
+
+[Open MP4](media/foodlike_pilot_outcomes.mp4)
+
+</details>
 
 ## Repository Layout
 
@@ -253,18 +336,27 @@ molmo_spaces/             Upstream MolmoSpaces Python package
 scripts/                  Upstream MolmoSpaces scripts
 configs/, examples/, docs/ Upstream configuration, examples, and documentation
 src/pnp/                  Pick-and-Place MimicGen integration scripts
-src/bimanual_yam/         Bimanual YAM diagnostics and browser teleop
+src/bimanual_yam/         Bimanual YAM diagnostics and browser keyboard teleoperation
 results/                  Lightweight JSON manifests and result summaries
-media/                    Demo GIFs and videos for the README
-tools/setup_mimicgen_dependency.sh   Fetch MimicGen and robomimic into vendor/
+media/                    Small public demo videos for the GitHub README
+docs/experiments.md       Public experiment notes and evidence boundaries
+docs/upstream_molmospaces_readme.md  Original upstream MolmoSpaces README
+tools/setup_mimicgen_dependency.sh   Helper to fetch MimicGen and robomimic into vendor/
 ```
+
+## Evidence Boundaries
+
+- Source trajectories are synthetic planner expert trajectories from MolmoBot-Data, not human demonstrations.
+- Replay success and parser success are prerequisites, not generated-demo success.
+- Accepted generated demonstrations require a real MolmoSpaces simulator rollout, `final_success=true`, post-hold stability, and saved artifacts.
 
 ## Attribution
 
-- **Upstream MolmoSpaces**: Allen Institute for AI, Apache License 2.0.
-- **Upstream MimicGen**: NVIDIA / NVlabs (Ajay Mandlekar et al.), NVIDIA Source Code License; datasets under CC-BY 4.0.
-- **MolmoSpaces Integration**: Kunyu Yang, Institute of Trustworthy Embodied Intelligence, Fudan University. See `AUTHORS.md`.
+- Upstream MolmoSpaces: Allen Institute for AI, Apache License 2.0. The upstream source and license are retained in this repository.
+- Upstream MimicGen: NVIDIA / NVlabs. MimicGen was introduced by Ajay Mandlekar, Soroush Nasiriany, Bowen Wen, Iretiayo Akinola, Yashraj Narang, Linxi Fan, Yuke Zhu, and Dieter Fox. MimicGen code is released under the NVIDIA Source Code License, and MimicGen datasets are released under CC-BY 4.0.
+- MolmoSpaces Integration and release organization: Kunyu Yang, Institute of Trustworthy Embodied Intelligence, Fudan University.
+- Details: `AUTHORS.md`.
 
 ## License
 
-Upstream MolmoSpaces code: Apache License 2.0 (`LICENSE`). Integration code: same repository license.
+The upstream MolmoSpaces code is distributed under the Apache License 2.0; see `LICENSE`. Third-party dependencies and datasets retain their own licenses. The integration code in this repository is provided as research code under the same repository license unless a file states otherwise.
