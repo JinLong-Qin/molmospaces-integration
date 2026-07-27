@@ -1,10 +1,36 @@
-# MolmoSpaces x MimicGen
+<div align="center">
+  <img src="media/banner.svg" alt="MolmoSpaces x MimicGen" width="980" />
+</div>
 
-[English](README.md) | [中文](README_zh.md)
+<p align="center">
+  <a href="README.md">English</a> | <a href="README_zh.md">中文</a>
+</p>
 
-MolmoSpaces x MimicGen is a fork-style research snapshot that combines the upstream MolmoSpaces codebase with an integration layer for Pick-and-Place trajectory generation and bimanual YAM browser/keyboard teleoperation.
+<p align="center">
+  <strong>MolmoSpaces x MimicGen</strong> combines the upstream MolmoSpaces codebase with an integration layer for Pick-and-Place trajectory generation and bimanual YAM browser/keyboard teleoperation.
+</p>
 
-This repository is organized so that a new user can clone it, install MolmoSpaces, fetch MimicGen and robomimic, place the official MolmoBot-Data shard under `runtime/`, and run the included source-replay and generation scripts.
+<p align="center">
+  A new user can clone this repository, install MolmoSpaces, fetch MimicGen and robomimic, place the official MolmoBot-Data shard under <code>runtime/</code>, and run the included source-replay and generation scripts.
+</p>
+
+<p align="center">
+  <img src="media/gif/heterogeneous_generated_examples.gif" alt="Generated rollout examples" width="245" />
+  &nbsp;
+  <img src="media/gif/source_candidate_example.gif" alt="Source candidate example" width="245" />
+  &nbsp;
+  <img src="media/gif/foodlike_pilot_outcomes.gif" alt="Pilot outcomes" width="245" />
+</p>
+
+<p align="center">
+  <a href="media/heterogeneous_generated_examples.mp4">Generated examples</a>
+  &nbsp;·&nbsp;
+  <a href="media/foodlike_source_candidates_grid.mp4">Source candidates</a>
+  &nbsp;·&nbsp;
+  <a href="media/foodlike_pilot_outcomes.mp4">Pilot outcomes</a>
+</p>
+
+<p align="center"><em>Previews are intentionally compact; open the MP4 links for the full-size demos.</em></p>
 
 ## What is included
 

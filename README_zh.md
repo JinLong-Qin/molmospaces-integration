@@ -1,10 +1,36 @@
-# MolmoSpaces x MimicGen
+<div align="center">
+  <img src="media/banner.svg" alt="MolmoSpaces x MimicGen" width="980" />
+</div>
 
-[English](README.md) | [中文](README_zh.md)
+<p align="center">
+  <a href="README.md">English</a> | <a href="README_zh.md">中文</a>
+</p>
 
-MolmoSpaces x MimicGen 是一个 fork-style 的研究代码快照：它把上游 MolmoSpaces 代码库和一个 MimicGen 集成层放在同一个仓库中，用于 Pick-and-Place 轨迹生成，以及 bimanual YAM 的浏览器可视化和键盘遥操作。
+<p align="center">
+  <strong>MolmoSpaces x MimicGen</strong> 把上游 MolmoSpaces 代码库和一个 MimicGen 集成层放在同一个仓库中，用于 Pick-and-Place 轨迹生成，以及 bimanual YAM 的浏览器可视化和键盘遥操作。
+</p>
 
-本仓库的组织目标是：新用户 clone 后，可以安装 MolmoSpaces，拉取 MimicGen 和 robomimic，把官方 MolmoBot-Data shard 放到 `runtime/`，然后运行本仓库提供的 source replay 和 generation 脚本。
+<p align="center">
+  新用户可以 clone 仓库，安装 MolmoSpaces，拉取 MimicGen 和 robomimic，把官方 MolmoBot-Data shard 放到 <code>runtime/</code>，然后运行本仓库提供的 source replay 和 generation 脚本。
+</p>
+
+<p align="center">
+  <img src="media/gif/heterogeneous_generated_examples.gif" alt="Generated rollout examples" width="245" />
+  &nbsp;
+  <img src="media/gif/source_candidate_example.gif" alt="Source candidate example" width="245" />
+  &nbsp;
+  <img src="media/gif/foodlike_pilot_outcomes.gif" alt="Pilot outcomes" width="245" />
+</p>
+
+<p align="center">
+  <a href="media/heterogeneous_generated_examples.mp4">Generated examples</a>
+  &nbsp;·&nbsp;
+  <a href="media/foodlike_source_candidates_grid.mp4">Source candidates</a>
+  &nbsp;·&nbsp;
+  <a href="media/foodlike_pilot_outcomes.mp4">Pilot outcomes</a>
+</p>
+
+<p align="center"><em>顶部预览保持紧凑；点击 MP4 链接可查看完整尺寸演示。</em></p>
 
 ## 包含内容
 
