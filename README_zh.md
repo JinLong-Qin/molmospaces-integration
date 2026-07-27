@@ -34,14 +34,22 @@
 
 ## 包含内容
 
-- 上游 MolmoSpaces 源码快照。
-- `src/pnp/` 下的 Pick-and-Place MimicGen 集成脚本。
-- `src/bimanual_yam/` 下的 bimanual YAM 浏览器可视化和键盘遥操作脚本。
-- `results/` 下的轻量 manifest 和结果摘要。
-- `media/` 下的小体积 README 演示媒体。
-- public 文档和 attribution 文件。
+这个仓库是 **MolmoSpaces integration workline portfolio**，不是只有 Pick-and-Place 的单线 release。首页直接列出全部公开 workline，避免读者误以为只有少数几个方向。
 
-大规模运行数据不进入 Git：官方 shard、生成的 HDF5、rollout 目录、simulator logs、PID 文件、cache 和内部 planning ledger 都被排除。
+| Workline | Canonical README | 代码入口 | 证据 / inventory | 状态 |
+|---|---|---|---|---|
+| MimicGen Pick-and-Place | [`docs/worklines/mimicgen_pick_and_place/README.md`](docs/worklines/mimicgen_pick_and_place/README.md) | [`src/pnp/`](src/pnp/) | [`results/workline_index/mimicgen_pick_and_place.md`](results/workline_index/mimicgen_pick_and_place.md) | Active / primary |
+| 50-demo MimicGen cross-subtask route | [`docs/worklines/mimicgen_50cross/README.md`](docs/worklines/mimicgen_50cross/README.md) | [`src/pnp/*50cross*`](src/pnp/) | [`results/50cross_selectsrc_pilot_20260727_182533/`](results/50cross_selectsrc_pilot_20260727_182533/) | Diagnostic |
+| Bimanual YAM browser teleoperation | [`docs/worklines/bimanual_yam_browser_teleop/README.md`](docs/worklines/bimanual_yam_browser_teleop/README.md) | [`src/bimanual_yam/`](src/bimanual_yam/) | [`results/workline_index/ithor_bimanual_yam.md`](results/workline_index/ithor_bimanual_yam.md) | Infrastructure |
+| iTHOR bimanual YAM | [`docs/worklines/ithor_bimanual_yam/README.md`](docs/worklines/ithor_bimanual_yam/README.md) | [`src/bimanual_yam/`](src/bimanual_yam/) | [`results/workline_index/ithor_bimanual_yam.md`](results/workline_index/ithor_bimanual_yam.md) | In progress |
+| Completed custom-scene bimanual YAM baseline | [`docs/worklines/bimanual_yam_source_baseline/README.md`](docs/worklines/bimanual_yam_source_baseline/README.md) | Inventory / regeneration entrypoints | [`results/workline_index/bimanual_yam_source_baseline.md`](results/workline_index/bimanual_yam_source_baseline.md) | Completed evidence package |
+| MolmoAct2 → MolmoSpaces legacy | [`docs/worklines/molmoact2_legacy/README.md`](docs/worklines/molmoact2_legacy/README.md) | [`src/molmoact2_legacy/`](src/molmoact2_legacy/) | [`results/workline_index/molmoact2_integration_legacy.md`](results/workline_index/molmoact2_integration_legacy.md) | Legacy / ended |
+| Bounded official MolmoSpaces reproduction | [`docs/worklines/molmospaces_official_reproduction/README.md`](docs/worklines/molmospaces_official_reproduction/README.md) | Upstream MolmoSpaces entrypoints | [`results/workline_index/molmospaces_official_reproduction.md`](results/workline_index/molmospaces_official_reproduction.md) | Completed bounded reproduction |
+| MimicGen single-arm groundwork | [`docs/worklines/mimicgen_single_arm/README.md`](docs/worklines/mimicgen_single_arm/README.md) | 已由 [`src/pnp/`](src/pnp/) 继承 | [`results/workline_index/mimicgen_single_arm.md`](results/workline_index/mimicgen_single_arm.md) | Historical groundwork |
+
+同时包含：上游 MolmoSpaces 源码快照、`results/` 下的轻量 manifest/summary、`media/` 下的小体积 README 演示媒体、公开文档和 attribution 文件。
+
+仓库刻意不提交大体积运行数据：官方 shards、生成的 HDF5、rollout 目录、simulator logs、PID 文件、cache、视频、本地机器路径和内部 planning ledger。每条 workline 至少保留 README、轻量 inventory 或再生成入口，而不是只给少数方向单独文档。
 
 ## Quick Start
 

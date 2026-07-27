@@ -34,19 +34,22 @@
 
 ## What is included
 
-This repository now tracks the broader MolmoSpaces integration portfolio, not only the current Pick-and-Place MimicGen line.
+This repository is a **MolmoSpaces integration workline portfolio**, not a single Pick-and-Place-only release. The top-level README lists every public workline so a new reader does not need to discover hidden documentation by browsing subdirectories.
 
-- Upstream MolmoSpaces source snapshot.
-- Pick-and-Place MimicGen integration scripts under `src/pnp/`.
-- 50-demo cross-subtask MimicGen diagnostic scripts and lightweight evidence under `src/pnp/*50cross*` and `results/50cross_*`.
-- Bimanual YAM browser visualization and keyboard teleoperation scripts under `src/bimanual_yam/`.
-- Legacy MolmoAct2-to-MolmoSpaces adapter code, diagnostics, and tests under `src/molmoact2_legacy/`.
-- Workline-level documentation under `docs/worklines/`.
-- Lightweight manifests, inventories, and result summaries under `results/`.
-- Small README demo media under `media/`.
-- Public documentation and attribution files.
+| Workline | Canonical README | Code entrypoint | Evidence / inventory | Status |
+|---|---|---|---|---|
+| MimicGen Pick-and-Place | [`docs/worklines/mimicgen_pick_and_place/README.md`](docs/worklines/mimicgen_pick_and_place/README.md) | [`src/pnp/`](src/pnp/) | [`results/workline_index/mimicgen_pick_and_place.md`](results/workline_index/mimicgen_pick_and_place.md) | Active / primary |
+| 50-demo MimicGen cross-subtask route | [`docs/worklines/mimicgen_50cross/README.md`](docs/worklines/mimicgen_50cross/README.md) | [`src/pnp/*50cross*`](src/pnp/) | [`results/50cross_selectsrc_pilot_20260727_182533/`](results/50cross_selectsrc_pilot_20260727_182533/) | Diagnostic |
+| Bimanual YAM browser teleoperation | [`docs/worklines/bimanual_yam_browser_teleop/README.md`](docs/worklines/bimanual_yam_browser_teleop/README.md) | [`src/bimanual_yam/`](src/bimanual_yam/) | [`results/workline_index/ithor_bimanual_yam.md`](results/workline_index/ithor_bimanual_yam.md) | Infrastructure |
+| iTHOR bimanual YAM | [`docs/worklines/ithor_bimanual_yam/README.md`](docs/worklines/ithor_bimanual_yam/README.md) | [`src/bimanual_yam/`](src/bimanual_yam/) | [`results/workline_index/ithor_bimanual_yam.md`](results/workline_index/ithor_bimanual_yam.md) | In progress |
+| Completed custom-scene bimanual YAM baseline | [`docs/worklines/bimanual_yam_source_baseline/README.md`](docs/worklines/bimanual_yam_source_baseline/README.md) | Inventory / regeneration entrypoints | [`results/workline_index/bimanual_yam_source_baseline.md`](results/workline_index/bimanual_yam_source_baseline.md) | Completed evidence package |
+| MolmoAct2 → MolmoSpaces legacy | [`docs/worklines/molmoact2_legacy/README.md`](docs/worklines/molmoact2_legacy/README.md) | [`src/molmoact2_legacy/`](src/molmoact2_legacy/) | [`results/workline_index/molmoact2_integration_legacy.md`](results/workline_index/molmoact2_integration_legacy.md) | Legacy / ended |
+| Bounded official MolmoSpaces reproduction | [`docs/worklines/molmospaces_official_reproduction/README.md`](docs/worklines/molmospaces_official_reproduction/README.md) | Upstream MolmoSpaces entrypoints | [`results/workline_index/molmospaces_official_reproduction.md`](results/workline_index/molmospaces_official_reproduction.md) | Completed bounded reproduction |
+| MimicGen single-arm groundwork | [`docs/worklines/mimicgen_single_arm/README.md`](docs/worklines/mimicgen_single_arm/README.md) | Superseded by [`src/pnp/`](src/pnp/) | [`results/workline_index/mimicgen_single_arm.md`](results/workline_index/mimicgen_single_arm.md) | Historical groundwork |
 
-Large runtime data are intentionally excluded from Git: official shards, generated HDF5 files, rollout directories, simulator logs, PID files, caches, videos, local machine paths, and internal planning ledgers. When a workline used such files, the repository keeps a lightweight inventory or regeneration entrypoint instead of committing the raw artifact.
+Also included: the upstream MolmoSpaces source snapshot, lightweight manifests/summaries under `results/`, small README demo media under `media/`, public documentation, and attribution files.
+
+Large runtime data are intentionally excluded from Git: official shards, generated HDF5 files, rollout directories, simulator logs, PID files, caches, videos, local machine paths, and internal planning ledgers. When a workline used such files, the repository keeps a README, lightweight inventory, or regeneration entrypoint instead of committing the raw artifact.
 
 ## Quick Start
 
@@ -175,16 +178,9 @@ A successful replay only verifies source-trajectory replay. It is not yet a gene
 
 ## MolmoSpaces Workline Portfolio
 
-The public workline map is in [`docs/worklines/README.md`](docs/worklines/README.md). It covers:
+The complete workline table is shown near the top of this README and mirrored in [`docs/worklines/README.md`](docs/worklines/README.md). Each workline has a canonical README, even when its raw HDF5/videos are excluded from normal Git.
 
-- MimicGen Pick-and-Place and the 50-demo cross-subtask diagnostic route;
-- bimanual YAM browser/keyboard teleoperation;
-- iTHOR bimanual YAM source-demo infrastructure;
-- completed custom-scene bimanual YAM source baseline;
-- legacy MolmoAct2-to-MolmoSpaces adapter work;
-- bounded official MolmoSpaces reproduction evidence.
-
-Important evidence boundary: MolmoAct2 official `sim_eval` success, MolmoSpaces adapter diagnostics, bimanual browser teleoperation, custom-scene YAM baseline, and Pick-and-Place MimicGen rollouts are separate evidence layers. The documentation deliberately avoids merging them into a single overclaimed success result.
+Important evidence boundary: MolmoAct2 official `sim_eval` success, MolmoSpaces adapter diagnostics, bimanual browser teleoperation, custom-scene YAM baseline, iTHOR source-demo infrastructure, and Pick-and-Place MimicGen rollouts are separate evidence layers. The documentation deliberately avoids merging them into a single overclaimed success result.
 
 ## Pick-and-Place Integration Workflow
 
