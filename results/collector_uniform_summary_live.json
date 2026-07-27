@@ -1,0 +1,12 @@
+{
+  "target_success": 100,
+  "accepted_total": 28,
+  "accepted_seeded_from_pilot": 15,
+  "accepted_new": 13,
+  "new_attempts": 75,
+  "new_revised_success": 13,
+  "new_success_rate": 0.17333333333333334,
+  "overall_attempts_including_pilot": 175,
+  "overall_success_including_pilot": 28,
+  "overall_success_rate_including_pilot": 0.16
+}

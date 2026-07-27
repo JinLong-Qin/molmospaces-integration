@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Simulator and dataset artifacts
+artifacts/
+data/
+logs/
+*.hdf5
+*.h5
+*.mp4
+*.avi
+*.mov
+*.npy
+*.npz
+*.tar
+*.tar.gz
+
+# Runtime files
+*.log
+*.out
+*.pid
+*.exit_code
+*.tmp
+*.bak
+*.backup
+
+# Internal planning ledgers
+*task_plan*
+*findings*
+*progress*
+*planning*
+PROJECT_STRUCTURE.md

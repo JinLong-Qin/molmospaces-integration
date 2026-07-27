@@ -1,0 +1,189 @@
+{
+  "out": "${MOLMOSPACES_ROOT}/work/current/mimicgen_pick_and_place/artifacts/seeds/robomimic_pnp_10demo_aligned.hdf5",
+  "accepted": [
+    0,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    15,
+    16
+  ],
+  "n_demos": 10,
+  "total": 1858,
+  "demos": [
+    {
+      "demo": "demo_0",
+      "seed_index": 0,
+      "house_id": 1536,
+      "n": 153,
+      "signals": {
+        "pregrasp_done": 32,
+        "grasp_done": 48,
+        "gripper_closed": 57,
+        "lift_done": 91,
+        "preplace_done": 117,
+        "place_success": 141
+      },
+      "first_success": 141,
+      "success_final": true,
+      "task": "Pick up the round red tomato and place it in or on the terracotta ceramic bowl with band"
+    },
+    {
+      "demo": "demo_1",
+      "seed_index": 6,
+      "house_id": 2305,
+      "n": 170,
+      "signals": {
+        "pregrasp_done": 24,
+        "grasp_done": 39,
+        "gripper_closed": 48,
+        "lift_done": 73,
+        "preplace_done": 94,
+        "place_success": 110
+      },
+      "first_success": 110,
+      "success_final": true,
+      "task": "Pick up the ornate vintage pocket watch and place it in or on the matte brown ceramic bowl"
+    },
+    {
+      "demo": "demo_2",
+      "seed_index": 7,
+      "house_id": 2412,
+      "n": 165,
+      "signals": {
+        "pregrasp_done": 24,
+        "grasp_done": 39,
+        "gripper_closed": 48,
+        "lift_done": 82,
+        "preplace_done": 94,
+        "place_success": 104
+      },
+      "first_success": 104,
+      "success_final": true,
+      "task": "Pick up the small oval red potato and place it in or on the white mug"
+    },
+    {
+      "demo": "demo_3",
+      "seed_index": 8,
+      "house_id": 2423,
+      "n": 181,
+      "signals": {
+        "pregrasp_done": 33,
+        "grasp_done": 48,
+        "gripper_closed": 57,
+        "lift_done": 91,
+        "preplace_done": 108,
+        "place_success": 118
+      },
+      "first_success": 118,
+      "success_final": true,
+      "task": "Pick up the brown potato and place it in or on the white ceramic mug with black cat"
+    },
+    {
+      "demo": "demo_4",
+      "seed_index": 9,
+      "house_id": 2504,
+      "n": 179,
+      "signals": {
+        "pregrasp_done": 32,
+        "grasp_done": 47,
+        "gripper_closed": 56,
+        "lift_done": 77,
+        "preplace_done": 103,
+        "place_success": 118
+      },
+      "first_success": 118,
+      "success_final": true,
+      "task": "Pick up the rustic brown ceramic mug with handle and place it in or on the rustic brown dish"
+    },
+    {
+      "demo": "demo_5",
+      "seed_index": 10,
+      "house_id": 2520,
+      "n": 187,
+      "signals": {
+        "pregrasp_done": 27,
+        "grasp_done": 42,
+        "gripper_closed": 51,
+        "lift_done": 85,
+        "preplace_done": 114,
+        "place_success": 127
+      },
+      "first_success": 127,
+      "success_final": true,
+      "task": "Pick up the sleek dark rectangular cell phone and place it in or on the matte terracotta ceramic bowl"
+    },
+    {
+      "demo": "demo_6",
+      "seed_index": 11,
+      "house_id": 2656,
+      "n": 194,
+      "signals": {
+        "pregrasp_done": 28,
+        "grasp_done": 43,
+        "gripper_closed": 52,
+        "lift_done": 95,
+        "preplace_done": 118,
+        "place_success": 144
+      },
+      "first_success": 144,
+      "success_final": true,
+      "task": "Pick up the yellow floral rectangular tissue box and place it in or on the purple patterned box"
+    },
+    {
+      "demo": "demo_7",
+      "seed_index": 12,
+      "house_id": 276,
+      "n": 248,
+      "signals": {
+        "pregrasp_done": 22,
+        "grasp_done": 37,
+        "gripper_closed": 46,
+        "lift_done": 156,
+        "preplace_done": 170,
+        "place_success": 187
+      },
+      "first_success": 187,
+      "success_final": true,
+      "task": "Pick up the red apple and place it in or on the hexagonal ceramic bowl with blue glaze"
+    },
+    {
+      "demo": "demo_8",
+      "seed_index": 15,
+      "house_id": 2988,
+      "n": 213,
+      "signals": {
+        "pregrasp_done": 32,
+        "grasp_done": 47,
+        "gripper_closed": 56,
+        "lift_done": 90,
+        "preplace_done": 125,
+        "place_success": 154
+      },
+      "first_success": 154,
+      "success_final": true,
+      "task": "Pick up the medium red apple and place it in or on the rugged stone container with opening"
+    },
+    {
+      "demo": "demo_9",
+      "seed_index": 16,
+      "house_id": 3022,
+      "n": 168,
+      "signals": {
+        "pregrasp_done": 20,
+        "grasp_done": 35,
+        "gripper_closed": 44,
+        "lift_done": 69,
+        "preplace_done": 82,
+        "place_success": 108
+      },
+      "first_success": 108,
+      "success_final": true,
+      "task": "Pick up the green apple and place it in or on the sleek white dish with orange rim"
+    }
+  ]
+}

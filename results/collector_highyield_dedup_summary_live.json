@@ -1,0 +1,11 @@
+{
+  "target_success": 100,
+  "accepted_total_unique": 25,
+  "accepted_seeded_unique": 15,
+  "accepted_new_unique": 10,
+  "new_attempts": 73,
+  "new_success": 25,
+  "new_duplicate_success": 15,
+  "new_unique_success": 10,
+  "new_unique_success_rate": 0.136986301369863
+}

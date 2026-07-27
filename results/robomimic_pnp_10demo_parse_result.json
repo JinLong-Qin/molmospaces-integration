@@ -1,0 +1,936 @@
+{
+  "source": "${MOLMOSPACES_ROOT}/work/current/mimicgen_pick_and_place/artifacts/seeds/robomimic_pnp_10demo_aligned.hdf5",
+  "demo_keys": [
+    "demo_0",
+    "demo_1",
+    "demo_2",
+    "demo_3",
+    "demo_4",
+    "demo_5",
+    "demo_6",
+    "demo_7",
+    "demo_8",
+    "demo_9"
+  ],
+  "subtask_term_signals": [
+    "pregrasp_done",
+    "grasp_done",
+    "gripper_closed",
+    "lift_done",
+    "preplace_done",
+    "place_success",
+    null
+  ],
+  "subtask_term_offset_ranges": [
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ]
+  ],
+  "subtask_indices_shape": [
+    10,
+    7,
+    2
+  ],
+  "subtask_indices": [
+    [
+      [
+        0,
+        33
+      ],
+      [
+        33,
+        49
+      ],
+      [
+        49,
+        58
+      ],
+      [
+        58,
+        92
+      ],
+      [
+        92,
+        118
+      ],
+      [
+        118,
+        142
+      ],
+      [
+        142,
+        153
+      ]
+    ],
+    [
+      [
+        0,
+        25
+      ],
+      [
+        25,
+        40
+      ],
+      [
+        40,
+        49
+      ],
+      [
+        49,
+        74
+      ],
+      [
+        74,
+        95
+      ],
+      [
+        95,
+        111
+      ],
+      [
+        111,
+        170
+      ]
+    ],
+    [
+      [
+        0,
+        25
+      ],
+      [
+        25,
+        40
+      ],
+      [
+        40,
+        49
+      ],
+      [
+        49,
+        83
+      ],
+      [
+        83,
+        95
+      ],
+      [
+        95,
+        105
+      ],
+      [
+        105,
+        165
+      ]
+    ],
+    [
+      [
+        0,
+        34
+      ],
+      [
+        34,
+        49
+      ],
+      [
+        49,
+        58
+      ],
+      [
+        58,
+        92
+      ],
+      [
+        92,
+        109
+      ],
+      [
+        109,
+        119
+      ],
+      [
+        119,
+        181
+      ]
+    ],
+    [
+      [
+        0,
+        33
+      ],
+      [
+        33,
+        48
+      ],
+      [
+        48,
+        57
+      ],
+      [
+        57,
+        78
+      ],
+      [
+        78,
+        104
+      ],
+      [
+        104,
+        119
+      ],
+      [
+        119,
+        179
+      ]
+    ],
+    [
+      [
+        0,
+        28
+      ],
+      [
+        28,
+        43
+      ],
+      [
+        43,
+        52
+      ],
+      [
+        52,
+        86
+      ],
+      [
+        86,
+        115
+      ],
+      [
+        115,
+        128
+      ],
+      [
+        128,
+        187
+      ]
+    ],
+    [
+      [
+        0,
+        29
+      ],
+      [
+        29,
+        44
+      ],
+      [
+        44,
+        53
+      ],
+      [
+        53,
+        96
+      ],
+      [
+        96,
+        119
+      ],
+      [
+        119,
+        145
+      ],
+      [
+        145,
+        194
+      ]
+    ],
+    [
+      [
+        0,
+        23
+      ],
+      [
+        23,
+        38
+      ],
+      [
+        38,
+        47
+      ],
+      [
+        47,
+        157
+      ],
+      [
+        157,
+        171
+      ],
+      [
+        171,
+        188
+      ],
+      [
+        188,
+        248
+      ]
+    ],
+    [
+      [
+        0,
+        33
+      ],
+      [
+        33,
+        48
+      ],
+      [
+        48,
+        57
+      ],
+      [
+        57,
+        91
+      ],
+      [
+        91,
+        126
+      ],
+      [
+        126,
+        155
+      ],
+      [
+        155,
+        213
+      ]
+    ],
+    [
+      [
+        0,
+        21
+      ],
+      [
+        21,
+        36
+      ],
+      [
+        36,
+        45
+      ],
+      [
+        45,
+        70
+      ],
+      [
+        70,
+        83
+      ],
+      [
+        83,
+        109
+      ],
+      [
+        109,
+        168
+      ]
+    ]
+  ],
+  "segment_lengths": [
+    [
+      33,
+      16,
+      9,
+      34,
+      26,
+      24,
+      11
+    ],
+    [
+      25,
+      15,
+      9,
+      25,
+      21,
+      16,
+      59
+    ],
+    [
+      25,
+      15,
+      9,
+      34,
+      12,
+      10,
+      60
+    ],
+    [
+      34,
+      15,
+      9,
+      34,
+      17,
+      10,
+      62
+    ],
+    [
+      33,
+      15,
+      9,
+      21,
+      26,
+      15,
+      60
+    ],
+    [
+      28,
+      15,
+      9,
+      34,
+      29,
+      13,
+      59
+    ],
+    [
+      29,
+      15,
+      9,
+      43,
+      23,
+      26,
+      49
+    ],
+    [
+      23,
+      15,
+      9,
+      110,
+      14,
+      17,
+      60
+    ],
+    [
+      33,
+      15,
+      9,
+      34,
+      35,
+      29,
+      58
+    ],
+    [
+      21,
+      15,
+      9,
+      25,
+      13,
+      26,
+      59
+    ]
+  ],
+  "datagen_info_count": 10,
+  "datagen_shapes_by_demo": [
+    {
+      "eef_pose": [
+        153,
+        4,
+        4
+      ],
+      "target_pose": [
+        153,
+        4,
+        4
+      ],
+      "gripper_action": [
+        153,
+        1
+      ],
+      "object_poses": {
+        "pickup_obj": [
+          153,
+          4,
+          4
+        ],
+        "place_receptacle": [
+          153,
+          4,
+          4
+        ]
+      },
+      "subtask_term_signals": {
+        "grasp_done": [
+          153
+        ],
+        "gripper_closed": [
+          153
+        ],
+        "lift_done": [
+          153
+        ],
+        "place_success": [
+          153
+        ],
+        "pregrasp_done": [
+          153
+        ],
+        "preplace_done": [
+          153
+        ]
+      }
+    },
+    {
+      "eef_pose": [
+        170,
+        4,
+        4
+      ],
+      "target_pose": [
+        170,
+        4,
+        4
+      ],
+      "gripper_action": [
+        170,
+        1
+      ],
+      "object_poses": {
+        "pickup_obj": [
+          170,
+          4,
+          4
+        ],
+        "place_receptacle": [
+          170,
+          4,
+          4
+        ]
+      },
+      "subtask_term_signals": {
+        "grasp_done": [
+          170
+        ],
+        "gripper_closed": [
+          170
+        ],
+        "lift_done": [
+          170
+        ],
+        "place_success": [
+          170
+        ],
+        "pregrasp_done": [
+          170
+        ],
+        "preplace_done": [
+          170
+        ]
+      }
+    },
+    {
+      "eef_pose": [
+        165,
+        4,
+        4
+      ],
+      "target_pose": [
+        165,
+        4,
+        4
+      ],
+      "gripper_action": [
+        165,
+        1
+      ],
+      "object_poses": {
+        "pickup_obj": [
+          165,
+          4,
+          4
+        ],
+        "place_receptacle": [
+          165,
+          4,
+          4
+        ]
+      },
+      "subtask_term_signals": {
+        "grasp_done": [
+          165
+        ],
+        "gripper_closed": [
+          165
+        ],
+        "lift_done": [
+          165
+        ],
+        "place_success": [
+          165
+        ],
+        "pregrasp_done": [
+          165
+        ],
+        "preplace_done": [
+          165
+        ]
+      }
+    },
+    {
+      "eef_pose": [
+        181,
+        4,
+        4
+      ],
+      "target_pose": [
+        181,
+        4,
+        4
+      ],
+      "gripper_action": [
+        181,
+        1
+      ],
+      "object_poses": {
+        "pickup_obj": [
+          181,
+          4,
+          4
+        ],
+        "place_receptacle": [
+          181,
+          4,
+          4
+        ]
+      },
+      "subtask_term_signals": {
+        "grasp_done": [
+          181
+        ],
+        "gripper_closed": [
+          181
+        ],
+        "lift_done": [
+          181
+        ],
+        "place_success": [
+          181
+        ],
+        "pregrasp_done": [
+          181
+        ],
+        "preplace_done": [
+          181
+        ]
+      }
+    },
+    {
+      "eef_pose": [
+        179,
+        4,
+        4
+      ],
+      "target_pose": [
+        179,
+        4,
+        4
+      ],
+      "gripper_action": [
+        179,
+        1
+      ],
+      "object_poses": {
+        "pickup_obj": [
+          179,
+          4,
+          4
+        ],
+        "place_receptacle": [
+          179,
+          4,
+          4
+        ]
+      },
+      "subtask_term_signals": {
+        "grasp_done": [
+          179
+        ],
+        "gripper_closed": [
+          179
+        ],
+        "lift_done": [
+          179
+        ],
+        "place_success": [
+          179
+        ],
+        "pregrasp_done": [
+          179
+        ],
+        "preplace_done": [
+          179
+        ]
+      }
+    },
+    {
+      "eef_pose": [
+        187,
+        4,
+        4
+      ],
+      "target_pose": [
+        187,
+        4,
+        4
+      ],
+      "gripper_action": [
+        187,
+        1
+      ],
+      "object_poses": {
+        "pickup_obj": [
+          187,
+          4,
+          4
+        ],
+        "place_receptacle": [
+          187,
+          4,
+          4
+        ]
+      },
+      "subtask_term_signals": {
+        "grasp_done": [
+          187
+        ],
+        "gripper_closed": [
+          187
+        ],
+        "lift_done": [
+          187
+        ],
+        "place_success": [
+          187
+        ],
+        "pregrasp_done": [
+          187
+        ],
+        "preplace_done": [
+          187
+        ]
+      }
+    },
+    {
+      "eef_pose": [
+        194,
+        4,
+        4
+      ],
+      "target_pose": [
+        194,
+        4,
+        4
+      ],
+      "gripper_action": [
+        194,
+        1
+      ],
+      "object_poses": {
+        "pickup_obj": [
+          194,
+          4,
+          4
+        ],
+        "place_receptacle": [
+          194,
+          4,
+          4
+        ]
+      },
+      "subtask_term_signals": {
+        "grasp_done": [
+          194
+        ],
+        "gripper_closed": [
+          194
+        ],
+        "lift_done": [
+          194
+        ],
+        "place_success": [
+          194
+        ],
+        "pregrasp_done": [
+          194
+        ],
+        "preplace_done": [
+          194
+        ]
+      }
+    },
+    {
+      "eef_pose": [
+        248,
+        4,
+        4
+      ],
+      "target_pose": [
+        248,
+        4,
+        4
+      ],
+      "gripper_action": [
+        248,
+        1
+      ],
+      "object_poses": {
+        "pickup_obj": [
+          248,
+          4,
+          4
+        ],
+        "place_receptacle": [
+          248,
+          4,
+          4
+        ]
+      },
+      "subtask_term_signals": {
+        "grasp_done": [
+          248
+        ],
+        "gripper_closed": [
+          248
+        ],
+        "lift_done": [
+          248
+        ],
+        "place_success": [
+          248
+        ],
+        "pregrasp_done": [
+          248
+        ],
+        "preplace_done": [
+          248
+        ]
+      }
+    },
+    {
+      "eef_pose": [
+        213,
+        4,
+        4
+      ],
+      "target_pose": [
+        213,
+        4,
+        4
+      ],
+      "gripper_action": [
+        213,
+        1
+      ],
+      "object_poses": {
+        "pickup_obj": [
+          213,
+          4,
+          4
+        ],
+        "place_receptacle": [
+          213,
+          4,
+          4
+        ]
+      },
+      "subtask_term_signals": {
+        "grasp_done": [
+          213
+        ],
+        "gripper_closed": [
+          213
+        ],
+        "lift_done": [
+          213
+        ],
+        "place_success": [
+          213
+        ],
+        "pregrasp_done": [
+          213
+        ],
+        "preplace_done": [
+          213
+        ]
+      }
+    },
+    {
+      "eef_pose": [
+        168,
+        4,
+        4
+      ],
+      "target_pose": [
+        168,
+        4,
+        4
+      ],
+      "gripper_action": [
+        168,
+        1
+      ],
+      "object_poses": {
+        "pickup_obj": [
+          168,
+          4,
+          4
+        ],
+        "place_receptacle": [
+          168,
+          4,
+          4
+        ]
+      },
+      "subtask_term_signals": {
+        "grasp_done": [
+          168
+        ],
+        "gripper_closed": [
+          168
+        ],
+        "lift_done": [
+          168
+        ],
+        "place_success": [
+          168
+        ],
+        "pregrasp_done": [
+          168
+        ],
+        "preplace_done": [
+          168
+        ]
+      }
+    }
+  ]
+}

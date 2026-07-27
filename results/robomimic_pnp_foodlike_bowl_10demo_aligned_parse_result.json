@@ -1,0 +1,170 @@
+{
+  "source": "${MOLMOSPACES_ROOT}/work/current/mimicgen_pick_and_place/artifacts/seeds/robomimic_pnp_foodlike_bowl_10demo_aligned.hdf5",
+  "demo_keys": [
+    "demo_0",
+    "demo_1",
+    "demo_2",
+    "demo_3",
+    "demo_4",
+    "demo_5",
+    "demo_6",
+    "demo_7",
+    "demo_8",
+    "demo_9"
+  ],
+  "subtask_term_signals": [
+    "pregrasp_done",
+    "grasp_done",
+    "gripper_closed",
+    "lift_done",
+    "preplace_done",
+    "place_success",
+    null
+  ],
+  "subtask_indices_shape": [
+    10,
+    7,
+    2
+  ],
+  "segment_lengths": [
+    [
+      19,
+      15,
+      9,
+      34,
+      19,
+      14,
+      60
+    ],
+    [
+      24,
+      16,
+      9,
+      34,
+      33,
+      15,
+      58
+    ],
+    [
+      28,
+      15,
+      9,
+      30,
+      34,
+      12,
+      59
+    ],
+    [
+      34,
+      15,
+      9,
+      30,
+      27,
+      22,
+      49
+    ],
+    [
+      16,
+      15,
+      9,
+      30,
+      22,
+      30,
+      57
+    ],
+    [
+      33,
+      16,
+      9,
+      34,
+      26,
+      24,
+      11
+    ],
+    [
+      37,
+      15,
+      9,
+      23,
+      18,
+      24,
+      58
+    ],
+    [
+      29,
+      15,
+      9,
+      34,
+      23,
+      26,
+      59
+    ],
+    [
+      32,
+      15,
+      9,
+      30,
+      19,
+      10,
+      61
+    ],
+    [
+      27,
+      15,
+      9,
+      34,
+      18,
+      10,
+      61
+    ]
+  ],
+  "datagen_info_count": 10,
+  "datagen_shapes": {
+    "eef_pose": [
+      170,
+      4,
+      4
+    ],
+    "target_pose": [
+      170,
+      4,
+      4
+    ],
+    "gripper_action": [
+      170,
+      1
+    ],
+    "object_poses": {
+      "pickup_obj": [
+        170,
+        4,
+        4
+      ],
+      "place_receptacle": [
+        170,
+        4,
+        4
+      ]
+    },
+    "subtask_term_signals": {
+      "grasp_done": [
+        170
+      ],
+      "gripper_closed": [
+        170
+      ],
+      "lift_done": [
+        170
+      ],
+      "place_success": [
+        170
+      ],
+      "pregrasp_done": [
+        170
+      ],
+      "preplace_done": [
+        170
+      ]
+    }
+  }
+}
