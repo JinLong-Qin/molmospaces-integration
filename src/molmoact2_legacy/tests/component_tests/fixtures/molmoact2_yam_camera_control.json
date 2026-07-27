@@ -1,0 +1,230 @@
+{
+  "action_bridge": {
+    "action_dimension": 14,
+    "bridge_ast": "FunctionDef(name='molmoact2_yam_action_to_move_group_command', args=arguments(posonlyargs=[], args=[arg(arg='action', annotation=Name(id='Any', ctx=Load()))], kwonlyargs=[arg(arg='gripper_max', annotation=Name(id='float', ctx=Load())), arg(arg='gripper_open_command', annotation=BinOp(left=Name(id='float', ctx=Load()), op=BitOr(), right=Constant(value=None))), arg(arg='gripper_closed_command', annotation=Name(id='float', ctx=Load())), arg(arg='grasping_type', annotation=Name(id='str', ctx=Load())), arg(arg='grasping_threshold', annotation=Name(id='float', ctx=Load()))], kw_defaults=[Name(id='MOLMOACT2_YAM_GRIPPER_MAX', ctx=Load()), Constant(value=None), Constant(value=0.0), Constant(value='continuous'), Constant(value=0.5)], defaults=[]), body=[Expr(value=Constant(value='Convert one absolute 14D MolmoAct2 YAM target to MolmoSpaces move groups.')), Assign(targets=[Name(id='action', ctx=Store())], value=Call(func=Attribute(value=Call(func=Attribute(value=Name(id='np', ctx=Load()), attr='asarray', ctx=Load()), args=[Name(id='action', ctx=Load())], keywords=[keyword(arg='dtype', value=Attribute(value=Name(id='np', ctx=Load()), attr='float32', ctx=Load()))]), attr='reshape', ctx=Load()), args=[UnaryOp(op=USub(), operand=Constant(value=1))], keywords=[])), If(test=Compare(left=Attribute(value=Name(id='action', ctx=Load()), attr='shape', ctx=Load()), ops=[NotEq()], comparators=[Tuple(elts=[Name(id='MOLMOACT2_YAM_ACTION_DIM', ctx=Load())], ctx=Load())]), body=[Raise(exc=Call(func=Name(id='ValueError', ctx=Load()), args=[JoinedStr(values=[Constant(value='Expected MolmoAct2 YAM action shape (14,), got '), FormattedValue(value=Attribute(value=Name(id='action', ctx=Load()), attr='shape', ctx=Load()), conversion=-1)])], keywords=[]))], orelse=[]), Return(value=Dict(keys=[Constant(value='left_arm'), Constant(value='right_arm'), Constant(value='left_gripper'), Constant(value='right_gripper')], values=[Call(func=Attribute(value=Subscript(value=Name(id='action', ctx=Load()), slice=Slice(lower=Constant(value=0), upper=Constant(value=6)), ctx=Load()), attr='astype', ctx=Load()), args=[Attribute(value=Name(id='np', ctx=Load()), attr='float32', ctx=Load())], keywords=[]), Call(func=Attribute(value=Subscript(value=Name(id='action', ctx=Load()), slice=Slice(lower=Constant(value=7), upper=Constant(value=13)), ctx=Load()), attr='astype', ctx=Load()), args=[Attribute(value=Name(id='np', ctx=Load()), attr='float32', ctx=Load())], keywords=[]), Call(func=Name(id='scale_molmoact2_yam_gripper_action', ctx=Load()), args=[Call(func=Name(id='float', ctx=Load()), args=[Subscript(value=Name(id='action', ctx=Load()), slice=Constant(value=6), ctx=Load())], keywords=[])], keywords=[keyword(arg='gripper_max', value=Name(id='gripper_max', ctx=Load())), keyword(arg='gripper_open_command', value=Name(id='gripper_open_command', ctx=Load())), keyword(arg='gripper_closed_command', value=Name(id='gripper_closed_command', ctx=Load())), keyword(arg='grasping_type', value=Name(id='grasping_type', ctx=Load())), keyword(arg='grasping_threshold', value=Name(id='grasping_threshold', ctx=Load()))]), Call(func=Name(id='scale_molmoact2_yam_gripper_action', ctx=Load()), args=[Call(func=Name(id='float', ctx=Load()), args=[Subscript(value=Name(id='action', ctx=Load()), slice=Constant(value=13), ctx=Load())], keywords=[])], keywords=[keyword(arg='gripper_max', value=Name(id='gripper_max', ctx=Load())), keyword(arg='gripper_open_command', value=Name(id='gripper_open_command', ctx=Load())), keyword(arg='gripper_closed_command', value=Name(id='gripper_closed_command', ctx=Load())), keyword(arg='grasping_type', value=Name(id='grasping_type', ctx=Load())), keyword(arg='grasping_threshold', value=Name(id='grasping_threshold', ctx=Load()))])]))], decorator_list=[], returns=Subscript(value=Name(id='dict', ctx=Load()), slice=Tuple(elts=[Name(id='str', ctx=Load()), Attribute(value=Name(id='np', ctx=Load()), attr='ndarray', ctx=Load())], ctx=Load()), ctx=Load()))",
+    "gripper_closed_command": 0.0,
+    "gripper_open_command": -0.0475,
+    "gripper_semantics": "official:1=open,0=closed",
+    "mapping": {
+      "left_arm": [
+        0,
+        6
+      ],
+      "left_gripper": 6,
+      "right_arm": [
+        7,
+        13
+      ],
+      "right_gripper": 13
+    },
+    "state_action_order": [
+      "left_arm_6",
+      "left_gripper",
+      "right_arm_6",
+      "right_gripper"
+    ]
+  },
+  "camera_order": [
+    "top_cam",
+    "left_cam",
+    "right_cam"
+  ],
+  "cameras": [
+    {
+      "hfov_deg": 69.4,
+      "molmospaces_quaternion_wxyz": [
+        -0.704416026403,
+        -0.061628416716,
+        0.061628416716,
+        0.704416026403
+      ],
+      "name": "top_cam",
+      "offset": [
+        0.15,
+        0.0,
+        0.8
+      ],
+      "reference_bodies": [
+        "robot_0/bimanual_base",
+        "robot_0/base"
+      ],
+      "resolution": [
+        640,
+        360
+      ],
+      "source_quaternion_wxyz": [
+        0.7660444431189782,
+        0.0,
+        0.6427876096865391,
+        0.0
+      ],
+      "source_spec": "top_cam",
+      "vfov_deg": 42.561177083628
+    },
+    {
+      "hfov_deg": 87.0,
+      "molmospaces_quaternion_wxyz": [
+        7.038e-09,
+        1.886e-09,
+        0.965925827781,
+        0.258819039536
+      ],
+      "name": "left_cam",
+      "offset": [
+        0.0,
+        0.09,
+        0.06
+      ],
+      "reference_bodies": [
+        "robot_0/left_link_6"
+      ],
+      "resolution": [
+        640,
+        360
+      ],
+      "source_quaternion_wxyz": [
+        0.612372429196013,
+        -0.35355339154618404,
+        -0.3535533966987049,
+        -0.612372438120441
+      ],
+      "source_spec": "left_cam",
+      "vfov_deg": 56.185936694666
+    },
+    {
+      "hfov_deg": 87.0,
+      "molmospaces_quaternion_wxyz": [
+        7.038e-09,
+        1.886e-09,
+        0.965925827781,
+        0.258819039536
+      ],
+      "name": "right_cam",
+      "offset": [
+        0.0,
+        0.09,
+        0.06
+      ],
+      "reference_bodies": [
+        "robot_0/right_link_6"
+      ],
+      "resolution": [
+        640,
+        360
+      ],
+      "source_quaternion_wxyz": [
+        0.612372429196013,
+        -0.35355339154618404,
+        -0.3535533966987049,
+        -0.612372438120441
+      ],
+      "source_spec": "right_cam",
+      "vfov_deg": 56.185936694666
+    }
+  ],
+  "execution": {
+    "camera_mapping": {
+      "left_cam": "left_cam",
+      "right_cam": "right_cam",
+      "top_cam": "top_cam"
+    },
+    "execution_command_hz": 30.0,
+    "mode": "sim_eval_step",
+    "num_steps": 30,
+    "randomize_dynamics": false,
+    "randomize_lighting": false,
+    "randomize_textures": false,
+    "sim_settle_timesteps": 0
+  },
+  "image_semantics": {
+    "adapter_ast": "FunctionDef(name='_to_uint8_image', args=arguments(posonlyargs=[], args=[arg(arg='image', annotation=Name(id='Any', ctx=Load())), arg(arg='name', annotation=Name(id='str', ctx=Load()))], kwonlyargs=[], kw_defaults=[], defaults=[]), body=[If(test=BoolOp(op=And(), values=[Call(func=Name(id='hasattr', ctx=Load()), args=[Name(id='image', ctx=Load()), Constant(value='detach')], keywords=[]), Call(func=Name(id='hasattr', ctx=Load()), args=[Name(id='image', ctx=Load()), Constant(value='cpu')], keywords=[])]), body=[Assign(targets=[Name(id='image', ctx=Store())], value=Call(func=Attribute(value=Call(func=Attribute(value=Call(func=Attribute(value=Name(id='image', ctx=Load()), attr='detach', ctx=Load()), args=[], keywords=[]), attr='cpu', ctx=Load()), args=[], keywords=[]), attr='numpy', ctx=Load()), args=[], keywords=[]))], orelse=[]), Assign(targets=[Name(id='image', ctx=Store())], value=Call(func=Attribute(value=Name(id='np', ctx=Load()), attr='asarray', ctx=Load()), args=[Name(id='image', ctx=Load())], keywords=[])), If(test=BoolOp(op=And(), values=[Compare(left=Attribute(value=Name(id='image', ctx=Load()), attr='ndim', ctx=Load()), ops=[Eq()], comparators=[Constant(value=4)]), Compare(left=Subscript(value=Attribute(value=Name(id='image', ctx=Load()), attr='shape', ctx=Load()), slice=Constant(value=0), ctx=Load()), ops=[Eq()], comparators=[Constant(value=1)])]), body=[Assign(targets=[Name(id='image', ctx=Store())], value=Subscript(value=Name(id='image', ctx=Load()), slice=Constant(value=0), ctx=Load()))], orelse=[]), If(test=BoolOp(op=Or(), values=[Compare(left=Attribute(value=Name(id='image', ctx=Load()), attr='ndim', ctx=Load()), ops=[NotEq()], comparators=[Constant(value=3)]), Compare(left=Subscript(value=Attribute(value=Name(id='image', ctx=Load()), attr='shape', ctx=Load()), slice=UnaryOp(op=USub(), operand=Constant(value=1)), ctx=Load()), ops=[NotIn()], comparators=[Tuple(elts=[Constant(value=3), Constant(value=4)], ctx=Load())])]), body=[Raise(exc=Call(func=Name(id='ValueError', ctx=Load()), args=[JoinedStr(values=[Constant(value=\"Camera '\"), FormattedValue(value=Name(id='name', ctx=Load()), conversion=-1), Constant(value=\"' must have shape (H, W, 3/4), got \"), FormattedValue(value=Attribute(value=Name(id='image', ctx=Load()), attr='shape', ctx=Load()), conversion=-1)])], keywords=[]))], orelse=[]), If(test=Compare(left=Subscript(value=Attribute(value=Name(id='image', ctx=Load()), attr='shape', ctx=Load()), slice=UnaryOp(op=USub(), operand=Constant(value=1)), ctx=Load()), ops=[Eq()], comparators=[Constant(value=4)]), body=[Assign(targets=[Name(id='image', ctx=Store())], value=Subscript(value=Name(id='image', ctx=Load()), slice=Tuple(elts=[Constant(value=Ellipsis), Slice(upper=Constant(value=3))], ctx=Load()), ctx=Load()))], orelse=[]), If(test=Compare(left=Attribute(value=Name(id='image', ctx=Load()), attr='dtype', ctx=Load()), ops=[NotEq()], comparators=[Attribute(value=Name(id='np', ctx=Load()), attr='uint8', ctx=Load())]), body=[Assign(targets=[Name(id='scale', ctx=Store())], value=IfExp(test=BoolOp(op=And(), values=[Attribute(value=Name(id='image', ctx=Load()), attr='size', ctx=Load()), Compare(left=Call(func=Attribute(value=Name(id='np', ctx=Load()), attr='nanmax', ctx=Load()), args=[Name(id='image', ctx=Load())], keywords=[]), ops=[LtE()], comparators=[Constant(value=1.0)])]), body=Constant(value=255.0), orelse=Constant(value=1.0))), Assign(targets=[Name(id='image', ctx=Store())], value=Call(func=Attribute(value=Call(func=Attribute(value=Name(id='np', ctx=Load()), attr='clip', ctx=Load()), args=[BinOp(left=Name(id='image', ctx=Load()), op=Mult(), right=Name(id='scale', ctx=Load())), Constant(value=0), Constant(value=255)], keywords=[]), attr='astype', ctx=Load()), args=[Attribute(value=Name(id='np', ctx=Load()), attr='uint8', ctx=Load())], keywords=[]))], orelse=[]), Return(value=Name(id='image', ctx=Load()))], decorator_list=[], returns=Attribute(value=Name(id='np', ctx=Load()), attr='ndarray', ctx=Load()))",
+    "alpha": "drop-fourth-channel",
+    "batch_axis": "remove-only-singleton-leading-axis",
+    "channel_reorder": "none",
+    "color": "RGB",
+    "crop": "none",
+    "dtype": "uint8",
+    "flip": "none",
+    "layout": "HWC",
+    "output_resolution": [
+      640,
+      360
+    ],
+    "resize": "none",
+    "source_checks": {
+      "accepts_hwc_3_or_4": true,
+      "drops_alpha": true,
+      "scales_unit_float": true
+    }
+  },
+  "initialization": {
+    "init_qpos": {
+      "left_arm": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "left_gripper": [
+        0.0,
+        0.0
+      ],
+      "right_arm": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "right_gripper": [
+        0.0,
+        0.0
+      ]
+    },
+    "init_qpos_noise_range": null,
+    "object_anchors_xy": {
+      "obj_056_tennis_ball": [
+        -0.3,
+        -0.22
+      ],
+      "obj_073-a_lego_duplo": [
+        -0.3,
+        0.22
+      ]
+    },
+    "robot_world_pos": [
+      -0.65,
+      0.0,
+      0.01
+    ],
+    "seed": 42
+  },
+  "instruction": "put everything into the box",
+  "projection": {
+    "far": 6.0,
+    "intrinsics": "pinhole-from-horizontal-fov",
+    "near": 0.01
+  },
+  "schema_version": 1,
+  "success": {
+    "aggregate": "all-listed-objects-in-box",
+    "box_center_xy": [
+      -0.15,
+      0.0
+    ],
+    "box_inner_half": 0.09,
+    "floor_top_z": 0.008,
+    "inside_xy": "abs(x-box_x) < box_inner_half and abs(y-box_y) < box_inner_half",
+    "object_names": [
+      "obj_073-a_lego_duplo",
+      "obj_056_tennis_ball"
+    ],
+    "predicate_ast": "FunctionDef(name='official_sim_eval_yam_box_success_from_positions', args=arguments(posonlyargs=[], args=[arg(arg='object_positions', annotation=Subscript(value=Name(id='dict', ctx=Load()), slice=Tuple(elts=[Name(id='str', ctx=Load()), Attribute(value=Name(id='np', ctx=Load()), attr='ndarray', ctx=Load())], ctx=Load()), ctx=Load()))], kwonlyargs=[], kw_defaults=[], defaults=[]), body=[Assign(targets=[Tuple(elts=[Name(id='bx', ctx=Store()), Name(id='by', ctx=Store())], ctx=Store())], value=Name(id='OFFICIAL_YAM_BOX_POS_XY', ctx=Load())), AnnAssign(target=Name(id='per_object', ctx=Store()), annotation=Subscript(value=Name(id='dict', ctx=Load()), slice=Tuple(elts=[Name(id='str', ctx=Load()), Subscript(value=Name(id='dict', ctx=Load()), slice=Tuple(elts=[Name(id='str', ctx=Load()), Name(id='Any', ctx=Load())], ctx=Load()), ctx=Load())], ctx=Load()), ctx=Load()), value=Dict(keys=[], values=[]), simple=1), Assign(targets=[Name(id='n_in_box', ctx=Store())], value=Constant(value=0)), For(target=Name(id='name', ctx=Store()), iter=Name(id='OFFICIAL_YAM_OBJECT_NAMES', ctx=Load()), body=[Assign(targets=[Name(id='pos', ctx=Store())], value=Call(func=Attribute(value=Call(func=Attribute(value=Name(id='np', ctx=Load()), attr='asarray', ctx=Load()), args=[Subscript(value=Name(id='object_positions', ctx=Load()), slice=Name(id='name', ctx=Load()), ctx=Load())], keywords=[keyword(arg='dtype', value=Name(id='float', ctx=Load()))]), attr='reshape', ctx=Load()), args=[Constant(value=3)], keywords=[])), Assign(targets=[Name(id='dx', ctx=Store())], value=Call(func=Name(id='abs', ctx=Load()), args=[BinOp(left=Call(func=Name(id='float', ctx=Load()), args=[Subscript(value=Name(id='pos', ctx=Load()), slice=Constant(value=0), ctx=Load())], keywords=[]), op=Sub(), right=Name(id='bx', ctx=Load()))], keywords=[])), Assign(targets=[Name(id='dy', ctx=Store())], value=Call(func=Name(id='abs', ctx=Load()), args=[BinOp(left=Call(func=Name(id='float', ctx=Load()), args=[Subscript(value=Name(id='pos', ctx=Load()), slice=Constant(value=1), ctx=Load())], keywords=[]), op=Sub(), right=Name(id='by', ctx=Load()))], keywords=[])), Assign(targets=[Name(id='inside_xy', ctx=Store())], value=BoolOp(op=And(), values=[Compare(left=Name(id='dx', ctx=Load()), ops=[Lt()], comparators=[Name(id='OFFICIAL_YAM_BOX_INNER_HALF', ctx=Load())]), Compare(left=Name(id='dy', ctx=Load()), ops=[Lt()], comparators=[Name(id='OFFICIAL_YAM_BOX_INNER_HALF', ctx=Load())])])), Assign(targets=[Name(id='z_ok', ctx=Store())], value=BoolOp(op=And(), values=[Compare(left=Subscript(value=Name(id='pos', ctx=Load()), slice=Constant(value=2), ctx=Load()), ops=[Gt()], comparators=[BinOp(left=Name(id='OFFICIAL_SIM_EVAL_BOX_FLOOR_TOP_Z', ctx=Load()), op=Sub(), right=Constant(value=0.01))]), Compare(left=Subscript(value=Name(id='pos', ctx=Load()), slice=Constant(value=2), ctx=Load()), ops=[Lt()], comparators=[BinOp(left=Name(id='OFFICIAL_SIM_EVAL_BOX_RIM_Z', ctx=Load()), op=Add(), right=Constant(value=0.05))])])), Assign(targets=[Name(id='in_box', ctx=Store())], value=Call(func=Name(id='bool', ctx=Load()), args=[BoolOp(op=And(), values=[Name(id='inside_xy', ctx=Load()), Name(id='z_ok', ctx=Load())])], keywords=[])), AugAssign(target=Name(id='n_in_box', ctx=Store()), op=Add(), value=Call(func=Name(id='int', ctx=Load()), args=[Name(id='in_box', ctx=Load())], keywords=[])), Assign(targets=[Subscript(value=Name(id='per_object', ctx=Load()), slice=Name(id='name', ctx=Load()), ctx=Store())], value=Dict(keys=[Constant(value='position'), Constant(value='dx_from_box_center'), Constant(value='dy_from_box_center'), Constant(value='inside_xy'), Constant(value='z_ok'), Constant(value='in_box')], values=[Call(func=Attribute(value=Name(id='pos', ctx=Load()), attr='tolist', ctx=Load()), args=[], keywords=[]), Name(id='dx', ctx=Load()), Name(id='dy', ctx=Load()), Call(func=Name(id='bool', ctx=Load()), args=[Name(id='inside_xy', ctx=Load())], keywords=[]), Call(func=Name(id='bool', ctx=Load()), args=[Name(id='z_ok', ctx=Load())], keywords=[]), Name(id='in_box', ctx=Load())]))], orelse=[]), Return(value=Dict(keys=[Constant(value='success'), Constant(value='n_in_box'), Constant(value='n_total'), Constant(value='per_object')], values=[Compare(left=Name(id='n_in_box', ctx=Load()), ops=[Eq()], comparators=[Call(func=Name(id='len', ctx=Load()), args=[Name(id='OFFICIAL_YAM_OBJECT_NAMES', ctx=Load())], keywords=[])]), Name(id='n_in_box', ctx=Load()), Call(func=Name(id='len', ctx=Load()), args=[Name(id='OFFICIAL_YAM_OBJECT_NAMES', ctx=Load())], keywords=[]), Name(id='per_object', ctx=Load())]))], decorator_list=[], returns=Subscript(value=Name(id='dict', ctx=Load()), slice=Tuple(elts=[Name(id='str', ctx=Load()), Name(id='Any', ctx=Load())], ctx=Load()), ctx=Load()))",
+    "rim_z": 0.068,
+    "z_lower_margin": 0.01,
+    "z_upper_margin": 0.05
+  }
+}

@@ -1,0 +1,819 @@
+{
+  "workline": "mimicgen_single_arm",
+  "root": "work/current/mimicgen_single_arm",
+  "file_count": 135,
+  "lightweight_count": 76,
+  "large_artifact_count": 59,
+  "files": [
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_00/pickup_obj_pose_rel_observations.npy",
+      "size": 5184,
+      "class": "large_artifact",
+      "suffix": ".npy"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_00/replay_result.json",
+      "size": 513,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_00/step_trace.json",
+      "size": 105292,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_00/target_pose_rel_actions.npy",
+      "size": 5120,
+      "class": "large_artifact",
+      "suffix": ".npy"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_01/pickup_obj_pose_rel_observations.npy",
+      "size": 5632,
+      "class": "large_artifact",
+      "suffix": ".npy"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_01/replay_result.json",
+      "size": 513,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_01/step_trace.json",
+      "size": 181263,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_01/target_pose_rel_actions.npy",
+      "size": 5568,
+      "class": "large_artifact",
+      "suffix": ".npy"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_02/pickup_obj_pose_rel_observations.npy",
+      "size": 4864,
+      "class": "large_artifact",
+      "suffix": ".npy"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_02/replay_result.json",
+      "size": 516,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_02/step_trace.json",
+      "size": 104093,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_02/target_pose_rel_actions.npy",
+      "size": 4800,
+      "class": "large_artifact",
+      "suffix": ".npy"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_03/pickup_obj_pose_rel_observations.npy",
+      "size": 4736,
+      "class": "large_artifact",
+      "suffix": ".npy"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_03/replay_result.json",
+      "size": 516,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_03/step_trace.json",
+      "size": 108224,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_03/target_pose_rel_actions.npy",
+      "size": 4672,
+      "class": "large_artifact",
+      "suffix": ".npy"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_04/pickup_obj_pose_rel_observations.npy",
+      "size": 5568,
+      "class": "large_artifact",
+      "suffix": ".npy"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_04/replay_result.json",
+      "size": 519,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_04/step_trace.json",
+      "size": 203702,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_04/target_pose_rel_actions.npy",
+      "size": 5504,
+      "class": "large_artifact",
+      "suffix": ".npy"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_05/pickup_obj_pose_rel_observations.npy",
+      "size": 4800,
+      "class": "large_artifact",
+      "suffix": ".npy"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_05/replay_result.json",
+      "size": 518,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_05/step_trace.json",
+      "size": 96745,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_05/target_pose_rel_actions.npy",
+      "size": 4736,
+      "class": "large_artifact",
+      "suffix": ".npy"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_06/pickup_obj_pose_rel_observations.npy",
+      "size": 4608,
+      "class": "large_artifact",
+      "suffix": ".npy"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_06/replay_result.json",
+      "size": 516,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_06/step_trace.json",
+      "size": 91476,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_06/target_pose_rel_actions.npy",
+      "size": 4544,
+      "class": "large_artifact",
+      "suffix": ".npy"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_07/pickup_obj_pose_rel_observations.npy",
+      "size": 4928,
+      "class": "large_artifact",
+      "suffix": ".npy"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_07/replay_result.json",
+      "size": 519,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_07/step_trace.json",
+      "size": 124047,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_07/target_pose_rel_actions.npy",
+      "size": 4864,
+      "class": "large_artifact",
+      "suffix": ".npy"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_08/pickup_obj_pose_rel_observations.npy",
+      "size": 5184,
+      "class": "large_artifact",
+      "suffix": ".npy"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_08/replay_result.json",
+      "size": 519,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_08/step_trace.json",
+      "size": 159904,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_08/target_pose_rel_actions.npy",
+      "size": 5120,
+      "class": "large_artifact",
+      "suffix": ".npy"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_09/pickup_obj_pose_rel_observations.npy",
+      "size": 4224,
+      "class": "large_artifact",
+      "suffix": ".npy"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_09/replay_result.json",
+      "size": 516,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_09/step_trace.json",
+      "size": 109194,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/seed_09/target_pose_rel_actions.npy",
+      "size": 4160,
+      "class": "large_artifact",
+      "suffix": ".npy"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_batch_exact/summary.json",
+      "size": 8316,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v12_video/episode_00000000_droid_shoulder_light_randomization_failed_replay.mp4",
+      "size": 89177,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v12_video/episode_00000000_randomized_gopro_analogue_1_failed_replay.mp4",
+      "size": 16562,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v12_video/episode_00000000_randomized_zed2_analogue_1_failed_replay.mp4",
+      "size": 18471,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v12_video/episode_00000000_randomized_zed2_analogue_2_failed_replay.mp4",
+      "size": 24898,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v12_video/episode_00000000_wrist_camera_zed_mini_depth_failed_replay.mp4",
+      "size": 103038,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v12_video/episode_00000000_wrist_camera_zed_mini_failed_replay.mp4",
+      "size": 225142,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v15_exact_traj1/diagnostics/episode_00000000_droid_shoulder_light_randomization_exact_traj1_contact.png",
+      "size": 178647,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v15_exact_traj1/diagnostics/episode_00000000_randomized_gopro_analogue_1_exact_traj1_contact.png",
+      "size": 195973,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v15_exact_traj1/diagnostics/episode_00000000_randomized_zed2_analogue_1_exact_traj1_contact.png",
+      "size": 172592,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v15_exact_traj1/diagnostics/episode_00000000_randomized_zed2_analogue_2_exact_traj1_contact.png",
+      "size": 171770,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v15_exact_traj1/diagnostics/episode_00000000_wrist_camera_zed_mini_exact_traj1_contact.png",
+      "size": 164413,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v15_exact_traj1/episode_00000000_droid_shoulder_light_randomization_exact_traj1.mp4",
+      "size": 69215,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v15_exact_traj1/episode_00000000_randomized_gopro_analogue_1_exact_traj1.mp4",
+      "size": 49093,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v15_exact_traj1/episode_00000000_randomized_zed2_analogue_1_exact_traj1.mp4",
+      "size": 75465,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v15_exact_traj1/episode_00000000_randomized_zed2_analogue_2_exact_traj1.mp4",
+      "size": 66833,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v15_exact_traj1/episode_00000000_wrist_camera_zed_mini_exact_traj1.mp4",
+      "size": 108192,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v15_exact_traj1/replay_result.json",
+      "size": 299,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v16_exact_traj1_diagnostic/episode_00000000_droid_shoulder_light_randomization_exact_traj1.mp4",
+      "size": 69215,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v16_exact_traj1_diagnostic/episode_00000000_randomized_gopro_analogue_1_exact_traj1.mp4",
+      "size": 49093,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v16_exact_traj1_diagnostic/episode_00000000_randomized_zed2_analogue_1_exact_traj1.mp4",
+      "size": 75465,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v16_exact_traj1_diagnostic/episode_00000000_randomized_zed2_analogue_2_exact_traj1.mp4",
+      "size": 66833,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v16_exact_traj1_diagnostic/episode_00000000_wrist_camera_zed_mini_exact_traj1.mp4",
+      "size": 108192,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v16_exact_traj1_diagnostic/replay_result.json",
+      "size": 299,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v16_exact_traj1_diagnostic/step_trace.json",
+      "size": 97586,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v17_exact_traj1_aligned/episode_00000000_droid_shoulder_light_randomization_exact_traj1.mp4",
+      "size": 68009,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v17_exact_traj1_aligned/episode_00000000_randomized_gopro_analogue_1_exact_traj1.mp4",
+      "size": 48711,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v17_exact_traj1_aligned/episode_00000000_randomized_zed2_analogue_1_exact_traj1.mp4",
+      "size": 71018,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v17_exact_traj1_aligned/episode_00000000_randomized_zed2_analogue_2_exact_traj1.mp4",
+      "size": 65579,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v17_exact_traj1_aligned/episode_00000000_wrist_camera_zed_mini_exact_traj1.mp4",
+      "size": 97108,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v17_exact_traj1_aligned/replay_result.json",
+      "size": 498,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/replay_v17_exact_traj1_aligned/step_trace.json",
+      "size": 104093,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/seeds/raw/seed_00__house0__batch10.h5",
+      "size": 2076324,
+      "class": "large_artifact",
+      "suffix": ".h5"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/seeds/raw/seed_01__house1__batch9.h5",
+      "size": 2156390,
+      "class": "large_artifact",
+      "suffix": ".h5"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/seeds/raw/seed_02__house10__batch6.h5",
+      "size": 2123925,
+      "class": "large_artifact",
+      "suffix": ".h5"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/seeds/raw/seed_03__house100__batch8.h5",
+      "size": 2222775,
+      "class": "large_artifact",
+      "suffix": ".h5"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/seeds/raw/seed_04__house10000__batch7.h5",
+      "size": 2160571,
+      "class": "large_artifact",
+      "suffix": ".h5"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/seeds/raw/seed_05__house10001__batch15.h5",
+      "size": 1579894,
+      "class": "large_artifact",
+      "suffix": ".h5"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/seeds/raw/seed_06__house10002__batch1.h5",
+      "size": 1959354,
+      "class": "large_artifact",
+      "suffix": ".h5"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/seeds/raw/seed_07__house10006__batch15.h5",
+      "size": 2060831,
+      "class": "large_artifact",
+      "suffix": ".h5"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/seeds/raw/seed_08__house10007__batch1.h5",
+      "size": 2257066,
+      "class": "large_artifact",
+      "suffix": ".h5"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/seeds/raw/seed_09__house10008__batch16.h5",
+      "size": 2064938,
+      "class": "large_artifact",
+      "suffix": ".h5"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/seeds/robomimic_seeds.hdf5",
+      "size": 418670,
+      "class": "large_artifact",
+      "suffix": ".hdf5"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/seeds/robomimic_seeds_aligned.hdf5",
+      "size": 498000,
+      "class": "large_artifact",
+      "suffix": ".hdf5"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/artifacts/seeds/seeds_manifest.json",
+      "size": 3610,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/data/molmobot_data/FrankaPickOmniCamConfig/train_shards/00000.tar",
+      "size": 2217932800,
+      "class": "large_artifact",
+      "suffix": ".tar"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/findings.md",
+      "size": 17958,
+      "class": "lightweight",
+      "suffix": ".md"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/convert_seeds_aligned.log",
+      "size": 1212,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/download_history/curl_mirror.log",
+      "size": 71904,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/download_history/curl_shard.log",
+      "size": 76379,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/download_history/curl_shard2.log",
+      "size": 7653,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/download_history/download.log",
+      "size": 782,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/download_history/download2.log",
+      "size": 546,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_attempt1.log",
+      "size": 11007,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_batch_exact/seed_00.log",
+      "size": 5300,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_batch_exact/seed_01.log",
+      "size": 5386,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_batch_exact/seed_02.log",
+      "size": 5173,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_batch_exact/seed_03.log",
+      "size": 5215,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_batch_exact/seed_04.log",
+      "size": 5436,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_batch_exact/seed_05.log",
+      "size": 5279,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_batch_exact/seed_06.log",
+      "size": 5343,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_batch_exact/seed_07.log",
+      "size": 5346,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_batch_exact/seed_08.log",
+      "size": 5487,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_batch_exact/seed_09.log",
+      "size": 5366,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_batch_exact.log",
+      "size": 977,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_batch_exact_objectposes.log",
+      "size": 977,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_batch_exact_seed02_smoke.log",
+      "size": 5173,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_batch_exact_targets.log",
+      "size": 977,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_v10_offline.log",
+      "size": 2764,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_v11_full_state.log",
+      "size": 2753,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_v12_video.log",
+      "size": 3473,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_v13_exact_traj1.log",
+      "size": 21003,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_v14_exact_traj1.log",
+      "size": 8430,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_v15_exact_traj1.log",
+      "size": 4838,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_v16_exact_traj1_diagnostic.log",
+      "size": 5095,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_v17_exact_traj1_aligned.log",
+      "size": 5171,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_v4.log",
+      "size": 22140,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_v4b.log",
+      "size": 7107,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_v4c.log",
+      "size": 770,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_v5.log",
+      "size": 7343,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_v6.log",
+      "size": 770,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_v7.log",
+      "size": 770,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_v8.log",
+      "size": 175,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_v8b.log",
+      "size": 992,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_v8c.log",
+      "size": 1529,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/logs/replay_v9.log",
+      "size": 1970,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/progress.md",
+      "size": 8150,
+      "class": "lightweight",
+      "suffix": ".md"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/scripts/01_select_seeds.py",
+      "size": 9090,
+      "class": "lightweight",
+      "suffix": ".py"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/scripts/02_convert_seeds_to_robomimic.py",
+      "size": 13909,
+      "class": "lightweight",
+      "suffix": ".py"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/scripts/03_replay_seed.py",
+      "size": 10875,
+      "class": "lightweight",
+      "suffix": ".py"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/scripts/04_replay_via_jsoneval.py",
+      "size": 9043,
+      "class": "lightweight",
+      "suffix": ".py"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/scripts/05_replay_lightweight.py",
+      "size": 7870,
+      "class": "lightweight",
+      "suffix": ".py"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/scripts/06_replay_exact_episode.py",
+      "size": 11107,
+      "class": "lightweight",
+      "suffix": ".py"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/scripts/07_replay_all_seeds.py",
+      "size": 3056,
+      "class": "lightweight",
+      "suffix": ".py"
+    },
+    {
+      "path": "work/current/mimicgen_single_arm/task_plan.md",
+      "size": 9152,
+      "class": "lightweight",
+      "suffix": ".md"
+    }
+  ]
+}

@@ -1,0 +1,1881 @@
+{
+  "workline": "ithor_bimanual_yam",
+  "root": "work/current/ithor_bimanual_yam",
+  "file_count": 312,
+  "lightweight_count": 178,
+  "large_artifact_count": 134,
+  "files": [
+    {
+      "path": "work/current/ithor_bimanual_yam/README.md",
+      "size": 994,
+      "class": "lightweight",
+      "suffix": ".md"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101/initial_exo_camera.png",
+      "size": 205149,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101/initial_left_wrist_camera.png",
+      "size": 225548,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101/initial_right_wrist_camera.png",
+      "size": 217495,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101/report.json",
+      "size": 11216,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_ablation/initial_exo_camera.png",
+      "size": 205149,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_ablation/initial_left_wrist_camera.png",
+      "size": 225548,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_ablation/initial_right_wrist_camera.png",
+      "size": 217495,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_ablation/report.json",
+      "size": 24781,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_ablation_console.log",
+      "size": 1190,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_box24/dual_reach_exo_camera.png",
+      "size": 180196,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_box24/dual_reach_left_wrist_camera.png",
+      "size": 196048,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_box24/dual_reach_right_wrist_camera.png",
+      "size": 176287,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_box24/initial_exo_camera.png",
+      "size": 200571,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_box24/initial_left_wrist_camera.png",
+      "size": 230946,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_box24/initial_right_wrist_camera.png",
+      "size": 212886,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_box24/report.json",
+      "size": 39022,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_box24_console.log",
+      "size": 1466,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_boxcenter/dual_reach_exo_camera.png",
+      "size": 173289,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_boxcenter/dual_reach_left_wrist_camera.png",
+      "size": 183387,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_boxcenter/dual_reach_right_wrist_camera.png",
+      "size": 194427,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_boxcenter/initial_exo_camera.png",
+      "size": 205149,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_boxcenter/initial_left_wrist_camera.png",
+      "size": 225548,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_boxcenter/initial_right_wrist_camera.png",
+      "size": 217495,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_boxcenter/report.json",
+      "size": 31961,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_boxcenter_console.log",
+      "size": 2170,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_final/dual_reach_exo_camera.png",
+      "size": 180196,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_final/dual_reach_left_wrist_camera.png",
+      "size": 196048,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_final/dual_reach_right_wrist_camera.png",
+      "size": 176287,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_final/initial_exo_camera.png",
+      "size": 200571,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_final/initial_left_wrist_camera.png",
+      "size": 230946,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_final/initial_right_wrist_camera.png",
+      "size": 212886,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_final/report.json",
+      "size": 36820,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_final_console.log",
+      "size": 903,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_gatefix/dual_reach_exo_camera.png",
+      "size": 173264,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_gatefix/dual_reach_left_wrist_camera.png",
+      "size": 183387,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_gatefix/dual_reach_right_wrist_camera.png",
+      "size": 194427,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_gatefix/initial_exo_camera.png",
+      "size": 205149,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_gatefix/initial_left_wrist_camera.png",
+      "size": 225548,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_gatefix/initial_right_wrist_camera.png",
+      "size": 217495,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_gatefix/report.json",
+      "size": 25009,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d1/seed101_gatefix_console.log",
+      "size": 7635,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/2a_seed101/report.json",
+      "size": 1771,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/2a_seed101/sample_exo_camera.jpg",
+      "size": 8591,
+      "class": "large_artifact",
+      "suffix": ".jpg"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/2a_seed101/sample_left_wrist_camera.jpg",
+      "size": 7813,
+      "class": "large_artifact",
+      "suffix": ".jpg"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/2a_seed101/sample_right_wrist_camera.jpg",
+      "size": 7175,
+      "class": "large_artifact",
+      "suffix": ".jpg"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/2a_seed101_console.log",
+      "size": 613,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/2b_seed101/bridge.log",
+      "size": 1131,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/2b_seed101/bridge.pid",
+      "size": 8,
+      "class": "lightweight",
+      "suffix": ".pid"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/2b_seed101/report.json",
+      "size": 2256,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/2c_official_seed101/report.json",
+      "size": 2585,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/2c_seed101/report.json",
+      "size": 2307,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/init_audit_seed101/supports.json",
+      "size": 14624,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/tabletop_edge_aligned_seed109_v1/report.json",
+      "size": 1007979,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/tabletop_init_seed101/report.json",
+      "size": 11702,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/tabletop_init_seed101_v2/report.json",
+      "size": 105750,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/tabletop_init_seed101_v3/report.json",
+      "size": 106847,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/tabletop_init_seed101_v4/report.json",
+      "size": 256366,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/tabletop_init_seed109_32attempts/exo_camera.png",
+      "size": 321453,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/tabletop_init_seed109_32attempts/left_wrist_camera.png",
+      "size": 382916,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/tabletop_init_seed109_32attempts/report.json",
+      "size": 221621,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/tabletop_init_seed109_32attempts/right_wrist_camera.png",
+      "size": 356393,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/tabletop_official_edge_aligned_seed109_v2/exo_camera.png",
+      "size": 288968,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/tabletop_official_edge_aligned_seed109_v2/left_wrist_camera.png",
+      "size": 302093,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/tabletop_official_edge_aligned_seed109_v2/report.json",
+      "size": 19478,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/tabletop_official_edge_aligned_seed109_v2/right_wrist_camera.png",
+      "size": 322887,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/tabletop_official_mesh_edge_seed109_v3/exo_camera.png",
+      "size": 320118,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/tabletop_official_mesh_edge_seed109_v3/left_wrist_camera.png",
+      "size": 331785,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/tabletop_official_mesh_edge_seed109_v3/report.json",
+      "size": 19624,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/tabletop_official_mesh_edge_seed109_v3/right_wrist_camera.png",
+      "size": 351370,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/tabletop_official_parallel_edge_seed109_v4/exo_camera.png",
+      "size": 351550,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/tabletop_official_parallel_edge_seed109_v4/left_wrist_camera.png",
+      "size": 348387,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/tabletop_official_parallel_edge_seed109_v4/report.json",
+      "size": 33905,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d2/tabletop_official_parallel_edge_seed109_v4/right_wrist_camera.png",
+      "size": 319019,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v1/launcher.pid",
+      "size": 8,
+      "class": "lightweight",
+      "suffix": ".pid"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v1/run.log",
+      "size": 3137,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v10_vertical_lift/run.log",
+      "size": 5812,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v11_candle_yam_orientation/run.log",
+      "size": 7565,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v12_dynamic_probe/run.log",
+      "size": 18323,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v13_settled_layout/run.log",
+      "size": 13406,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v14_yam_native/run.log",
+      "size": 19698,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v15_candle_native/run.log",
+      "size": 31971,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v16_full_state_recording/run.log",
+      "size": 32789,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v17_restore_after_place_ik/run.log",
+      "size": 32157,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v18_repeatable_preferred/run.log",
+      "size": 18682,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v19_offline_history/run.log",
+      "size": 21152,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v2/launcher.pid",
+      "size": 8,
+      "class": "lightweight",
+      "suffix": ".pid"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v2/run.log",
+      "size": 4075,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v20_exact_probe_commands/run.log",
+      "size": 22510,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v21_clean_post_ik_probe/run.log",
+      "size": 24632,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v22_repeat_gate/run.log",
+      "size": 34744,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v23_ramped_contact/run.log",
+      "size": 5166,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v24_object_relative_place/run.log",
+      "size": 4799,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v25_object_relative_place_fix/run.log",
+      "size": 5070,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v26_above_box_release/run.log",
+      "size": 5354,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v27_rigid_grasp_place/run.log",
+      "size": 2057833,
+      "class": "large_artifact",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v28_neutral_place_orientation/run.log",
+      "size": 7131,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v29_post_plan_repeat/run.log",
+      "size": 5621,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v3/launcher.pid",
+      "size": 8,
+      "class": "lightweight",
+      "suffix": ".pid"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v3/run.log",
+      "size": 4075,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v30_resetdata_restore/run.log",
+      "size": 6427,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v31_center_low_drop/run.log",
+      "size": 5625,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v32_native_right_center_drop/run.log",
+      "size": 5582,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v33_closed_loop_release_alignment/run.log",
+      "size": 5410,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v34_true_opening_height/run.log",
+      "size": 5764,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v35_damped_xy_alignment/run.log",
+      "size": 6742,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v36_physical_support_gate/run.log",
+      "size": 9936,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v37_left_shift_box_retreat/run.log",
+      "size": 8661,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v38_arm_side_release/run.log",
+      "size": 10192,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v39_reverse_retreat/run.log",
+      "size": 10398,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v4/launcher.pid",
+      "size": 8,
+      "class": "lightweight",
+      "suffix": ".pid"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v4/run.log",
+      "size": 3242,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v40_strict_release_gate/run.log",
+      "size": 12727,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v41_alignment_convergence/run.log",
+      "size": 8427,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v42_incremental_alignment/run.log",
+      "size": 15076,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v43_arm_side_interior/run.log",
+      "size": 16127,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v44_direct_release/run.log",
+      "size": 11009,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v45_place_convergence/run.log",
+      "size": 5299,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v46_shared_box_shift/run.log",
+      "size": 5212,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v47_target_compensation/run.log",
+      "size": 11035,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v48_deeper_release/run.log",
+      "size": 22909,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v49_right_reachable/run.log",
+      "size": 16733,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v5/launcher.pid",
+      "size": 8,
+      "class": "lightweight",
+      "suffix": ".pid"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v5/run.log",
+      "size": 3259,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v50_release_separation/run.log",
+      "size": 16732,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v51_release_separation_10pct/run.log",
+      "size": 30747,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v52_right_fine_search/run.log",
+      "size": 16725,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v53_two_segment_release/run.log",
+      "size": 17618,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v54_vertical_clearance/run.log",
+      "size": 24567,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v55_contact_identity/run.log",
+      "size": 183360,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v56_optional_vertical_clearance.run.log",
+      "size": 170506,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v57_detached.exit_code",
+      "size": 2,
+      "class": "lightweight",
+      "suffix": ".exit_code"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v57_detached.launcher_pid",
+      "size": 8,
+      "class": "lightweight",
+      "suffix": ".launcher_pid"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v57_detached.run.log",
+      "size": 128329,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v58_lifted_seed_detached.exit_code",
+      "size": 2,
+      "class": "lightweight",
+      "suffix": ".exit_code"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v58_lifted_seed_detached.launcher_pid",
+      "size": 8,
+      "class": "lightweight",
+      "suffix": ".launcher_pid"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v58_lifted_seed_detached.run.log",
+      "size": 43212,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v59_side_seed_detached.exit_code",
+      "size": 4,
+      "class": "lightweight",
+      "suffix": ".exit_code"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v59_side_seed_detached.launcher_pid",
+      "size": 8,
+      "class": "lightweight",
+      "suffix": ".launcher_pid"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v59_side_seed_detached.run.log",
+      "size": 114312,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v6/launcher.pid",
+      "size": 8,
+      "class": "lightweight",
+      "suffix": ".pid"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v6/run.log",
+      "size": 4065,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v60_centered_box_detached.exit_code",
+      "size": 2,
+      "class": "lightweight",
+      "suffix": ".exit_code"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v60_centered_box_detached.launcher_pid",
+      "size": 8,
+      "class": "lightweight",
+      "suffix": ".launcher_pid"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v60_centered_box_detached.run.log",
+      "size": 33485,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v61_box_x057_detached.exit_code",
+      "size": 2,
+      "class": "lightweight",
+      "suffix": ".exit_code"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v61_box_x057_detached.launcher_pid",
+      "size": 8,
+      "class": "lightweight",
+      "suffix": ".launcher_pid"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v61_box_x057_detached.run.log",
+      "size": 14759,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v62_box_x060_detached.exit_code",
+      "size": 2,
+      "class": "lightweight",
+      "suffix": ".exit_code"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v62_box_x060_detached.launcher_pid",
+      "size": 8,
+      "class": "lightweight",
+      "suffix": ".launcher_pid"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v62_box_x060_detached.run.log",
+      "size": 10650,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v63_box_x061_detached.exit_code",
+      "size": 2,
+      "class": "lightweight",
+      "suffix": ".exit_code"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v63_box_x061_detached.launcher_pid",
+      "size": 8,
+      "class": "lightweight",
+      "suffix": ".launcher_pid"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v63_box_x061_detached.run.log",
+      "size": 14855,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v64_box_x061_failure_video_detached/episode_00000000_exo_camera_failure_diagnostic.mp4",
+      "size": 232676,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v64_box_x061_failure_video_detached/episode_00000000_left_wrist_camera_failure_diagnostic.mp4",
+      "size": 175509,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v64_box_x061_failure_video_detached/episode_00000000_right_wrist_camera_failure_diagnostic.mp4",
+      "size": 111288,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v64_box_x061_failure_video_detached/failure_diagnostic.json",
+      "size": 576,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v64_box_x061_failure_video_detached.exit_code",
+      "size": 2,
+      "class": "lightweight",
+      "suffix": ".exit_code"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v64_box_x061_failure_video_detached.launcher_pid",
+      "size": 8,
+      "class": "lightweight",
+      "suffix": ".launcher_pid"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v64_box_x061_failure_video_detached.run.log",
+      "size": 12838,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v65_right_low_preplace_detached.launcher_pid",
+      "size": 8,
+      "class": "lightweight",
+      "suffix": ".launcher_pid"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v65_right_low_preplace_detached.run.log",
+      "size": 1638,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v7/run.log",
+      "size": 3242,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v8_diag/run.log",
+      "size": 5009,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/artifacts/gate_1d3/scripted_expert_seed110_v9_converge/run.log",
+      "size": 5668,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/findings.md",
+      "size": 22567,
+      "class": "lightweight",
+      "suffix": ".md"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/findings.md.bak.20260723_2038",
+      "size": 3042,
+      "class": "lightweight",
+      "suffix": ".20260723_2038"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/findings.md.bak.20260723_2113",
+      "size": 4839,
+      "class": "lightweight",
+      "suffix": ".20260723_2113"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/findings.md.bak.20260723_2126",
+      "size": 7636,
+      "class": "lightweight",
+      "suffix": ".20260723_2126"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/findings.md.bak.20260723_2133",
+      "size": 9266,
+      "class": "lightweight",
+      "suffix": ".20260723_2133"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/findings.md.bak.20260723_2307",
+      "size": 10143,
+      "class": "lightweight",
+      "suffix": ".20260723_2307"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/findings.md.bak.20260724_2008",
+      "size": 18465,
+      "class": "lightweight",
+      "suffix": ".20260724_2008"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/manifests/experiment_manifest.json",
+      "size": 1686,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp10_s1/floorplan10_overview.png",
+      "size": 816626,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp10_s1/floorplan10_overview_az135.png",
+      "size": 620034,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp10_s1/floorplan10_overview_az225.png",
+      "size": 635821,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp10_s1/floorplan10_overview_az315.png",
+      "size": 816626,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp10_s1/floorplan10_overview_az45.png",
+      "size": 1009136,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp10_s1/floorplan10_overview_top.png",
+      "size": 670976,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp10_s2/floorplan10_overview.png",
+      "size": 526025,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp10_s2/floorplan10_overview_az135.png",
+      "size": 840704,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp10_s2/floorplan10_overview_az225.png",
+      "size": 547691,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp10_s2/floorplan10_overview_az315.png",
+      "size": 526025,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp10_s2/floorplan10_overview_az45.png",
+      "size": 904092,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp10_s2/floorplan10_overview_top.png",
+      "size": 522401,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp10_s3/floorplan10_overview.png",
+      "size": 833842,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp10_s3/floorplan10_overview_az135.png",
+      "size": 492162,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp10_s3/floorplan10_overview_az225.png",
+      "size": 590074,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp10_s3/floorplan10_overview_az315.png",
+      "size": 833842,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp10_s3/floorplan10_overview_az45.png",
+      "size": 763616,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp10_s3/floorplan10_overview_top.png",
+      "size": 631223,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp1_s1/floorplan1_overview.png",
+      "size": 552284,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp1_s1/floorplan1_overview_az135.png",
+      "size": 918604,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp1_s1/floorplan1_overview_az225.png",
+      "size": 811174,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp1_s1/floorplan1_overview_az315.png",
+      "size": 552284,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp1_s1/floorplan1_overview_az45.png",
+      "size": 507762,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp1_s1/floorplan1_overview_top.png",
+      "size": 677401,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp1_s2/floorplan1_overview.png",
+      "size": 587671,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp1_s2/floorplan1_overview_az135.png",
+      "size": 749404,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp1_s2/floorplan1_overview_az225.png",
+      "size": 845486,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp1_s2/floorplan1_overview_az315.png",
+      "size": 587671,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp1_s2/floorplan1_overview_az45.png",
+      "size": 465519,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp1_s2/floorplan1_overview_top.png",
+      "size": 687626,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp1_s3/floorplan1_overview.png",
+      "size": 544030,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp1_s3/floorplan1_overview_az135.png",
+      "size": 910438,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp1_s3/floorplan1_overview_az225.png",
+      "size": 808295,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp1_s3/floorplan1_overview_az315.png",
+      "size": 544030,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp1_s3/floorplan1_overview_az45.png",
+      "size": 508112,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp1_s3/floorplan1_overview_top.png",
+      "size": 674092,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp28_s1/floorplan28_overview.png",
+      "size": 655077,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp28_s1/floorplan28_overview_az135.png",
+      "size": 228103,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp28_s1/floorplan28_overview_az225.png",
+      "size": 763119,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp28_s1/floorplan28_overview_az315.png",
+      "size": 655077,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp28_s1/floorplan28_overview_az45.png",
+      "size": 223085,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp28_s1/floorplan28_overview_top.png",
+      "size": 515504,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp28_s2/floorplan28_overview.png",
+      "size": 671385,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp28_s2/floorplan28_overview_az135.png",
+      "size": 231291,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp28_s2/floorplan28_overview_az225.png",
+      "size": 667937,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp28_s2/floorplan28_overview_az315.png",
+      "size": 671385,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp28_s2/floorplan28_overview_az45.png",
+      "size": 234994,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp28_s2/floorplan28_overview_top.png",
+      "size": 513549,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp28_s3/floorplan28_overview.png",
+      "size": 640940,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp28_s3/floorplan28_overview_az135.png",
+      "size": 311633,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp28_s3/floorplan28_overview_az225.png",
+      "size": 728222,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp28_s3/floorplan28_overview_az315.png",
+      "size": 640940,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp28_s3/floorplan28_overview_az45.png",
+      "size": 243013,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/multi/fp28_s3/floorplan28_overview_top.png",
+      "size": 578442,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/official_cam_scene/exo_camera.png",
+      "size": 315581,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/official_cam_scene/left_wrist_camera.png",
+      "size": 322563,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/official_cam_scene/right_wrist_camera.png",
+      "size": 262206,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/single/fp1/floorplan1_overview.png",
+      "size": 888862,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/single/fp1/floorplan1_overview_az135.png",
+      "size": 589026,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/single/fp1/floorplan1_overview_az225.png",
+      "size": 739327,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/single/fp1/floorplan1_overview_az315.png",
+      "size": 888862,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/single/fp1/floorplan1_overview_az45.png",
+      "size": 519006,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/single/fp1/floorplan1_overview_top.png",
+      "size": 472268,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/single/fp10/floorplan10_overview.png",
+      "size": 832798,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/single/fp10/floorplan10_overview_az135.png",
+      "size": 447678,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/single/fp10/floorplan10_overview_az225.png",
+      "size": 600949,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/single/fp10/floorplan10_overview_az315.png",
+      "size": 832798,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/single/fp10/floorplan10_overview_az45.png",
+      "size": 575708,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/single/fp10/floorplan10_overview_top.png",
+      "size": 581619,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/single/fp28/floorplan28_overview.png",
+      "size": 672160,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/single/fp28/floorplan28_overview_az135.png",
+      "size": 238848,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/single/fp28/floorplan28_overview_az225.png",
+      "size": 706887,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/single/fp28/floorplan28_overview_az315.png",
+      "size": 672160,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/single/fp28/floorplan28_overview_az45.png",
+      "size": 243133,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/single/fp28/floorplan28_overview_top.png",
+      "size": 519121,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/wrist_cam_check/left_wrist_camera.png",
+      "size": 7185,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/wrist_cam_check/right_wrist_camera.png",
+      "size": 7185,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/wrist_cam_scene/robot_0__left_wrist_camera.png",
+      "size": 190805,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/wrist_cam_scene/robot_0__right_wrist_camera.png",
+      "size": 156387,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/wrist_pose_sweep/left_c1_back_up.png",
+      "size": 115812,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/wrist_pose_sweep/left_c2_back_up_hi.png",
+      "size": 185505,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/wrist_pose_sweep/left_c3_back_only.png",
+      "size": 60485,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/wrist_pose_sweep/left_c4_side_px.png",
+      "size": 143934,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/wrist_pose_sweep/left_c5_side_nx.png",
+      "size": 179473,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/previews/wrist_pose_sweep/left_c6_down_ny.png",
+      "size": 117088,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/progress.md",
+      "size": 17369,
+      "class": "lightweight",
+      "suffix": ".md"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/progress.md.bak.20260722",
+      "size": 459,
+      "class": "lightweight",
+      "suffix": ".20260722"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/progress.md.bak.20260723_2038",
+      "size": 1894,
+      "class": "lightweight",
+      "suffix": ".20260723_2038"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/progress.md.bak.20260723_2113",
+      "size": 4239,
+      "class": "lightweight",
+      "suffix": ".20260723_2113"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/progress.md.bak.20260723_2126",
+      "size": 5537,
+      "class": "lightweight",
+      "suffix": ".20260723_2126"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/progress.md.bak.20260723_2133",
+      "size": 6179,
+      "class": "lightweight",
+      "suffix": ".20260723_2133"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/progress.md.bak.20260723_2307",
+      "size": 6805,
+      "class": "lightweight",
+      "suffix": ".20260723_2307"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/progress.md.bak.20260724_2008",
+      "size": 13770,
+      "class": "lightweight",
+      "suffix": ".20260724_2008"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/reports/gate_1a_scene_installation.md",
+      "size": 908,
+      "class": "lightweight",
+      "suffix": ".md"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/audit_floorplan1_supports.py",
+      "size": 3236,
+      "class": "lightweight",
+      "suffix": ".py"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1b_scene_preview.py",
+      "size": 6064,
+      "class": "lightweight",
+      "suffix": ".py"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1c_official_cam_scene.py",
+      "size": 3581,
+      "class": "lightweight",
+      "suffix": ".py"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1c_quat_convert.py",
+      "size": 2080,
+      "class": "lightweight",
+      "suffix": ".py"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1c_wrist_cam_scene.py",
+      "size": 3112,
+      "class": "lightweight",
+      "suffix": ".py"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1c_wrist_pose_sweep.py",
+      "size": 4219,
+      "class": "lightweight",
+      "suffix": ".py"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1d1_dual_object_reachability.py",
+      "size": 22340,
+      "class": "lightweight",
+      "suffix": ".py"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1d1_dual_object_reachability.py.bak.20260723_2209_userfix",
+      "size": 16575,
+      "class": "lightweight",
+      "suffix": ".20260723_2209_userfix"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1d1_dual_object_reachability.py.bak.20260723_2225_ablation",
+      "size": 16676,
+      "class": "lightweight",
+      "suffix": ".20260723_2225_ablation"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1d1_dual_object_reachability.py.bak.20260723_2235_gate_semantics",
+      "size": 20269,
+      "class": "lightweight",
+      "suffix": ".20260723_2235_gate_semantics"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1d1_dual_object_reachability.py.bak.20260723_2248_boxcenter",
+      "size": 21708,
+      "class": "lightweight",
+      "suffix": ".20260723_2248_boxcenter"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1d1_dual_object_reachability.py.bak.20260723_2254_box24",
+      "size": 22300,
+      "class": "lightweight",
+      "suffix": ".20260723_2254_box24"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1d1_dual_object_reachability.py.bak.20260723_2300_finalgate",
+      "size": 22338,
+      "class": "lightweight",
+      "suffix": ".20260723_2300_finalgate"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1d2a_render_benchmark.py",
+      "size": 6593,
+      "class": "lightweight",
+      "suffix": ".py"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1d2b_browser_bridge.py",
+      "size": 8042,
+      "class": "lightweight",
+      "suffix": ".py"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1d2c_browser_teleop.py",
+      "size": 30519,
+      "class": "lightweight",
+      "suffix": ".py"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1d2c_browser_teleop.py.bak.20260724_1945",
+      "size": 30519,
+      "class": "lightweight",
+      "suffix": ".20260724_1945"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1d2c_browser_teleop.py.bak.20260724_1952",
+      "size": 30519,
+      "class": "lightweight",
+      "suffix": ".20260724_1952"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1d2c_browser_teleop.py.bak.20260724_1957",
+      "size": 30519,
+      "class": "lightweight",
+      "suffix": ".20260724_1957"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1d2c_tabletop_initialization.py",
+      "size": 27241,
+      "class": "lightweight",
+      "suffix": ".py"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1d2c_tabletop_initialization.py.bak.20260724_1945",
+      "size": 23386,
+      "class": "lightweight",
+      "suffix": ".20260724_1945"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1d2c_tabletop_initialization.py.bak.20260724_1952",
+      "size": 22014,
+      "class": "lightweight",
+      "suffix": ".20260724_1952"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1d2c_tabletop_initialization.py.bak.20260724_1957",
+      "size": 25505,
+      "class": "lightweight",
+      "suffix": ".20260724_1957"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1d3_scripted_expert.py",
+      "size": 56736,
+      "class": "lightweight",
+      "suffix": ".py"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1d3_scripted_expert.py.bak.v55",
+      "size": 53036,
+      "class": "lightweight",
+      "suffix": ".v55"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1d3_scripted_expert.py.bak.v57",
+      "size": 53796,
+      "class": "lightweight",
+      "suffix": ".v57"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1d3_scripted_expert.py.bak.v58",
+      "size": 53808,
+      "class": "lightweight",
+      "suffix": ".v58"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1d3_scripted_expert.py.bak.v59",
+      "size": 54106,
+      "class": "lightweight",
+      "suffix": ".v59"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1d3_scripted_expert.py.bak.v60",
+      "size": 54106,
+      "class": "lightweight",
+      "suffix": ".v60"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1d3_scripted_expert.py.bak.v61",
+      "size": 54106,
+      "class": "lightweight",
+      "suffix": ".v61"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1d3_scripted_expert.py.bak.v62",
+      "size": 54106,
+      "class": "lightweight",
+      "suffix": ".v62"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1d3_scripted_expert.py.bak.v63",
+      "size": 54106,
+      "class": "lightweight",
+      "suffix": ".v63"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/gate_1d3_scripted_expert.py.bak.v64",
+      "size": 55332,
+      "class": "lightweight",
+      "suffix": ".v64"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/validate_gate_1d2c_tabletop_initialization.py",
+      "size": 3642,
+      "class": "lightweight",
+      "suffix": ".py"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/validate_gate_1d2c_tabletop_initialization.py.bak.20260724_1945",
+      "size": 3627,
+      "class": "lightweight",
+      "suffix": ".20260724_1945"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/validate_gate_1d2c_tabletop_initialization.py.bak.20260724_1952",
+      "size": 3642,
+      "class": "lightweight",
+      "suffix": ".20260724_1952"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/scripts/validate_gate_1d2c_tabletop_initialization.py.bak.20260724_1957",
+      "size": 3642,
+      "class": "lightweight",
+      "suffix": ".20260724_1957"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/task_plan.md",
+      "size": 11420,
+      "class": "lightweight",
+      "suffix": ".md"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/task_plan.md.bak.20260723_2038",
+      "size": 3613,
+      "class": "lightweight",
+      "suffix": ".20260723_2038"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/task_plan.md.bak.20260723_2113",
+      "size": 5876,
+      "class": "lightweight",
+      "suffix": ".20260723_2113"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/task_plan.md.bak.20260723_2126",
+      "size": 7924,
+      "class": "lightweight",
+      "suffix": ".20260723_2126"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/task_plan.md.bak.20260723_2133",
+      "size": 9011,
+      "class": "lightweight",
+      "suffix": ".20260723_2133"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/task_plan.md.bak.20260723_2307",
+      "size": 9226,
+      "class": "lightweight",
+      "suffix": ".20260723_2307"
+    },
+    {
+      "path": "work/current/ithor_bimanual_yam/task_plan.md.bak.20260724_2008",
+      "size": 11355,
+      "class": "lightweight",
+      "suffix": ".20260724_2008"
+    }
+  ]
+}

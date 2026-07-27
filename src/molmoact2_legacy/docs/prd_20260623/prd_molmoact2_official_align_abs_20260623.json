@@ -1,0 +1,66 @@
+{
+  "name": "MolmoAct2 Official YAM Absolute-Source Alignment",
+  "description": "Use the absolute official MolmoAct2 source copy to correct the MolmoSpaces MolmoAct2-YAM task/scene/camera route and produce a fresh rollout video. Do not invent custom room/countertop/viewpoint placement.",
+  "branchName": "ralph/molmoact2-official-yam-absolute-source",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Audit absolute official MolmoAct2 source",
+      "description": "As a reproduction maintainer, I want direct evidence from the absolute official MolmoAct2 source copy so that task and placement decisions are source-grounded.",
+      "acceptanceCriteria": [
+        "Use absolute official task source: /home/c/project/paper_reproductions/official/artifacts/molmospaces/molmoact2_yam_integration_analysis_20260620_142443/molmoact2/sim_eval/tasks/yam_tasks/bimanual_put_everything_in_box.py.",
+        "Use absolute official robot source: /home/c/project/paper_reproductions/official/artifacts/molmospaces/molmoact2_yam_integration_analysis_20260620_142443/molmoact2/sim_eval/robots/bimanual_yam.py.",
+        "Also inspect nearby official MolmoAct2 sim_eval files if these two import placement/camera/task constants from them.",
+        "Inspect current route files: molmo_spaces/data_generation/config/molmoact2_official_yam_box_config.py, molmo_spaces/configs/camera_configs.py, molmo_spaces/policy/learned_policy/molmoact2_yam_policy.py, scripts/datagen/run_pipeline.py, and examples/molmoact2_official_yam_box/.",
+        "Write artifacts/molmospaces/molmoact2_yam_integration/official_absolute_alignment_audit_20260623.md with source-backed official task/object/camera/placement facts, current mismatches, and exact evidence paths.",
+        "Do not modify behavior files in this story except the audit artifact and Ralph progress files."
+      ],
+      "priority": 1,
+      "passes": false,
+      "notes": "The official source is outside the molmospaces checkout; do not declare it missing before checking the absolute paths above.",
+      "dependsOn": []
+    },
+    {
+      "id": "US-002",
+      "title": "Correct route to official-seen task semantics",
+      "description": "As a reproduction maintainer, I want the executable route to avoid unseen custom scene/task semantics and use the closest representable MolmoAct2 official YAM setup.",
+      "acceptanceCriteria": [
+        "Patch only minimal files needed for MolmoAct2OfficialYamBoxDataGenConfig and its scene/camera support.",
+        "The default official run must not use examples/molmoact2_yam_room_tabletop or countertop/frontfix variants unless the report clearly labels them non-official diagnostics; for this run prefer examples/molmoact2_official_yam_box or a source-grounded official-like asset scene.",
+        "Preserve official instruction 'put everything into the box'.",
+        "Preserve official objects obj_073-a_lego_duplo, obj_056_tennis_ball, and open_box unless the official source proves a different naming/asset mapping is required.",
+        "Preserve official camera names top_cam, left_cam, right_cam, official-like resolution/HFOV/orientation semantics, and do not invent a new viewpoint just to make a better-looking video.",
+        "If exact ManiSkill/SAPIEN placement cannot be represented in MolmoSpaces/MuJoCo, document the approximation and blocker explicitly; do not hide it.",
+        "Run py_compile on every changed Python file."
+      ],
+      "priority": 2,
+      "passes": false,
+      "notes": "This is a correction toward what MolmoAct2 has seen, not a room-beautification task.",
+      "dependsOn": [
+        "US-001"
+      ]
+    },
+    {
+      "id": "US-003",
+      "title": "Generate fresh official-aligned rollout video",
+      "description": "As Kunyu, I want a fresh video from the corrected route to visually inspect whether task and scene are now right and whether behavior improves.",
+      "acceptanceCriteria": [
+        "Verify or reuse MolmoAct2 /act server at http://127.0.0.1:8202/act; if unavailable, report the blocker with evidence instead of silently switching policy.",
+        "Run scripts/datagen/run_pipeline.py with --config MolmoAct2OfficialYamBoxDataGenConfig --robot bimanual_yam --policy molmoact2_yam and a bounded horizon of 300-400 steps if runtime/storage allow; otherwise justify the shorter horizon.",
+        "Save H5, top_cam/left_cam/right_cam MP4s, and a combined/three-camera MP4 or contact sheet under artifacts/molmospaces/molmoact2_yam_integration/ with a unique 20260623 official-aligned run name.",
+        "Analyze and report approach/contact/grasp/lift/place flags plus success/reward metrics using scripts/analyze_molmoact2_official_yam_box_rollout.py or an equivalent source-readable analyzer.",
+        "Write artifacts/molmospaces/molmoact2_yam_integration/final_official_absolute_alignment_report_20260623.md with changed files, command, video paths, evidence matrix, and next blocker/gate.",
+        "Do not call the result successful unless official success metric or clear task-directed behavior supports it."
+      ],
+      "priority": 3,
+      "passes": false,
+      "notes": "Deliverable is video plus honest source-aligned evidence, not a success claim.",
+      "dependsOn": [
+        "US-002"
+      ]
+    }
+  ],
+  "metadata": {
+    "updatedAt": "2026-06-23T10:18:34.773Z"
+  }
+}

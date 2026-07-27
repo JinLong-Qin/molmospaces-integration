@@ -1,0 +1,688 @@
+{
+  "actuators": [],
+  "bodies": [
+    {
+      "inertia": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "ipos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "iquat": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "mass": 0.0,
+      "name": "world",
+      "parent": 0,
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "quat": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "inertia": [
+        3.1062667e-05,
+        3.0852077e-05,
+        2.178941e-05
+      ],
+      "ipos": [
+        0.0,
+        0.0,
+        0.003179487179
+      ],
+      "iquat": [
+        0.0,
+        0.707106781187,
+        0.0,
+        0.707106781187
+      ],
+      "mass": 0.039,
+      "name": "obj_073-a_lego_duplo",
+      "parent": 0,
+      "pos": [
+        -0.3,
+        0.22,
+        0.025
+      ],
+      "quat": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "inertia": [
+        2.52648e-05,
+        2.52648e-05,
+        2.52648e-05
+      ],
+      "ipos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "iquat": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "mass": 0.058,
+      "name": "obj_056_tennis_ball",
+      "parent": 0,
+      "pos": [
+        -0.3,
+        -0.22,
+        0.028
+      ],
+      "quat": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "inertia": [
+        0.006228009301,
+        0.003415823075,
+        0.003415823075
+      ],
+      "ipos": [
+        0.0,
+        0.0,
+        0.022364298027
+      ],
+      "iquat": [
+        0.5,
+        0.5,
+        -0.5,
+        0.5
+      ],
+      "mass": 0.668288,
+      "name": "open_box",
+      "parent": 0,
+      "pos": [
+        -0.15,
+        0.0,
+        0.0
+      ],
+      "quat": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "contacts": [],
+  "joints": [
+    {
+      "armature": 0.0,
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "body": 1,
+      "damping": 0.0,
+      "frictionloss": 0.0,
+      "limited": 0,
+      "name": "obj_073-a_lego_duplo_freejoint",
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "range": [
+        0.0,
+        0.0
+      ],
+      "type": 0
+    },
+    {
+      "armature": 0.0,
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "body": 2,
+      "damping": 0.0,
+      "frictionloss": 0.0,
+      "limited": 0,
+      "name": "obj_056_tennis_ball_freejoint",
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "range": [
+        0.0,
+        0.0
+      ],
+      "type": 0
+    }
+  ],
+  "option": {
+    "cone": 0,
+    "gravity": [
+      0.0,
+      0.0,
+      -9.81
+    ],
+    "integrator": 2,
+    "iterations": 100,
+    "jacobian": 2,
+    "solver": 2,
+    "timestep": 0.002,
+    "tolerance": 1e-08
+  },
+  "physical_geoms": [
+    {
+      "body": 0,
+      "conaffinity": 1,
+      "contype": 1,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "name": "floor",
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "quat": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "size": [
+        2.0,
+        2.0,
+        0.1
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "type": 0
+    },
+    {
+      "body": 1,
+      "conaffinity": 1,
+      "contype": 1,
+      "friction": [
+        1.0,
+        0.01,
+        0.001
+      ],
+      "name": "obj_073-a_lego_duplo_base",
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "quat": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "size": [
+        0.04,
+        0.03,
+        0.025
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "type": 6
+    },
+    {
+      "body": 1,
+      "conaffinity": 1,
+      "contype": 1,
+      "friction": [
+        1.0,
+        0.01,
+        0.001
+      ],
+      "name": "obj_073-a_lego_duplo_stud_1",
+      "pos": [
+        -0.018,
+        -0.01,
+        0.031
+      ],
+      "quat": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "size": [
+        0.01,
+        0.006,
+        0.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "type": 5
+    },
+    {
+      "body": 1,
+      "conaffinity": 1,
+      "contype": 1,
+      "friction": [
+        1.0,
+        0.01,
+        0.001
+      ],
+      "name": "obj_073-a_lego_duplo_stud_2",
+      "pos": [
+        0.018,
+        -0.01,
+        0.031
+      ],
+      "quat": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "size": [
+        0.01,
+        0.006,
+        0.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "type": 5
+    },
+    {
+      "body": 1,
+      "conaffinity": 1,
+      "contype": 1,
+      "friction": [
+        1.0,
+        0.01,
+        0.001
+      ],
+      "name": "obj_073-a_lego_duplo_stud_3",
+      "pos": [
+        -0.018,
+        0.01,
+        0.031
+      ],
+      "quat": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "size": [
+        0.01,
+        0.006,
+        0.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "type": 5
+    },
+    {
+      "body": 1,
+      "conaffinity": 1,
+      "contype": 1,
+      "friction": [
+        1.0,
+        0.01,
+        0.001
+      ],
+      "name": "obj_073-a_lego_duplo_stud_4",
+      "pos": [
+        0.018,
+        0.01,
+        0.031
+      ],
+      "quat": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "size": [
+        0.01,
+        0.006,
+        0.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "type": 5
+    },
+    {
+      "body": 2,
+      "conaffinity": 1,
+      "contype": 1,
+      "friction": [
+        1.0,
+        0.01,
+        0.001
+      ],
+      "name": "obj_056_tennis_ball_geom",
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "quat": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "size": [
+        0.033,
+        0.0,
+        0.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "type": 2
+    },
+    {
+      "body": 3,
+      "conaffinity": 1,
+      "contype": 1,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "name": "open_box_floor",
+      "pos": [
+        0.0,
+        0.0,
+        0.004
+      ],
+      "quat": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "size": [
+        0.098,
+        0.098,
+        0.004
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "type": 6
+    },
+    {
+      "body": 3,
+      "conaffinity": 1,
+      "contype": 1,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "name": "open_box_wall_pos_x",
+      "pos": [
+        0.094,
+        0.0,
+        0.038
+      ],
+      "quat": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "size": [
+        0.004,
+        0.098,
+        0.03
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "type": 6
+    },
+    {
+      "body": 3,
+      "conaffinity": 1,
+      "contype": 1,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "name": "open_box_wall_neg_x",
+      "pos": [
+        -0.094,
+        0.0,
+        0.038
+      ],
+      "quat": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "size": [
+        0.004,
+        0.098,
+        0.03
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "type": 6
+    },
+    {
+      "body": 3,
+      "conaffinity": 1,
+      "contype": 1,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "name": "open_box_wall_pos_y",
+      "pos": [
+        0.0,
+        0.094,
+        0.038
+      ],
+      "quat": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "size": [
+        0.09,
+        0.004,
+        0.03
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "type": 6
+    },
+    {
+      "body": 3,
+      "conaffinity": 1,
+      "contype": 1,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "name": "open_box_wall_neg_y",
+      "pos": [
+        0.0,
+        -0.094,
+        0.038
+      ],
+      "quat": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "size": [
+        0.09,
+        0.004,
+        0.03
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "type": 6
+    }
+  ],
+  "schema_version": 1,
+  "task_geometry": {
+    "authoritative_geom_names": [
+      "floor",
+      "obj_073-a_lego_duplo_base",
+      "obj_073-a_lego_duplo_stud_1",
+      "obj_073-a_lego_duplo_stud_2",
+      "obj_073-a_lego_duplo_stud_3",
+      "obj_073-a_lego_duplo_stud_4",
+      "obj_056_tennis_ball_geom",
+      "open_box_floor",
+      "open_box_wall_pos_x",
+      "open_box_wall_neg_x",
+      "open_box_wall_pos_y",
+      "open_box_wall_neg_y"
+    ],
+    "object_bodies": [
+      "obj_073-a_lego_duplo",
+      "obj_056_tennis_ball",
+      "open_box"
+    ]
+  }
+}

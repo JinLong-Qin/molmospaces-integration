@@ -1,0 +1,471 @@
+{
+  "workline": "bimanual_yam_source_baseline",
+  "root": "work/completed/bimanual_yam_source_baseline",
+  "file_count": 77,
+  "lightweight_count": 32,
+  "large_artifact_count": 45,
+  "files": [
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/README.md",
+      "size": 777,
+      "class": "lightweight",
+      "suffix": ".md"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_20260722_0133/capture_manifest.json",
+      "size": 1035,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_20260722_0133/episode_00000000_left_cam.mp4",
+      "size": 97184,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_20260722_0133/episode_00000000_right_cam.mp4",
+      "size": 86994,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_20260722_0133/episode_00000000_top_cam.mp4",
+      "size": 102264,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_20260722_0133/trajectories.h5",
+      "size": 757420,
+      "class": "large_artifact",
+      "suffix": ".h5"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v2_20260722_0200/capture_manifest.json",
+      "size": 1038,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v2_20260722_0200/episode_00000000_left_cam.mp4",
+      "size": 95841,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v2_20260722_0200/episode_00000000_right_cam.mp4",
+      "size": 86387,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v2_20260722_0200/episode_00000000_top_cam.mp4",
+      "size": 102302,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v2_20260722_0200/trajectories.h5",
+      "size": 752326,
+      "class": "large_artifact",
+      "suffix": ".h5"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v3_20260722_0210/capture_manifest.json",
+      "size": 1038,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v3_20260722_0210/episode_00000000_left_cam.mp4",
+      "size": 95829,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v3_20260722_0210/episode_00000000_right_cam.mp4",
+      "size": 86437,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v3_20260722_0210/episode_00000000_top_cam.mp4",
+      "size": 102173,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v3_20260722_0210/trajectories.h5",
+      "size": 752326,
+      "class": "large_artifact",
+      "suffix": ".h5"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v4_20260722_0220/capture_manifest.json",
+      "size": 1033,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v4_20260722_0220/episode_00000000_left_cam.mp4",
+      "size": 105931,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v4_20260722_0220/episode_00000000_right_cam.mp4",
+      "size": 89631,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v4_20260722_0220/episode_00000000_top_cam.mp4",
+      "size": 95843,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v4_20260722_0220/replay_result.json",
+      "size": 1652,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v4_20260722_0220/trajectories.h5",
+      "size": 640872,
+      "class": "large_artifact",
+      "suffix": ".h5"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v5_20260722_0230/capture_manifest.json",
+      "size": 1033,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v5_20260722_0230/episode_00000000_left_cam.mp4",
+      "size": 106272,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v5_20260722_0230/episode_00000000_right_cam.mp4",
+      "size": 89446,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v5_20260722_0230/episode_00000000_top_cam.mp4",
+      "size": 95862,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v5_20260722_0230/replay_result.json",
+      "size": 1652,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v5_20260722_0230/trajectories.h5",
+      "size": 678392,
+      "class": "large_artifact",
+      "suffix": ".h5"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v6_final_20260722_0245/capture_manifest.json",
+      "size": 1039,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v6_final_20260722_0245/episode_00000000_left_cam.mp4",
+      "size": 105961,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v6_final_20260722_0245/episode_00000000_right_cam.mp4",
+      "size": 89659,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v6_final_20260722_0245/episode_00000000_top_cam.mp4",
+      "size": 95861,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v6_final_20260722_0245/qa_report.json",
+      "size": 3858,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v6_final_20260722_0245/replay_result.json",
+      "size": 1652,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v6_final_20260722_0245/trajectories.h5",
+      "size": 678392,
+      "class": "large_artifact",
+      "suffix": ".h5"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v7_final_20260722_0300/capture_manifest.json",
+      "size": 1039,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v7_final_20260722_0300/episode_00000000_left_cam.mp4",
+      "size": 106126,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v7_final_20260722_0300/episode_00000000_right_cam.mp4",
+      "size": 89625,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v7_final_20260722_0300/episode_00000000_top_cam.mp4",
+      "size": 95784,
+      "class": "large_artifact",
+      "suffix": ".mp4"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v7_final_20260722_0300/qa_report.json",
+      "size": 3879,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v7_final_20260722_0300/replay_result.json",
+      "size": 1652,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_gate_v7_final_20260722_0300/trajectories.h5",
+      "size": 678392,
+      "class": "large_artifact",
+      "suffix": ".h5"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/artifacts/source_demo_vertical_lift_20260722_1005/capture.log",
+      "size": 0,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/code/README.md",
+      "size": 242,
+      "class": "lightweight",
+      "suffix": ".md"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/code/capture_source_demo.py",
+      "size": 15972,
+      "class": "lightweight",
+      "suffix": ".py"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/code/capture_source_demo_vertical_lift.py",
+      "size": 16473,
+      "class": "lightweight",
+      "suffix": ".py"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/code/qa_source_demo.py",
+      "size": 7206,
+      "class": "lightweight",
+      "suffix": ".py"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/code/replay_source_demo.py",
+      "size": 4136,
+      "class": "lightweight",
+      "suffix": ".py"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/dependency_snapshot/examples/molmoact2_official_sim_eval_yam_box/assets/PROVENANCE.md",
+      "size": 3032,
+      "class": "lightweight",
+      "suffix": ".md"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/dependency_snapshot/examples/molmoact2_official_sim_eval_yam_box/assets/generated/.gitkeep",
+      "size": 1,
+      "class": "lightweight",
+      "suffix": ""
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/dependency_snapshot/examples/molmoact2_official_sim_eval_yam_box/assets/generated/table/table_leg_left.obj",
+      "size": 39642,
+      "class": "large_artifact",
+      "suffix": ".obj"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/dependency_snapshot/examples/molmoact2_official_sim_eval_yam_box/assets/generated/table/table_leg_right.obj",
+      "size": 43311,
+      "class": "large_artifact",
+      "suffix": ".obj"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/dependency_snapshot/examples/molmoact2_official_sim_eval_yam_box/assets/generated/table/table_support.obj",
+      "size": 2862,
+      "class": "large_artifact",
+      "suffix": ".obj"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/dependency_snapshot/examples/molmoact2_official_sim_eval_yam_box/assets/generated/table/tabletop.obj",
+      "size": 28409,
+      "class": "large_artifact",
+      "suffix": ".obj"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/dependency_snapshot/examples/molmoact2_official_sim_eval_yam_box/assets/generated/table/tabletop_base_color.png",
+      "size": 1388204,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/dependency_snapshot/examples/molmoact2_official_sim_eval_yam_box/assets/generated/ycb/056_tennis_ball/collision.obj",
+      "size": 164783,
+      "class": "large_artifact",
+      "suffix": ".obj"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/dependency_snapshot/examples/molmoact2_official_sim_eval_yam_box/assets/generated/ycb/056_tennis_ball/collision.ply",
+      "size": 92619,
+      "class": "large_artifact",
+      "suffix": ".ply"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/dependency_snapshot/examples/molmoact2_official_sim_eval_yam_box/assets/generated/ycb/056_tennis_ball/texture_map.png",
+      "size": 3503,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/dependency_snapshot/examples/molmoact2_official_sim_eval_yam_box/assets/generated/ycb/056_tennis_ball/textured.mtl",
+      "size": 63,
+      "class": "lightweight",
+      "suffix": ".mtl"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/dependency_snapshot/examples/molmoact2_official_sim_eval_yam_box/assets/generated/ycb/056_tennis_ball/textured.obj",
+      "size": 1026228,
+      "class": "large_artifact",
+      "suffix": ".obj"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/dependency_snapshot/examples/molmoact2_official_sim_eval_yam_box/assets/generated/ycb/073-a_lego_duplo/texture_map.png",
+      "size": 4905,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/dependency_snapshot/examples/molmoact2_official_sim_eval_yam_box/assets/generated/ycb/073-a_lego_duplo/textured.mtl",
+      "size": 63,
+      "class": "lightweight",
+      "suffix": ".mtl"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/dependency_snapshot/examples/molmoact2_official_sim_eval_yam_box/assets/generated/ycb/073-a_lego_duplo/textured.obj",
+      "size": 1063496,
+      "class": "large_artifact",
+      "suffix": ".obj"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/dependency_snapshot/examples/molmoact2_official_sim_eval_yam_box/assets/official_yam_tabletop.obj",
+      "size": 4662,
+      "class": "large_artifact",
+      "suffix": ".obj"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/dependency_snapshot/examples/molmoact2_official_sim_eval_yam_box/assets/sources/mani_skill2_ycb/056_tennis_ball/texture_map.png",
+      "size": 3503,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/dependency_snapshot/examples/molmoact2_official_sim_eval_yam_box/assets/sources/mani_skill2_ycb/056_tennis_ball/textured.mtl",
+      "size": 63,
+      "class": "lightweight",
+      "suffix": ".mtl"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/dependency_snapshot/examples/molmoact2_official_sim_eval_yam_box/assets/sources/mani_skill2_ycb/056_tennis_ball/textured.obj",
+      "size": 1026230,
+      "class": "large_artifact",
+      "suffix": ".obj"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/dependency_snapshot/examples/molmoact2_official_sim_eval_yam_box/assets/sources/mani_skill2_ycb/073-a_lego_duplo/texture_map.png",
+      "size": 4905,
+      "class": "large_artifact",
+      "suffix": ".png"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/dependency_snapshot/examples/molmoact2_official_sim_eval_yam_box/assets/sources/mani_skill2_ycb/073-a_lego_duplo/textured.mtl",
+      "size": 63,
+      "class": "lightweight",
+      "suffix": ".mtl"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/dependency_snapshot/examples/molmoact2_official_sim_eval_yam_box/assets/sources/mani_skill2_ycb/073-a_lego_duplo/textured.obj",
+      "size": 1063498,
+      "class": "large_artifact",
+      "suffix": ".obj"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/dependency_snapshot/examples/molmoact2_official_sim_eval_yam_box/assets/sources/maniskill/table/table.glb",
+      "size": 3891588,
+      "class": "large_artifact",
+      "suffix": ".glb"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/dependency_snapshot/examples/molmoact2_official_sim_eval_yam_box/assets/visual_asset_provenance.json",
+      "size": 8153,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/dependency_snapshot/examples/molmoact2_official_sim_eval_yam_box/scene.xml",
+      "size": 6409,
+      "class": "lightweight",
+      "suffix": ".xml"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/dependency_snapshot/molmo_spaces/data_generation/config/molmoact2_official_sim_eval_yam_box_config.py",
+      "size": 13142,
+      "class": "lightweight",
+      "suffix": ".py"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/dependency_snapshot/molmo_spaces/data_generation/config/molmoact2_official_yam_box_config.py",
+      "size": 21710,
+      "class": "lightweight",
+      "suffix": ".py"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/dependency_snapshot/molmo_spaces/policy/learned_policy/molmoact2_yam_policy.py",
+      "size": 34365,
+      "class": "lightweight",
+      "suffix": ".py"
+    },
+    {
+      "path": "work/completed/bimanual_yam_source_baseline/manifest.json",
+      "size": 19866,
+      "class": "lightweight",
+      "suffix": ".json"
+    }
+  ]
+}

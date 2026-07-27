@@ -1,0 +1,297 @@
+{
+  "workline": "molmospaces_official_reproduction",
+  "root": "work/completed/molmospaces_official_reproduction",
+  "file_count": 48,
+  "lightweight_count": 30,
+  "large_artifact_count": 18,
+  "files": [
+    {
+      "path": "work/completed/molmospaces_official_reproduction/README.md",
+      "size": 475,
+      "class": "lightweight",
+      "suffix": ".md"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/.lmdb/scenes/holodeck-objaverse-train/data.mdb",
+      "size": 105594880,
+      "class": "large_artifact",
+      "suffix": ".mdb"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/.lmdb/scenes/holodeck-objaverse-train/lock.mdb",
+      "size": 131200,
+      "class": "large_artifact",
+      "suffix": ".mdb"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/.lmdb/scenes/holodeck-objaverse-val/data.mdb",
+      "size": 10293248,
+      "class": "large_artifact",
+      "suffix": ".mdb"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/.lmdb/scenes/holodeck-objaverse-val/lock.mdb",
+      "size": 131200,
+      "class": "large_artifact",
+      "suffix": ".mdb"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/.lmdb/scenes/ithor/data.mdb",
+      "size": 585728,
+      "class": "large_artifact",
+      "suffix": ".mdb"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/.lmdb/scenes/ithor/lock.mdb",
+      "size": 131200,
+      "class": "large_artifact",
+      "suffix": ".mdb"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/.lmdb/scenes/procthor-10k-test/data.mdb",
+      "size": 1036288,
+      "class": "large_artifact",
+      "suffix": ".mdb"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/.lmdb/scenes/procthor-10k-test/lock.mdb",
+      "size": 131200,
+      "class": "large_artifact",
+      "suffix": ".mdb"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/.lmdb/scenes/procthor-10k-train/data.mdb",
+      "size": 10690560,
+      "class": "large_artifact",
+      "suffix": ".mdb"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/.lmdb/scenes/procthor-10k-train/lock.mdb",
+      "size": 131200,
+      "class": "large_artifact",
+      "suffix": ".mdb"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/.lmdb/scenes/procthor-10k-val/data.mdb",
+      "size": 786432,
+      "class": "large_artifact",
+      "suffix": ".mdb"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/.lmdb/scenes/procthor-10k-val/lock.mdb",
+      "size": 131200,
+      "class": "large_artifact",
+      "suffix": ".mdb"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/.lmdb/scenes/procthor-objaverse-train/data.mdb",
+      "size": 93687808,
+      "class": "large_artifact",
+      "suffix": ".mdb"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/.lmdb/scenes/procthor-objaverse-train/lock.mdb",
+      "size": 131200,
+      "class": "large_artifact",
+      "suffix": ".mdb"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/.lmdb/scenes/procthor-objaverse-val/data.mdb",
+      "size": 9138176,
+      "class": "large_artifact",
+      "suffix": ".mdb"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/.lmdb/scenes/procthor-objaverse-val/lock.mdb",
+      "size": 131200,
+      "class": "large_artifact",
+      "suffix": ".mdb"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/.lmdb/scenes/refs/data.mdb",
+      "size": 12288,
+      "class": "large_artifact",
+      "suffix": ".mdb"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/.lmdb/scenes/refs/lock.mdb",
+      "size": 131200,
+      "class": "large_artifact",
+      "suffix": ".mdb"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/datagen/pick_planner_v1/us102_ithor_pick_20260618_205526/experiment_config_20260618_205526.pkl",
+      "size": 7124,
+      "class": "lightweight",
+      "suffix": ".pkl"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/datagen/pick_planner_v1/us102_ithor_pick_20260618_205526/running_log.log",
+      "size": 15115,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/mjthor_data_type_to_source_to_versions.json",
+      "size": 1310,
+      "class": "lightweight",
+      "suffix": ".json"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/robots/floating_robotiq/.floating_robotiq.tar.zst_complete_links",
+      "size": 0,
+      "class": "lightweight",
+      "suffix": ".zst_complete_links"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/robots/floating_rum/.floating_rum_m.tar.zst_complete_links",
+      "size": 0,
+      "class": "lightweight",
+      "suffix": ".zst_complete_links"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/robots/franka_cap/.franka_cap.tar.zst_complete_links",
+      "size": 0,
+      "class": "lightweight",
+      "suffix": ".zst_complete_links"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/robots/franka_droid/.franka_droid.tar.zst_complete_links",
+      "size": 0,
+      "class": "lightweight",
+      "suffix": ".zst_complete_links"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/robots/franka_fr3/.franka_fr3.tar.zst_complete_links",
+      "size": 0,
+      "class": "lightweight",
+      "suffix": ".zst_complete_links"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/robots/i2rt_yam/.i2rt_yam.tar.zst_complete_links",
+      "size": 0,
+      "class": "lightweight",
+      "suffix": ".zst_complete_links"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/robots/rby1/.rby1.tar.zst_complete_links",
+      "size": 0,
+      "class": "lightweight",
+      "suffix": ".zst_complete_links"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/robots/rby1m/.rby1m.tar.zst_complete_links",
+      "size": 0,
+      "class": "lightweight",
+      "suffix": ".zst_complete_links"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/scenes/holodeck-objaverse-train/.holodeck-objaverse-train_housegen_build_settings.json.tar.zst_complete_links",
+      "size": 0,
+      "class": "lightweight",
+      "suffix": ".zst_complete_links"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/scenes/holodeck-objaverse-val/.holodeck-objaverse-val_housegen_build_settings.json.tar.zst_complete_links",
+      "size": 0,
+      "class": "lightweight",
+      "suffix": ".zst_complete_links"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/scenes/holodeck-objaverse-val/.holodeck-objaverse-val_val_1194.tar.zst_complete_links",
+      "size": 0,
+      "class": "lightweight",
+      "suffix": ".zst_complete_links"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/scenes/ithor/.ithor_FloorPlan1_physics.tar.zst_complete_links",
+      "size": 0,
+      "class": "lightweight",
+      "suffix": ".zst_complete_links"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/scenes/ithor/.ithor_Textures.tar.zst_complete_links",
+      "size": 0,
+      "class": "lightweight",
+      "suffix": ".zst_complete_links"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/scenes/ithor/.ithor_housegen_build_settings.json.tar.zst_complete_links",
+      "size": 0,
+      "class": "lightweight",
+      "suffix": ".zst_complete_links"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/scenes/procthor-objaverse-train/.procthor-objaverse-train_housegen_build_settings.json.tar.zst_complete_links",
+      "size": 0,
+      "class": "lightweight",
+      "suffix": ".zst_complete_links"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/scenes/procthor-objaverse-val/.procthor-objaverse-val_housegen_build_settings.json.tar.zst_complete_links",
+      "size": 0,
+      "class": "lightweight",
+      "suffix": ".zst_complete_links"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/assets/scenes/refs/.refs_asset_id_to_object_type.json.tar.zst_complete_links",
+      "size": 0,
+      "class": "lightweight",
+      "suffix": ".zst_complete_links"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/eval_output/DummyBenchmarkEvalConfig/20260618_204526/experiment_config_20260618_204526.pkl",
+      "size": 4034,
+      "class": "lightweight",
+      "suffix": ".pkl"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/eval_output/DummyBenchmarkEvalConfig/20260618_204526/running_log.log",
+      "size": 9768,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/eval_output/DummyBenchmarkEvalConfig/20260618_204930/experiment_config_20260618_204930.pkl",
+      "size": 4034,
+      "class": "lightweight",
+      "suffix": ".pkl"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/eval_output/DummyBenchmarkEvalConfig/20260618_204930/running_log.log",
+      "size": 9655,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/deeper_repro/metrics/franka_pick_droid_eval.csv",
+      "size": 394,
+      "class": "lightweight",
+      "suffix": ".csv"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/mlspaces_assets_official_like/datagen/pick_molmoact2_yam_v1/molmoact2_yam_official_like_us003_20260622_034602_20260622_034620/experiment_config_20260622_034620.pkl",
+      "size": 7336,
+      "class": "lightweight",
+      "suffix": ".pkl"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/mlspaces_assets_official_like/datagen/pick_molmoact2_yam_v1/molmoact2_yam_official_like_us003_20260622_034602_20260622_034620/running_log.log",
+      "size": 18471,
+      "class": "lightweight",
+      "suffix": ".log"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/mlspaces_assets_official_like/datagen/pick_molmoact2_yam_v1/molmoact2_yam_official_like_us003_20260622_034720_20260622_034738/experiment_config_20260622_034738.pkl",
+      "size": 7336,
+      "class": "lightweight",
+      "suffix": ".pkl"
+    },
+    {
+      "path": "work/completed/molmospaces_official_reproduction/artifacts/mlspaces_assets_official_like/datagen/pick_molmoact2_yam_v1/molmoact2_yam_official_like_us003_20260622_034720_20260622_034738/running_log.log",
+      "size": 21221,
+      "class": "lightweight",
+      "suffix": ".log"
+    }
+  ]
+}
