@@ -48,6 +48,7 @@ python src/bimanual_yam/scripted_bimanual_source_demo.py --help
 Recommended teleoperation command:
 
 ```bash
+HF_HOME=/mnt/vqa/.cache/huggingface \
 python src/bimanual_yam/browser_keyboard_teleop.py \
   --host 127.0.0.1 \
   --port 8765 \
@@ -59,6 +60,8 @@ python src/bimanual_yam/browser_keyboard_teleop.py \
   --initialization-max-attempts 50 \
   --initialization-report runtime/bimanual_yam_initialization_report.json
 ```
+
+Set `HF_HOME` to wherever the CLIP model is cached on your machine. On a fresh environment with a SOCKS proxy, install `httpx[socks]` first (`pip install httpx[socks]`) or the CLIP weight download will fail.
 
 Open `http://127.0.0.1:8765` after the terminal prints the teleoperation URL.
 

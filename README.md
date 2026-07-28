@@ -97,6 +97,20 @@ pip install -e ".[mujoco]"
 export PYTHONPATH=$PWD:${PYTHONPATH:-}
 ```
 
+**Note on SOCKS proxies**: if your machine uses a SOCKS proxy (e.g. `all_proxy=socks5://...`), MolmoSpaces downloads CLIP weights through `httpx`, which requires the `socksio` package. If you see `Using SOCKS proxy, but the 'socksio' package is not installed`, install it:
+
+```bash
+pip install httpx[socks]
+```
+
+**Note on CLIP model cache**: MolmoSpaces downloads a CLIP model on first use (cached under `HF_HOME`). If the model is already cached elsewhere (e.g. `/mnt/vqa/.cache/huggingface`), set `HF_HOME` to that path before running any script to avoid a redundant download:
+
+```bash
+export HF_HOME=/path/to/your/huggingface/cache
+```
+
+The teleop command below includes `HF_HOME` inline so it works correctly from any new terminal without requiring a prior `export`.
+
 Optional upstream extras can be installed as needed, for example:
 
 ```bash
@@ -323,6 +337,7 @@ Browser-based keyboard teleoperation for bimanual YAM scenes. The supported publ
 Run the teleoperation bridge:
 
 ```bash
+HF_HOME=/mnt/vqa/.cache/huggingface \
 $MOLMOSPACES_PYTHON src/bimanual_yam/browser_keyboard_teleop.py \
   --host 127.0.0.1 \
   --port 8765 \
@@ -334,6 +349,8 @@ $MOLMOSPACES_PYTHON src/bimanual_yam/browser_keyboard_teleop.py \
   --initialization-max-attempts 50 \
   --initialization-report runtime/bimanual_yam_initialization_report.json
 ```
+
+If the CLIP model is cached elsewhere, set `HF_HOME` to that directory. If you see a SOCKS proxy error on first run, install `httpx[socks]` first (see step 3 above).
 
 Open `http://127.0.0.1:8765` after the terminal prints the local teleoperation URL.
 

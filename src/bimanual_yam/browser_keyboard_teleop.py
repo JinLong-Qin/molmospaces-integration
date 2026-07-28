@@ -33,6 +33,7 @@ from scipy.spatial.transform import Rotation as R
 from websockets.asyncio.server import ServerConnection, serve
 from websockets.exceptions import ConnectionClosed
 
+from molmo_spaces.env.sensors_cameras import CameraSensor as _CameraSensor
 from molmo_spaces.policy.base_policy import InferencePolicy
 
 from check_dual_object_reachability import (
@@ -388,6 +389,23 @@ def compose_frame(observation, width: int, height: int, quality: int) -> bytes:
     return buffer.getvalue()
 
 
+def _pop_camera_sensors(task) -> dict:
+    """Temporarily remove CameraSensor instances from sensor_suite; return them for later restore."""
+    removed: dict = {}
+    if task.sensor_suite is None:
+        return removed
+    for k in list(task.sensor_suite.sensors.keys()):
+        if isinstance(task.sensor_suite.sensors[k], _CameraSensor):
+            removed[k] = task.sensor_suite.sensors.pop(k)
+    return removed
+
+
+def _restore_camera_sensors(task, removed: dict) -> None:
+    """Re-insert previously removed camera sensors into sensor_suite."""
+    if task.sensor_suite is not None:
+        task.sensor_suite.sensors.update(removed)
+
+
 def trim_task_caches(task, keep: int = 2) -> None:
     for name in (
         "observation_cache",
@@ -713,13 +731,33 @@ def main() -> None:
         period = 1 / args.control_hz
         next_render = 0.0
         step = 0
+        frames_sent = 0
+        server_fps_elapsed = 0.0
+        server_fps_window = started
+        _last_cam_frames: dict = {}  # stale camera frames reused on non-render cycles
         while not stop_event.is_set():
             cycle = time.monotonic()
+            do_render = cycle >= next_render
             action = policy.get_action(observation)
-            observation, *_ = task.step(action)
+            t0 = time.perf_counter()
+            if do_render or not _last_cam_frames:
+                # Render cycle: full step with all camera sensors active.
+                observation, *_ = task.step(action)
+                obs0 = observation[0] if isinstance(observation, list) else observation
+                _last_cam_frames = {k: obs0[k] for k in CAMERAS if k in obs0}
+            else:
+                # Non-render cycle: skip camera rendering for speed.
+                # Policy only uses proprioceptive obs (robot_base_pose, tcp_pose_*),
+                # so stale camera frames are injected back for API consistency.
+                _removed = _pop_camera_sensors(task)
+                observation, *_ = task.step(action)
+                _restore_camera_sensors(task, _removed)
+                obs0 = observation[0] if isinstance(observation, list) else observation
+                obs0.update(_last_cam_frames)
+            dt_step = time.perf_counter() - t0
             trim_task_caches(task)
             step += 1
-            if cycle >= next_render:
+            if do_render:
                 snap = policy.last_snapshot
                 status = {
                     "step": step,
@@ -732,10 +770,19 @@ def main() -> None:
                     "rejected_invalid": shared_control.rejected_invalid,
                     "visual_axes": policy.last_axes,
                 }
-                shared_frame.publish(
-                    compose_frame(observation, args.width, args.height, args.jpeg_quality), status
-                )
+                t0 = time.perf_counter()
+                jpeg = compose_frame(observation, args.width, args.height, args.jpeg_quality)
+                dt_compose = time.perf_counter() - t0
+                shared_frame.publish(jpeg, status)
+                frames_sent += 1
+                server_fps_elapsed += dt_step + dt_compose
                 next_render = cycle + 1 / args.render_fps
+                if cycle - server_fps_window >= 5.0:
+                    avg = server_fps_elapsed / max(frames_sent, 1) * 1000
+                    print(f"[fps] sent {frames_sent}f in {cycle-server_fps_window:.1f}s => {frames_sent/(cycle-server_fps_window):.1f} fps | avg {avg:.0f}ms/frame (step={dt_step*1000:.0f}ms+compose={dt_compose*1000:.0f}ms)", flush=True)
+                    frames_sent = 0
+                    server_fps_elapsed = 0.0
+                    server_fps_window = cycle
             if args.duration > 0 and cycle - started >= args.duration:
                 break
             stop_event.wait(max(0.0, period - (time.monotonic() - cycle)))
