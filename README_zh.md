@@ -101,26 +101,32 @@ pip install -e ".[mujoco,grasp,housegen]"
 
 上游 MolmoSpaces 安装细节见 `docs/upstream_molmospaces_readme.md`。
 
-### 4. 拉取 MimicGen 和 robomimic
+### 4. 拉取固定版本的 MimicGen 和 robomimic
 
-集成脚本依赖 MimicGen 和 robomimic。把两者拉到 `vendor/`：
+`vendor/` 不直接提交到 Git。请用脚本拉取本工作线实际使用的 upstream commit：
 
 ```bash
 bash tools/setup_mimicgen_dependency.sh
 ```
 
-如果有 package metadata，可以 editable 安装：
+当前 pin：
+
+- MimicGen: `72bd767c255545f462e7ccfb2731f2e5d4c1d9bb`
+- robomimic: `e10526b9a40c78b41f1e37e60041dc0ec0a5f60f`
+
+editable 安装：
 
 ```bash
 pip install -e vendor/robomimic
 pip install -e vendor/mimicgen
 ```
 
-设置依赖路径：
+设置依赖路径和 `PYTHONPATH`：
 
 ```bash
 export MIMICGEN_ROOT=$PWD/vendor/mimicgen
 export ROBOMIMIC_ROOT=$PWD/vendor/robomimic
+export PYTHONPATH=$PWD:$MIMICGEN_ROOT:$ROBOMIMIC_ROOT:${PYTHONPATH:-}
 ```
 
 如果使用已有本地 checkout，把 `MIMICGEN_ROOT` 和 `ROBOMIMIC_ROOT` 指向对应目录即可。
@@ -131,15 +137,14 @@ export ROBOMIMIC_ROOT=$PWD/vendor/robomimic
 export MOLMOSPACES_ROOT=$PWD
 export MOLMOSPACES_PYTHON=python
 export MOLMOSPACES_PNP_WORKDIR=$PWD/runtime/mimicgen_pick_and_place
+export HF_HOME=${HF_HOME:-$HOME/.cache/huggingface}
+export NLTK_DATA=${NLTK_DATA:-$HOME/nltk_data}
+export MOLMOSPACES_NLTK_DATA=$NLTK_DATA
 
 mkdir -p "$MOLMOSPACES_PNP_WORKDIR"/{artifacts/seeds,artifacts/mimicgen_pnp,data/molmobot_data/FrankaPickAndPlaceOmniCamConfig/val_shards,logs}
 ```
 
-可选 NLTK cache：
-
-```bash
-export MOLMOSPACES_NLTK_DATA=/path/to/nltk_data
-```
+`HF_HOME` 会被 robomimic 的 CLIP language embedding 工具使用。`NLTK_DATA` / `MOLMOSPACES_NLTK_DATA` 用于 MolmoSpaces 需要本地 WordNet cache 的情况。
 
 ### 6. 放置 MolmoBot-Data shard
 
@@ -151,7 +156,25 @@ runtime/mimicgen_pick_and_place/data/molmobot_data/FrankaPickAndPlaceOmniCamConf
 
 本仓库包含轻量 manifest 和摘要，不包含官方数据 shard 或生成产物。
 
-### 7. 运行 smoke check
+### 7. 首次运行资源 cache 说明
+
+MolmoSpaces 首次运行时可能下载/解压 iTHOR assets。如果中途被打断，可能出现类似错误：
+
+```text
+Directory path exists on disk but is not recorded in the cache manifest
+```
+
+不要手改 manifest。把报错中提到的未注册资源目录移动到 backup，再重跑，让资源管理器重新解压并登记。例如：
+
+```bash
+mkdir -p "$HOME/.cache/molmo-spaces-resources_broken_backup"
+mv "$HOME/.cache/molmo-spaces-resources/objects/thor/20251117" \
+  "$HOME/.cache/molmo-spaces-resources_broken_backup/thor_20251117_$(date +%Y%m%d_%H%M%S)"
+```
+
+如果网络需要代理，请在首次下载 asset/model 前设置代理环境变量。
+
+### 8. 运行 smoke check
 
 把 manifest 复制到运行目录：
 
@@ -283,7 +306,7 @@ bash src/pnp/collect_unique_highyield_successes.sh
 
 ## Bimanual YAM 浏览器遥操作
 
-bimanual YAM 场景的浏览器键盘遥操作工具。公开复现推荐入口是键盘遥操作 bridge，它会先执行当前 strict tabletop 初始化，再启动浏览器 UI。
+bimanual YAM 场景的浏览器键盘遥操作工具。公开复现推荐入口是键盘遥操作 bridge，它会先执行当前 strict tabletop 初始化，再启动浏览器 UI。旧的只读 viewer 脚本不是此工作线推荐复现入口。
 
 启动遥操作 bridge：
 
@@ -300,7 +323,9 @@ $MOLMOSPACES_PYTHON src/bimanual_yam/browser_keyboard_teleop.py \
   --initialization-report runtime/bimanual_yam_initialization_report.json
 ```
 
-终端打印本地 teleoperation URL 后打开 `http://127.0.0.1:8765`。该路径提供面向操作者的控制和观测基础设施；它本身不等于正式 source demo 成功。
+终端打印本地 teleoperation URL 后打开 `http://127.0.0.1:8765`，例如 `teleop=http://127.0.0.1:8765`。该路径提供面向操作者的控制和观测基础设施；它本身不等于正式 source demo 成功。
+
+浏览器键位：先点击页面；`Tab` 切换 active arm；`W/S/A/D` 在视觉平面移动；`E/Q` 上下；方向键控制 pitch/yaw；`Z/C` roll；`F` 切换当前夹爪。如果初始化失败，增大 `--initialization-max-attempts` 或查看 `runtime/bimanual_yam_initialization_report.json`。
 
 ## 当前结果快照
 

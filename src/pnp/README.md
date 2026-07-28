@@ -9,11 +9,17 @@ Canonical workline READMEs:
 
 ## Standard environment variables
 
+Run from the repository root after `bash tools/setup_mimicgen_dependency.sh`:
+
 ```bash
 export MOLMOSPACES_ROOT="$PWD"
-export MOLMOSPACES_PNP_WORKDIR="$PWD/runtime/pnp"
-export MIMICGEN_ROOT="$PWD/third_party/mimicgen"
-export ROBOMIMIC_ROOT="$PWD/third_party/robomimic"
+export MOLMOSPACES_PNP_WORKDIR="$PWD/runtime/mimicgen_pick_and_place"
+export MIMICGEN_ROOT="$PWD/vendor/mimicgen"
+export ROBOMIMIC_ROOT="$PWD/vendor/robomimic"
+export PYTHONPATH="$PWD:$MIMICGEN_ROOT:$ROBOMIMIC_ROOT:${PYTHONPATH:-}"
+export HF_HOME="${HF_HOME:-$HOME/.cache/huggingface}"
+export NLTK_DATA="${NLTK_DATA:-$HOME/nltk_data}"
+export MOLMOSPACES_NLTK_DATA="$NLTK_DATA"
 ```
 
 ## Main script groups

@@ -99,26 +99,32 @@ pip install -e ".[mujoco,grasp,housegen]"
 
 See `docs/upstream_molmospaces_readme.md` for upstream MolmoSpaces installation details.
 
-### 4. Fetch MimicGen and robomimic
+### 4. Fetch pinned MimicGen and robomimic dependencies
 
-The integration scripts use MimicGen and robomimic. Fetch both into `vendor/`:
+`vendor/` is intentionally not committed to Git. Fetch the upstream repositories at the commits used by this workline:
 
 ```bash
 bash tools/setup_mimicgen_dependency.sh
 ```
 
-Install them in editable mode when their package metadata is available:
+The script currently pins:
+
+- MimicGen: `72bd767c255545f462e7ccfb2731f2e5d4c1d9bb`
+- robomimic: `e10526b9a40c78b41f1e37e60041dc0ec0a5f60f`
+
+Install them in editable mode:
 
 ```bash
 pip install -e vendor/robomimic
 pip install -e vendor/mimicgen
 ```
 
-Set dependency roots:
+Set dependency roots and `PYTHONPATH`:
 
 ```bash
 export MIMICGEN_ROOT=$PWD/vendor/mimicgen
 export ROBOMIMIC_ROOT=$PWD/vendor/robomimic
+export PYTHONPATH=$PWD:$MIMICGEN_ROOT:$ROBOMIMIC_ROOT:${PYTHONPATH:-}
 ```
 
 If existing local checkouts are used instead, point `MIMICGEN_ROOT` and `ROBOMIMIC_ROOT` to those directories.
@@ -129,15 +135,14 @@ If existing local checkouts are used instead, point `MIMICGEN_ROOT` and `ROBOMIM
 export MOLMOSPACES_ROOT=$PWD
 export MOLMOSPACES_PYTHON=python
 export MOLMOSPACES_PNP_WORKDIR=$PWD/runtime/mimicgen_pick_and_place
+export HF_HOME=${HF_HOME:-$HOME/.cache/huggingface}
+export NLTK_DATA=${NLTK_DATA:-$HOME/nltk_data}
+export MOLMOSPACES_NLTK_DATA=$NLTK_DATA
 
 mkdir -p "$MOLMOSPACES_PNP_WORKDIR"/{artifacts/seeds,artifacts/mimicgen_pnp,data/molmobot_data/FrankaPickAndPlaceOmniCamConfig/val_shards,logs}
 ```
 
-Optional NLTK cache:
-
-```bash
-export MOLMOSPACES_NLTK_DATA=/path/to/nltk_data
-```
+`HF_HOME` is used by robomimic's CLIP language embedding utility. `NLTK_DATA` / `MOLMOSPACES_NLTK_DATA` are useful when MolmoSpaces needs a local WordNet cache.
 
 ### 6. Place the MolmoBot-Data shard
 
@@ -149,7 +154,25 @@ runtime/mimicgen_pick_and_place/data/molmobot_data/FrankaPickAndPlaceOmniCamConf
 
 The repository includes lightweight manifests and summaries but not official data shards or generated artifacts.
 
-### 7. Run a smoke check
+### 7. First-run resource cache notes
+
+MolmoSpaces may download/extract iTHOR assets on first use. If a run is interrupted during extraction, you may see an error like:
+
+```text
+Directory path exists on disk but is not recorded in the cache manifest
+```
+
+Do not hand-edit the manifest. Move the reported unregistered resource directory aside, then rerun so the resource manager can extract and register it cleanly. For example:
+
+```bash
+mkdir -p "$HOME/.cache/molmo-spaces-resources_broken_backup"
+mv "$HOME/.cache/molmo-spaces-resources/objects/thor/20251117" \
+  "$HOME/.cache/molmo-spaces-resources_broken_backup/thor_20251117_$(date +%Y%m%d_%H%M%S)"
+```
+
+If your network requires a proxy, export it before the first asset/model download.
+
+### 8. Run a smoke check
 
 Copy a manifest into the runtime work directory:
 
@@ -281,7 +304,7 @@ bash src/pnp/collect_unique_highyield_successes.sh
 
 ## Bimanual YAM Browser Teleoperation
 
-Browser-based keyboard teleoperation for bimanual YAM scenes. The supported public entrypoint is the keyboard teleoperation bridge, which performs the current strict tabletop initialization before serving the browser UI.
+Browser-based keyboard teleoperation for bimanual YAM scenes. The supported public entrypoint is the keyboard teleoperation bridge, which performs the current strict tabletop initialization before serving the browser UI. The older read-only viewer script is not the recommended reproduction entrypoint for this workline.
 
 Run the teleoperation bridge:
 
@@ -298,7 +321,9 @@ $MOLMOSPACES_PYTHON src/bimanual_yam/browser_keyboard_teleop.py \
   --initialization-report runtime/bimanual_yam_initialization_report.json
 ```
 
-Open `http://127.0.0.1:8765` after the terminal prints the local teleoperation URL. This path provides operator-facing control and observation infrastructure; it is not by itself a formal source-demo success claim.
+Open `http://127.0.0.1:8765` after the terminal prints the local teleoperation URL, for example `teleop=http://127.0.0.1:8765`. This path provides operator-facing control and observation infrastructure; it is not by itself a formal source-demo success claim.
+
+Browser controls: click the page first; `Tab` switches active arm; `W/S/A/D` moves in the visual plane; `E/Q` raises/lowers; arrow keys control pitch/yaw; `Z/C` roll; `F` toggles the active gripper. If initialization fails, increase `--initialization-max-attempts` or inspect `runtime/bimanual_yam_initialization_report.json`.
 
 ## Included Results Snapshot
 

@@ -6,6 +6,9 @@ __pycache__/
 venv/
 .env
 
+# Third-party checkouts fetched by tools/setup_mimicgen_dependency.sh
+vendor/
+
 # MolmoSpaces runtime/generated data
 work/
 runtime/

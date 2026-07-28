@@ -7,7 +7,7 @@ This is a platform-integration project: it shows how to use MolmoSpaces as the s
 ## What Is Included
 
 - `src/pnp/`: Pick-and-Place source selection, exact replay, datagen-info extraction, robomimic/MimicGen HDF5 conversion, rollout generation, and success collectors.
-- `src/bimanual_yam/`: bimanual YAM scene checks, browser camera streaming, keyboard teleoperation, tabletop initialization validation, and scripted source-demo diagnostics.
+- `src/bimanual_yam/`: bimanual YAM scene checks, browser keyboard teleoperation, tabletop initialization validation, and scripted source-demo diagnostics.
 - `results/`: small JSON manifests and summaries from completed runs.
 - `docs/`: public notes describing the experiment flow, evidence boundaries, and current status.
 
@@ -15,29 +15,40 @@ Large artifacts are intentionally not tracked by Git: official MolmoBot-Data sha
 
 ## Upstream Dependencies
 
-Clone the upstream projects separately:
+Use the top-level clone as the MolmoSpaces checkout and install it first:
 
 ```bash
-git clone https://github.com/allenai/molmospaces.git
-git clone https://github.com/NVlabs/mimicgen.git
+pip install -e ".[mujoco]"
 ```
 
-The scripts assume the MolmoSpaces checkout contains a work directory at:
+Then fetch the pinned MimicGen and robomimic checkouts used by this workline:
 
-```text
-${MOLMOSPACES_ROOT}/runtime/mimicgen_pick_and_place
+```bash
+bash tools/setup_mimicgen_dependency.sh
+pip install -e vendor/robomimic
+pip install -e vendor/mimicgen
 ```
+
+The helper pins:
+
+- MimicGen: `72bd767c255545f462e7ccfb2731f2e5d4c1d9bb`
+- robomimic: `e10526b9a40c78b41f1e37e60041dc0ec0a5f60f`
 
 Set the environment variables before running:
 
 ```bash
-export MOLMOSPACES_ROOT=/path/to/molmospaces
-export MIMICGEN_ROOT=/path/to/mimicgen
+export MOLMOSPACES_ROOT=$PWD
+export MIMICGEN_ROOT=$PWD/vendor/mimicgen
+export ROBOMIMIC_ROOT=$PWD/vendor/robomimic
+export PYTHONPATH=$PWD:$MIMICGEN_ROOT:$ROBOMIMIC_ROOT:${PYTHONPATH:-}
 export MOLMOSPACES_PNP_WORKDIR=${MOLMOSPACES_ROOT}/runtime/mimicgen_pick_and_place
-export MOLMOSPACES_PYTHON=${MOLMOSPACES_ROOT}/.venv/bin/python
-# optional, if your MolmoSpaces setup uses a local NLTK data cache
-export MOLMOSPACES_NLTK_DATA=/path/to/nltk_data
+export MOLMOSPACES_PYTHON=python
+export HF_HOME=${HF_HOME:-$HOME/.cache/huggingface}
+export NLTK_DATA=${NLTK_DATA:-$HOME/nltk_data}
+export MOLMOSPACES_NLTK_DATA=$NLTK_DATA
 ```
+
+`HF_HOME` is used by robomimic's CLIP language embedding utility. `NLTK_DATA` / `MOLMOSPACES_NLTK_DATA` are useful when MolmoSpaces needs a local WordNet cache.
 
 Create the work layout:
 
@@ -45,7 +56,7 @@ Create the work layout:
 mkdir -p ${MOLMOSPACES_PNP_WORKDIR}/{artifacts/seeds,artifacts/mimicgen_pnp,data/molmobot_data/FrankaPickAndPlaceOmniCamConfig/val_shards,logs}
 ```
 
-Copy this repository's `src/` directory into the MolmoSpaces checkout root, or run commands from `${MOLMOSPACES_ROOT}` with this repository on `PYTHONPATH`.
+Run commands from the repository root with the `PYTHONPATH` shown above.
 
 ## Data
 
@@ -149,7 +160,7 @@ ${MOLMOSPACES_PYTHON} src/bimanual_yam/browser_keyboard_teleop.py \
   --initialization-report runtime/bimanual_yam_initialization_report.json
 ```
 
-The browser page supports active-arm switching, Cartesian keyboard motion, gripper toggle, stale-input hold, invalid-input rejection, and loopback-only serving. It is a teleoperation/control bridge, not by itself a successful task demonstration.
+Open `http://127.0.0.1:8765` after the terminal prints the local teleoperation URL, for example `teleop=http://127.0.0.1:8765`. The browser page supports active-arm switching, Cartesian keyboard motion, gripper toggle, stale-input hold, invalid-input rejection, and loopback-only serving. It is a teleoperation/control bridge, not by itself a successful task demonstration.
 
 ## Current Results Snapshot
 
