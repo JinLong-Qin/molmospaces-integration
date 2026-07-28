@@ -8,7 +8,6 @@ This workline uses official-style iTHOR / ProcTHOR scene resources with the bima
 
 The reusable public scripts are shared with the bimanual browser/teleop workline under [`src/bimanual_yam/`](../../../src/bimanual_yam/):
 
-- `browser_viewer.py`
 - `browser_keyboard_teleop.py`
 - `validate_tabletop_initialization.py`
 - `check_dual_object_reachability.py`
@@ -21,9 +20,23 @@ Use the standard clone setup, make sure MolmoSpaces assets are available, then i
 ```bash
 python src/bimanual_yam/validate_tabletop_initialization.py --help
 python src/bimanual_yam/check_dual_object_reachability.py --help
-python src/bimanual_yam/browser_viewer.py --help
 python src/bimanual_yam/browser_keyboard_teleop.py --help
 python src/bimanual_yam/scripted_bimanual_source_demo.py --help
+```
+
+For browser teleoperation, use the keyboard bridge directly:
+
+```bash
+python src/bimanual_yam/browser_keyboard_teleop.py \
+  --host 127.0.0.1 \
+  --port 8765 \
+  --house-index 1 \
+  --seed 110 \
+  --render-fps 8 \
+  --control-hz 25 \
+  --input-timeout-ms 400 \
+  --initialization-max-attempts 50 \
+  --initialization-report runtime/bimanual_yam_initialization_report.json
 ```
 
 The original runtime workline included many simulator artifacts and diagnostic logs. Those are not committed as raw files; they are indexed in the inventory below.

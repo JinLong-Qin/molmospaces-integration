@@ -132,18 +132,21 @@ The high-yield collector hashes `generated_actions.npy` and counts only unique s
 
 ## Bimanual YAM Browser Teleoperation
 
-These scripts are a separate bimanual YAM workline. They provide a browser bridge and keyboard controller for MolmoSpaces bimanual YAM experiments.
+These scripts are a separate bimanual YAM workline. The supported public entrypoint is the browser keyboard teleoperation bridge, which performs the current strict tabletop initialization before serving the browser UI.
 
-Read-only browser stream:
-
-```bash
-${MOLMOSPACES_PYTHON} src/bimanual_yam/browser_viewer.py --host 127.0.0.1 --port 8765
-```
-
-Keyboard teleoperation:
+Run keyboard teleoperation:
 
 ```bash
-${MOLMOSPACES_PYTHON} src/bimanual_yam/browser_keyboard_teleop.py --host 127.0.0.1 --port 8765
+${MOLMOSPACES_PYTHON} src/bimanual_yam/browser_keyboard_teleop.py \
+  --host 127.0.0.1 \
+  --port 8765 \
+  --house-index 1 \
+  --seed 110 \
+  --render-fps 8 \
+  --control-hz 25 \
+  --input-timeout-ms 400 \
+  --initialization-max-attempts 50 \
+  --initialization-report runtime/bimanual_yam_initialization_report.json
 ```
 
 The browser page supports active-arm switching, Cartesian keyboard motion, gripper toggle, stale-input hold, invalid-input rejection, and loopback-only serving. It is a teleoperation/control bridge, not by itself a successful task demonstration.

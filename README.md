@@ -281,21 +281,24 @@ bash src/pnp/collect_unique_highyield_successes.sh
 
 ## Bimanual YAM Browser Teleoperation
 
-Browser-based teleoperation utilities for bimanual YAM scenes: a read-only in-browser viewer for real-time observation, and keyboard teleoperation for interactive control.
+Browser-based keyboard teleoperation for bimanual YAM scenes. The supported public entrypoint is the keyboard teleoperation bridge, which performs the current strict tabletop initialization before serving the browser UI.
 
-Read-only browser stream:
-
-```bash
-$MOLMOSPACES_PYTHON src/bimanual_yam/browser_viewer.py --host 127.0.0.1 --port 8765
-```
-
-Keyboard teleoperation:
+Run the teleoperation bridge:
 
 ```bash
-$MOLMOSPACES_PYTHON src/bimanual_yam/browser_keyboard_teleop.py --host 127.0.0.1 --port 8765
+$MOLMOSPACES_PYTHON src/bimanual_yam/browser_keyboard_teleop.py \
+  --host 127.0.0.1 \
+  --port 8765 \
+  --house-index 1 \
+  --seed 110 \
+  --render-fps 8 \
+  --control-hz 25 \
+  --input-timeout-ms 400 \
+  --initialization-max-attempts 50 \
+  --initialization-report runtime/bimanual_yam_initialization_report.json
 ```
 
-The browser teleoperation path provides a control and observation bridge for bimanual YAM scenes.
+Open `http://127.0.0.1:8765` after the terminal prints the local teleoperation URL. This path provides operator-facing control and observation infrastructure; it is not by itself a formal source-demo success claim.
 
 ## Included Results Snapshot
 

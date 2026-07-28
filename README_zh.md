@@ -283,21 +283,24 @@ bash src/pnp/collect_unique_highyield_successes.sh
 
 ## Bimanual YAM 浏览器遥操作
 
-bimanual YAM 场景的浏览器遥操作工具：只读浏览器查看器用于实时观测，键盘遥操作用于交互控制。
+bimanual YAM 场景的浏览器键盘遥操作工具。公开复现推荐入口是键盘遥操作 bridge，它会先执行当前 strict tabletop 初始化，再启动浏览器 UI。
 
-只读浏览器视频流：
-
-```bash
-$MOLMOSPACES_PYTHON src/bimanual_yam/browser_viewer.py --host 127.0.0.1 --port 8765
-```
-
-键盘遥操作：
+启动遥操作 bridge：
 
 ```bash
-$MOLMOSPACES_PYTHON src/bimanual_yam/browser_keyboard_teleop.py --host 127.0.0.1 --port 8765
+$MOLMOSPACES_PYTHON src/bimanual_yam/browser_keyboard_teleop.py \
+  --host 127.0.0.1 \
+  --port 8765 \
+  --house-index 1 \
+  --seed 110 \
+  --render-fps 8 \
+  --control-hz 25 \
+  --input-timeout-ms 400 \
+  --initialization-max-attempts 50 \
+  --initialization-report runtime/bimanual_yam_initialization_report.json
 ```
 
-浏览器遥操作路径为 bimanual YAM 场景提供控制和观测桥接。
+终端打印本地 teleoperation URL 后打开 `http://127.0.0.1:8765`。该路径提供面向操作者的控制和观测基础设施；它本身不等于正式 source demo 成功。
 
 ## 当前结果快照
 
