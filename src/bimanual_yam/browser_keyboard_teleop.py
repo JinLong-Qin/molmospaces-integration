@@ -374,8 +374,9 @@ def compose_frame(observation, width: int, height: int, quality: int) -> bytes:
     panels = []
     for camera_name in CAMERAS:
         frame = obs[camera_name]
+        _resample = getattr(Image, "Resampling", Image).BILINEAR
         image = Image.fromarray(np.asarray(frame, dtype=np.uint8)).resize(
-            (width, height), Image.Resampling.BILINEAR
+            (width, height), _resample
         )
         draw = ImageDraw.Draw(image)
         draw.rectangle((0, 0, 190, 24), fill=(0, 0, 0))
