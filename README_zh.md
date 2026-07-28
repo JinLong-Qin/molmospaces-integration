@@ -93,6 +93,12 @@ MuJoCo Pick-and-Place 集成通常使用：
 pip install -e ".[mujoco]"
 ```
 
+**关于 `pip install -e` 的说明**：上游 MolmoSpaces `pyproject.toml` 使用的 build backend 不支持 `build_editable`（PEP 660）。如果 `pip install -e` 报错缺少 `build_editable`，包可能仍然能正常 import。如果运行脚本时出现 `ModuleNotFoundError: No module named 'molmo_spaces'`，将项目根目录加入 `PYTHONPATH`：
+
+```bash
+export PYTHONPATH=$PWD:${PYTHONPATH:-}
+```
+
 需要上游可选模块时可以安装 extras，例如：
 
 ```bash
@@ -308,6 +314,14 @@ bash src/pnp/collect_unique_highyield_successes.sh
 
 bimanual YAM 场景的浏览器键盘遥操作工具。公开复现推荐入口是键盘遥操作 bridge，它会先执行当前 strict tabletop 初始化，再启动浏览器 UI。旧的只读 viewer 脚本不是此工作线推荐复现入口。
 
+### 运行环境要求
+
+- **需要 GPU 渲染**才能达到可用帧率。CPU 软件渲染（OSMesa）三相机模式下仅 ~3 FPS，键盘控制响应延迟严重。
+- **NVIDIA EGL headless 渲染**是已验证的配置：Linux 主机 + NVIDIA GPU + NVIDIA 闭源驱动 + EGL vendor 文件（`/usr/share/glvnd/egl_vendor.d/10_nvidia.json`）。遥操作工具通过 MolmoSpaces 自动使用 `MUJOCO_GL=egl`。
+- **WSL2 不支持**此工作线。WSL2 使用 Mesa EGL，不暴露 `EGL_EXT_platform_device` 扩展——这是 MolmoSpaces headless GPU 渲染依赖的扩展。如果使用 WSL2，请在远程 Linux GPU 服务器上运行（见下方说明）。
+
+### 本地运行（Linux + NVIDIA GPU）
+
 启动遥操作 bridge：
 
 ```bash
@@ -323,9 +337,22 @@ $MOLMOSPACES_PYTHON src/bimanual_yam/browser_keyboard_teleop.py \
   --initialization-report runtime/bimanual_yam_initialization_report.json
 ```
 
-终端打印本地 teleoperation URL 后打开 `http://127.0.0.1:8765`，例如 `teleop=http://127.0.0.1:8765`。该路径提供面向操作者的控制和观测基础设施；它本身不等于正式 source demo 成功。
+终端打印本地 teleoperation URL 后打开 `http://127.0.0.1:8765`。
 
-浏览器键位：先点击页面；`Tab` 切换 active arm；`W/S/A/D` 在视觉平面移动；`E/Q` 上下；方向键控制 pitch/yaw；`Z/C` roll；`F` 切换当前夹爪。如果初始化失败，增大 `--initialization-max-attempts` 或查看 `runtime/bimanual_yam_initialization_report.json`。
+### 在远程 GPU 服务器上运行
+
+如果 teleop 运行在远程 Linux GPU 服务器上，需要建立 SSH tunnel 将浏览器端口转发到本地机器：
+
+```bash
+# 在本地机器上执行：
+ssh -L 8765:127.0.0.1:8765 user@your-gpu-server
+```
+
+然后在本地浏览器打开 `http://127.0.0.1:8765`。
+
+### 浏览器键位
+
+先点击页面；`Tab` 切换 active arm；`W/S/A/D` 在视觉平面移动；`E/Q` 上下；方向键控制 pitch/yaw；`Z/C` roll；`F` 切换当前夹爪。如果初始化失败，增大 `--initialization-max-attempts` 或查看 `runtime/bimanual_yam_initialization_report.json`。
 
 ## 当前结果快照
 

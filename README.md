@@ -91,6 +91,12 @@ For the MuJoCo-based Pick-and-Place integration:
 pip install -e ".[mujoco]"
 ```
 
+**Note on `pip install -e`**: the upstream MolmoSpaces `pyproject.toml` uses a build backend that does not support `build_editable` (PEP 660). If `pip install -e` fails with a message about missing `build_editable`, the package may still import correctly. If you see `ModuleNotFoundError: No module named 'molmo_spaces'` when running scripts, add the project root to `PYTHONPATH`:
+
+```bash
+export PYTHONPATH=$PWD:${PYTHONPATH:-}
+```
+
 Optional upstream extras can be installed as needed, for example:
 
 ```bash
@@ -306,6 +312,14 @@ bash src/pnp/collect_unique_highyield_successes.sh
 
 Browser-based keyboard teleoperation for bimanual YAM scenes. The supported public entrypoint is the keyboard teleoperation bridge, which performs the current strict tabletop initialization before serving the browser UI. The older read-only viewer script is not the recommended reproduction entrypoint for this workline.
 
+### Environment requirements
+
+- **GPU rendering is required** for usable frame rates. CPU software rendering (OSMesa) with three cameras gives ~3 FPS, which is too slow for responsive keyboard control.
+- **NVIDIA EGL headless rendering** is the tested configuration: a Linux host with an NVIDIA GPU, the NVIDIA proprietary driver, and EGL vendor files (`/usr/share/glvnd/egl_vendor.d/10_nvidia.json`). The teleop automatically uses `MUJOCO_GL=egl` via MolmoSpaces.
+- **WSL2 is not supported** for this workline. WSL2 uses Mesa EGL, which does not expose `EGL_EXT_platform_device` — the extension MolmoSpaces relies on for headless GPU rendering. If you are on WSL2, run the teleop on a remote Linux GPU server instead (see below).
+
+### Running locally (Linux + NVIDIA GPU)
+
 Run the teleoperation bridge:
 
 ```bash
@@ -321,9 +335,22 @@ $MOLMOSPACES_PYTHON src/bimanual_yam/browser_keyboard_teleop.py \
   --initialization-report runtime/bimanual_yam_initialization_report.json
 ```
 
-Open `http://127.0.0.1:8765` after the terminal prints the local teleoperation URL, for example `teleop=http://127.0.0.1:8765`. This path provides operator-facing control and observation infrastructure; it is not by itself a formal source-demo success claim.
+Open `http://127.0.0.1:8765` after the terminal prints the local teleoperation URL.
 
-Browser controls: click the page first; `Tab` switches active arm; `W/S/A/D` moves in the visual plane; `E/Q` raises/lowers; arrow keys control pitch/yaw; `Z/C` roll; `F` toggles the active gripper. If initialization fails, increase `--initialization-max-attempts` or inspect `runtime/bimanual_yam_initialization_report.json`.
+### Running on a remote GPU server
+
+If you run the teleop on a remote Linux GPU server, set up an SSH tunnel to forward the browser port to your local machine:
+
+```bash
+# On your local machine:
+ssh -L 8765:127.0.0.1:8765 user@your-gpu-server
+```
+
+Then open `http://127.0.0.1:8765` in your local browser.
+
+### Browser controls
+
+Click the page first; `Tab` switches active arm; `W/S/A/D` moves in the visual plane; `E/Q` raises/lowers; arrow keys control pitch/yaw; `Z/C` roll; `F` toggles the active gripper. If initialization fails, increase `--initialization-max-attempts` or inspect `runtime/bimanual_yam_initialization_report.json`.
 
 ## Included Results Snapshot
 

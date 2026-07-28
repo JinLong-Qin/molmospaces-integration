@@ -6,6 +6,12 @@ This workline provides human-facing browser visualization and keyboard teleopera
 
 It is a tooling/infrastructure workline, not a standalone task-success result.
 
+## Environment requirements
+
+- **GPU rendering is required** for usable frame rates. CPU software rendering (OSMesa) with three cameras gives ~3 FPS.
+- **NVIDIA EGL headless rendering** is the tested configuration: Linux + NVIDIA GPU + proprietary driver + EGL vendor (`/usr/share/glvnd/egl_vendor.d/10_nvidia.json`). The teleop automatically uses `MUJOCO_GL=egl` via MolmoSpaces.
+- **WSL2 is not supported**. WSL2 uses Mesa EGL, which does not expose `EGL_EXT_platform_device`.
+
 ## Public code
 
 Code directory: [`src/bimanual_yam/`](../../../src/bimanual_yam/)
@@ -19,7 +25,18 @@ Key scripts:
 
 ## Minimal run sequence
 
-After standard setup, inspect script options:
+### Environment requirements
+
+- **GPU rendering is required**. CPU rendering (OSMesa) with three cameras gives ~3 FPS.
+- **NVIDIA EGL headless rendering** is the tested configuration: Linux + NVIDIA GPU + proprietary driver + `/usr/share/glvnd/egl_vendor.d/10_nvidia.json`.
+- **WSL2 is not supported**. WSL2 Mesa EGL does not expose `EGL_EXT_platform_device`.
+- **Remote GPU server**: set up an SSH tunnel before opening the browser:
+  ```bash
+  # On your local machine:
+  ssh -L 8765:127.0.0.1:8765 user@your-gpu-server
+  ```
+
+Inspect script options:
 
 ```bash
 python src/bimanual_yam/browser_keyboard_teleop.py --help
@@ -28,7 +45,7 @@ python src/bimanual_yam/check_dual_object_reachability.py --help
 python src/bimanual_yam/scripted_bimanual_source_demo.py --help
 ```
 
-Recommended local teleoperation command:
+Recommended teleoperation command:
 
 ```bash
 python src/bimanual_yam/browser_keyboard_teleop.py \
@@ -43,9 +60,7 @@ python src/bimanual_yam/browser_keyboard_teleop.py \
   --initialization-report runtime/bimanual_yam_initialization_report.json
 ```
 
-Open `http://127.0.0.1:8765` after the terminal prints the local teleoperation URL.
-
-Actual simulator runs require MolmoSpaces assets and a display/browser-capable environment.
+Open `http://127.0.0.1:8765` after the terminal prints the teleoperation URL.
 
 ## Public evidence
 
