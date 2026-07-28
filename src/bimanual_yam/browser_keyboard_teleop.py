@@ -776,7 +776,7 @@ def main() -> None:
                 shared_frame.publish(jpeg, status)
                 frames_sent += 1
                 server_fps_elapsed += dt_step + dt_compose
-                next_render = cycle + 1 / args.render_fps
+                next_render = time.monotonic() + 1 / args.render_fps  # anchor to now, not cycle start
                 if cycle - server_fps_window >= 5.0:
                     avg = server_fps_elapsed / max(frames_sent, 1) * 1000
                     print(f"[fps] sent {frames_sent}f in {cycle-server_fps_window:.1f}s => {frames_sent/(cycle-server_fps_window):.1f} fps | avg {avg:.0f}ms/frame (step={dt_step*1000:.0f}ms+compose={dt_compose*1000:.0f}ms)", flush=True)
