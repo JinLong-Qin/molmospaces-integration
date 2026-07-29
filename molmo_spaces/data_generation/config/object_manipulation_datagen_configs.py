@@ -288,9 +288,9 @@ class RBY1OpenDataGenConfig(OpeningBaseConfig):
                 rby1_path / "curobo_config" / "rby1m_left_arm_holobase.yml"
             ),
             collision_activation_distance=0.01,
-            num_trajopt_seeds=12,
+            num_trajopt_seeds=4,
             max_attempts=15,
-            num_ik_seeds=128,
+            num_ik_seeds=32,
             trajopt_tsteps=48,
             interpolation_dt=self.ctrl_dt_ms / 1000.0,  # 1x control dt
             check_start_validity=False,
@@ -362,6 +362,8 @@ class RBY1PickAndPlaceDataGenConfig(PickAndPlaceDataGenConfig):
             left_curobo_planner_config=left_curobo_planner_config,
             right_curobo_planner_config=right_curobo_planner_config,
             enable_collision_avoidance=True,
+            batch_size=1,
+            max_batch_plan_attempts=4,
         )
 
     def model_post_init(self, __context) -> None:

@@ -510,6 +510,22 @@ class CuroboPickAndPlacePlannerPolicy(CuroboPlannerPolicy, PickAndPlacePlannerPo
                 return {}
         log.info("ENTERING PREGRASP PHASE")
         self.batch_plan_trajectory()
+
+        if self.planned_trajectory is None or len(self.planned_trajectory) == 0:
+            log.warning(
+                "[PREGRASP] No planned trajectory found after batch planning; staying in PREGRASP and returning no-op."
+            )
+            return {}
+
+        if self.trajectory_index >= len(self.planned_trajectory):
+            log.warning(
+                "[PREGRASP] Trajectory index out of range after batch planning; resetting PREGRASP state."
+            )
+            self.planned_trajectory = None
+            self.trajectory_index = 0
+            self.steps_spent_in_waypoint = 0
+            return {}
+
         return self._execute_trajectory({f"{self.arm_side}_gripper": -100})
 
     def _execute_grasp_phase(self) -> dict[str, Any]:
