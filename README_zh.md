@@ -107,6 +107,71 @@ pip install -e ".[mujoco,grasp,housegen]"
 
 上游 MolmoSpaces 安装细节见 `docs/upstream_molmospaces_readme.md`。
 
+### 3.1 安装 RB-Y1 scripted/planner datagen 所需的 CuRobo
+
+如果你要运行官方 single-arm RB-Y1 scripted/planner data-generation config，例如 `RBY1PickDataGenConfig` 或 `RBY1PickAndPlaceDataGenConfig`，还需要安装 CuRobo extra。
+
+这些 config 使用的是上游 package 入口：
+
+```bash
+python -m molmo_spaces.data_generation.main RBY1PickDataGenConfig
+python -m molmo_spaces.data_generation.main RBY1PickAndPlaceDataGenConfig
+```
+
+它们与本仓库公开的 `src/pnp/` MimicGen 集成脚本是不同路径。不要把 `src/pnp/` 误当成官方 RB-Y1 scripted/planner datagen 入口的直接替代。
+
+上游 `pyproject.toml` 中对应的 extra 依赖为：
+
+```text
+nvidia-curobo @ git+https://github.com/allenai/curobo.git@87e857d46fa5398f268c7f31d26566351be8671d
+```
+
+在某些机器上，`pip install -e ".[mujoco,curobo]"` 可能失败，因为 pip build isolation 会尝试额外下载较大的 `torch` wheel。这种情况下，更稳妥的方式是针对当前已激活环境安装 CuRobo，而不是让 pip 创建 isolated build env：
+
+```bash
+PIP_NO_BUILD_ISOLATION=1 pip install --no-build-isolation \
+  "nvidia-curobo @ git+https://github.com/allenai/curobo.git@87e857d46fa5398f268c7f31d26566351be8671d"
+```
+
+如果网络不稳定，pip 在下载传递依赖时频繁中断，可以先安装缺失 wheel，再关闭依赖解析重试 CuRobo：
+
+```bash
+pip install embreex rtree pycollada colorlog manifold3d mapbox_earcut svg.path \
+  vhacdx yourdfpy pybind11 setuptools_scm vcs-versioning warp-lang==1.11.1 \
+  importlib_resources
+
+PIP_NO_BUILD_ISOLATION=1 pip install --no-build-isolation --no-deps \
+  "nvidia-curobo @ git+https://github.com/allenai/curobo.git@87e857d46fa5398f268c7f31d26566351be8671d"
+```
+
+安装后，先验证 planner 依赖，再尝试 RB-Y1 datagen：
+
+```bash
+python -c "import curobo; print(curobo.__file__)"
+python - <<'PY'
+from molmo_spaces.data_generation.config.object_manipulation_datagen_configs import RBY1PickAndPlaceDataGenConfig
+cfg = RBY1PickAndPlaceDataGenConfig()
+print(type(cfg).__name__)
+print("house_inds:", cfg.task_sampler_config.house_inds)
+print("samples_per_house:", cfg.task_sampler_config.samples_per_house)
+print("episodes_per_batch:", cfg.task_sampler_config.episodes_per_batch)
+PY
+```
+
+如果 `import curobo` 失败，RB-Y1 planner config 会在 `model_post_init()` 阶段失败，此时官方 single-arm scripted-expert pipeline 还不能在该机器上运行。
+
+### 3.2 官方 RB-Y1 datagen 的 planner-server 说明
+
+官方 RB-Y1 scripted/planner datagen 路径使用带 planner 的 policy config。仓库中的 tests 和 helper code 表明，这条路径既支持配置好的 planner server URL，也支持本地 planner-server workflow。
+
+对复现者来说，真正重要的边界是：
+
+- 先验证 `curobo` 能 import，目标 config 能成功实例化；
+- 再根据你自己的环境使用合适的 planner-server 连接配置；
+- 只有当 config 构造和 planner-server 连通性都在你的机器上验证通过后，才应认为 datagen 路径具备可运行前提。
+
+由于 planner-server 的部署方式依赖具体环境，本 README 不把某个特定 host 或某种仅限本地机器的做法硬编码成唯一标准步骤。
+
 ### 4. 拉取固定版本的 MimicGen 和 robomimic
 
 `vendor/` 不直接提交到 Git。请用脚本拉取本工作线实际使用的 upstream commit：

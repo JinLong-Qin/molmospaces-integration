@@ -23,6 +23,8 @@ Key scripts:
 
 After the standard clone setup in [`../README.md`](../README.md), place the official MolmoBot Pick-and-Place shard under `runtime/`. Then use the top-level README workflow or run the scripts in this order:
 
+This workline is the public `src/pnp/` integration path. It is not the same entrypoint as the official RB-Y1 scripted/planner data-generation configs under `python -m molmo_spaces.data_generation.main ...`. If you need `RBY1PickDataGenConfig` or `RBY1PickAndPlaceDataGenConfig`, follow the dedicated CuRobo installation notes in the top-level [`README.md`](../../../README.md) instead of assuming the `src/pnp/` setup is sufficient.
+
 ```bash
 python src/pnp/inspect_source_candidates.py --help
 python src/pnp/select_pick_place_seeds.py --help

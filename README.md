@@ -47,6 +47,18 @@ Also included: the upstream MolmoSpaces source snapshot, lightweight manifests a
 
 Large runtime data are excluded from Git: official shards, generated HDF5 files, rollout directories, simulator logs, PID files, caches, videos, local machine paths, and internal planning ledgers. Worklines that use such files keep a README, lightweight inventory, or regeneration entrypoint instead of committing the raw artifact.
 
+## Reproduction Notes
+
+This repository contains multiple worklines with different dependency surfaces. The default `pip install -e ".[mujoco]"` setup is enough for MuJoCo-based replay, inspection, and the public `src/pnp/` MimicGen integration scripts, but it is not enough for RB-Y1 scripted-planner data generation.
+
+In particular:
+
+- `src/pnp/` worklines use the Pick-and-Place integration code on top of MolmoBot source trajectories and do not require CuRobo just to inspect manifests, replay source episodes, or parse source datasets.
+- `molmo_spaces.data_generation.main RBY1PickDataGenConfig` and `RBY1PickAndPlaceDataGenConfig` are a different path: they instantiate the official RB-Y1 scripted/planner data-generation pipeline and require `curobo`.
+- Browser teleoperation for bimanual YAM is yet another path and should not be conflated with scripted/planner expert collection.
+
+If your goal is to reproduce single-arm RB-Y1 scripted/planner expert rollouts, read the CuRobo section below before trying to instantiate `RBY1PickDataGenConfig` or `RBY1PickAndPlaceDataGenConfig`.
+
 ## Quick Start
 
 ### 1. Clone
@@ -118,6 +130,71 @@ pip install -e ".[mujoco,grasp,housegen]"
 ```
 
 See `docs/upstream_molmospaces_readme.md` for upstream MolmoSpaces installation details.
+
+### 3.1 Install CuRobo for RB-Y1 scripted/planner datagen
+
+If you need the official single-arm RB-Y1 scripted/planner data-generation configs such as `RBY1PickDataGenConfig` or `RBY1PickAndPlaceDataGenConfig`, you must install the CuRobo extra as well.
+
+These configs use the upstream package entrypoint:
+
+```bash
+python -m molmo_spaces.data_generation.main RBY1PickDataGenConfig
+python -m molmo_spaces.data_generation.main RBY1PickAndPlaceDataGenConfig
+```
+
+They are a different path from the public `src/pnp/` MimicGen integration scripts in this repository. Do not treat `src/pnp/` as a drop-in replacement for the official RB-Y1 scripted/planner datagen entrypoint.
+
+The upstream extra is declared in `pyproject.toml` as:
+
+```text
+nvidia-curobo @ git+https://github.com/allenai/curobo.git@87e857d46fa5398f268c7f31d26566351be8671d
+```
+
+On some machines, `pip install -e ".[mujoco,curobo]"` may fail because pip build isolation tries to download a separate large `torch` wheel. If that happens, install CuRobo against the already-activated environment instead of letting pip create an isolated build env:
+
+```bash
+PIP_NO_BUILD_ISOLATION=1 pip install --no-build-isolation \
+  "nvidia-curobo @ git+https://github.com/allenai/curobo.git@87e857d46fa5398f268c7f31d26566351be8671d"
+```
+
+If your network is flaky and pip repeatedly breaks while downloading transitive wheels, install the missing wheels first, then retry CuRobo without dependency resolution:
+
+```bash
+pip install embreex rtree pycollada colorlog manifold3d mapbox_earcut svg.path \
+  vhacdx yourdfpy pybind11 setuptools_scm vcs-versioning warp-lang==1.11.1 \
+  importlib_resources
+
+PIP_NO_BUILD_ISOLATION=1 pip install --no-build-isolation --no-deps \
+  "nvidia-curobo @ git+https://github.com/allenai/curobo.git@87e857d46fa5398f268c7f31d26566351be8671d"
+```
+
+After installation, verify the planner dependency before attempting RB-Y1 datagen:
+
+```bash
+python -c "import curobo; print(curobo.__file__)"
+python - <<'PY'
+from molmo_spaces.data_generation.config.object_manipulation_datagen_configs import RBY1PickAndPlaceDataGenConfig
+cfg = RBY1PickAndPlaceDataGenConfig()
+print(type(cfg).__name__)
+print("house_inds:", cfg.task_sampler_config.house_inds)
+print("samples_per_house:", cfg.task_sampler_config.samples_per_house)
+print("episodes_per_batch:", cfg.task_sampler_config.episodes_per_batch)
+PY
+```
+
+If `import curobo` fails, the RB-Y1 planner configs will fail during `model_post_init()` and the official single-arm scripted-expert pipeline is not yet runnable on that machine.
+
+### 3.2 Planner-server note for official RB-Y1 datagen
+
+The official RB-Y1 scripted/planner datagen path uses planner-backed policy configs. Repository tests and helper code indicate that this path supports both configured planner server URLs and a local planner-server workflow.
+
+For reproduction-facing documentation, the important boundary is:
+
+- first verify that `curobo` imports and the target config instantiates successfully;
+- then use the policy configuration expected by your environment for planner-server connectivity;
+- only treat the datagen path as runnable after both config construction and planner-server connectivity are verified on your machine.
+
+Because planner-server deployment differs across environments, this README does not hard-code a single host or local-only recipe as a universal requirement.
 
 ### 4. Fetch pinned MimicGen and robomimic dependencies
 

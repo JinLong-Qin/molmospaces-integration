@@ -13,6 +13,16 @@
 
 Large runtime data (HDF5, videos, logs) are excluded from Git.
 
+## Reproduction Boundary
+
+This portfolio includes multiple worklines that do not share the same runtime requirements.
+
+- The public `src/pnp/` MimicGen Pick-and-Place path uses MolmoBot source trajectories and the integration scripts in this repository.
+- The official RB-Y1 scripted/planner datagen path uses `python -m molmo_spaces.data_generation.main ...` with configs such as `RBY1PickDataGenConfig` and `RBY1PickAndPlaceDataGenConfig`; this is distinct from the public `src/pnp/` integration scripts.
+- Bimanual browser teleop is a separate infrastructure path again.
+
+A fresh `pip install -e ".[mujoco]"` setup is enough for the public `src/pnp/` worklines, but it is not enough for the RB-Y1 scripted/planner datagen configs. Those require `curobo` and should follow the dedicated CuRobo notes in the top-level [`README.md`](../../README.md).
+
 ## Setup
 
 ```bash
@@ -28,3 +38,5 @@ export MOLMOSPACES_PNP_WORKDIR="$PWD/runtime/pnp"
 export MIMICGEN_ROOT="$PWD/vendor/mimicgen"
 export ROBOMIMIC_ROOT="$PWD/vendor/robomimic"
 ```
+
+If you specifically need official RB-Y1 scripted/planner expert generation, install and verify CuRobo before trying `RBY1PickDataGenConfig` or `RBY1PickAndPlaceDataGenConfig`, then verify planner-server connectivity for your own environment.

@@ -214,7 +214,7 @@ class CuroboOpenClosePlannerPolicyConfig(OpenClosePlannerPolicyConfig):
         300.0  # gRPC deadline for motion planning calls (seconds), None = no deadline
     )
     server_urls: list[str] = [
-        "jupiter-cs-aus-107.reviz.ai2.in:10002",
+        "127.0.0.1:10000",
     ]
 
 
@@ -259,7 +259,7 @@ class CuroboPickAndPlacePlannerPolicyConfig(PickAndPlacePlannerPolicyConfig):
         300.0  # gRPC deadline for motion planning calls (seconds), None = no deadline
     )
     server_urls: list[str] = [
-        "jupiter-cs-aus-107.reviz.ai2.in:10002",
+        "127.0.0.1:10000",
     ]
 
 

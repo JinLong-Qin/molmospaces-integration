@@ -15,6 +15,10 @@ This repository keeps the current MolmoSpaces source snapshot and a lightweight 
 
 After standard setup, use the upstream-style package entrypoints and documentation from the root repository. This workline does not add a separate public script directory because it was a bounded check of official entrypoints/assets rather than a new integration pipeline.
 
+For official RB-Y1 scripted/planner data generation, the relevant entrypoint is `python -m molmo_spaces.data_generation.main ...` with configs such as `RBY1PickDataGenConfig` and `RBY1PickAndPlaceDataGenConfig`. Those configs require `curobo`; a plain `pip install -e ".[mujoco]"` environment is not sufficient. This official datagen path is distinct from the repository's public `src/pnp/` integration scripts.
+
+In addition to successful `curobo` installation, the planner-backed policy path also requires a working planner-server configuration for the target environment. Reproduction guidance should therefore verify both config construction and planner-server connectivity, rather than assuming one universal host or one universal local-only setup.
+
 Basic local checks:
 
 ```bash
