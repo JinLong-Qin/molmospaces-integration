@@ -251,9 +251,7 @@ class PickAndPlaceTask(BaseMujocoTask):
             supporting_body_name=self.config.task_config.supporting_body_name,
             robot_name=self.config.task_config.robot_name,
             pickup_asset_uid=self.config.task_config.pickup_asset_uid,
-            place_receptacle_asset_uid=(
-                self.config.task_config.place_receptacle_asset_uid
-            ),
+            place_receptacle_asset_uid=(self.config.task_config.place_receptacle_asset_uid),
         )
         obs_scene.update(obs_extra)
         return obs_scene

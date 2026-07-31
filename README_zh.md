@@ -139,7 +139,25 @@ python scripts/datagen/run_pipeline.py --list_pools
 
 每个 pool 固定 scene dataset、split、house、pickup object 和 receptacle。在目标机器通过完整行为与产物 gate 之前，这些 pool 仍是研究候选。
 
-### 6. 运行有界 Franka PnP datagen smoke
+### 6. Franka datagen 参数参考
+
+| 参数 | 含义与约束 |
+|---|---|
+| `--pool NAME` | 选择固定的 MolmoData-derived PnP identity。它会覆盖 `--scene_dataset`、`--data_split`、`--house_inds`、`--pickup_obj_name` 和 `--fixed_place_receptacle_uid`；要求 `--task_type pick_and_place`，且不能与 `--config` 或 `--eval` 同时使用。 |
+| `--samples_per_house N` | 每个 house 目标保存的轨迹数。Sampling 或 IK 失败可能让 run 提前结束，因此必须核验实际 success count 和 HDF5 trajectory count。 |
+| `--device gpu` | 让 Franka Warp parallel IK 使用 CUDA；MuJoCo physics 仍在 CPU。`--device cpu` 是较慢的 fallback。 |
+| `CUDA_VISIBLE_DEVICES=K` | 选择 Warp 可见的物理 GPU。仅设置 `--device gpu` 不负责选择具体物理 GPU。 |
+| `--num_workers N` | 设置 rollout worker 进程数。Worker 消费 runner 生成的独立 work item；一个 work item 不会被拆分。实际并行度取决于生成的 batches，增加 worker 不保证线性加速或一定完成目标数。 |
+| `--seed N` | 控制 task sampling 和 randomization。续采时每个 run 使用新 seed，避免重复相同随机序列。 |
+| `--run_name_prefix NAME` | 为时间戳输出目录增加可读且唯一的前缀。不同 seed 和 pool 使用不同 prefix。 |
+| `--randomize_fixed_pickup_pose` | 在已发现的原始 supporting geometry 上重采样固定 pickup，距离范围由 `--fixed_pickup_min_dist` 和 `--fixed_pickup_max_dist` 控制。 |
+| `--filter_for_successful_trajectories` | 只把成功轨迹保存为 source candidate，不保留失败轨迹。 |
+| `--disable_action_noise` | 关闭逐步 robot action noise，用于受控 source collection。 |
+| `--require_clean_success` | 将 planner retry 设为零，并拒绝发生任何 retry 的轨迹；要求支持该字段的 object-manipulation planner。 |
+
+每个 pool 应使用独立的 output/source dataset。不要混合不同 pool 的 identity 后把结果称为 homogeneous source pool。输出目录是 `ASSETS_DIR/datagen/<task_type>_<policy>_v1/<prefix>_<timestamp>`；所以下面的命令输出到 `datagen/pick_and_place_planner_v1/` 下。
+
+### 7. 运行有界 Franka PnP datagen smoke
 
 在原生 Linux NVIDIA 机器上，为 Warp parallel IK 选择 GPU；MuJoCo physics 仍在 CPU：
 
@@ -211,24 +229,36 @@ mkdir -p "$MOLMOSPACES_PNP_WORKDIR"/{artifacts/seeds,artifacts/mimicgen_pnp,data
 
 `HF_HOME` 会被 robomimic 的 CLIP language embedding 工具使用。`NLTK_DATA` / `MOLMOSPACES_NLTK_DATA` 用于 MolmoSpaces 需要本地 WordNet cache 的情况。
 
-### 3. 选择 source 输入
+### 3. 从两种 MimicGen source 选项中选择一种
 
-使用新生成的 Franka HDF5 时，将 selector 指向一个 run 目录，或多个 run 的共同父目录：
+两种选项都会生成同一份 `pnp_seed_manifest_50demo_crossmix.json` contract，之后共用下面的 replay、datagen-info collection、robomimic conversion 和 MimicGen generation 命令。一个 dataset 选择一种 source 路线，不要隐式混合 provenance。
+
+#### 选项 A：官方预采集 MolmoData / MolmoBot-Data source shard
+
+当前 integration 文件把这类 source 称为 `MolmoBot-Data`，固定 pool 的 provenance label 使用 `MolmoData`。下载官方 Franka Pick-and-Place validation shard 并放到：
+
+```text
+runtime/mimicgen_pick_and_place/data/molmobot_data/FrankaPickAndPlaceOmniCamConfig/val_shards/00000.tar
+```
+
+使用 selector 的默认 shard 模式生成 source manifest：
+
+```bash
+PNP_SELECT_N=50 $MOLMOSPACES_PYTHON src/pnp/select_pnp_50_source_pool.py
+```
+
+#### 选项 B：本地采集的 Franka datagen HDF5
+
+将同一个 selector 指向一个已验收的 Franka run 目录，或多个已验收 run 的共同父目录：
 
 ```bash
 PNP_SELECT_N=50 $MOLMOSPACES_PYTHON src/pnp/select_pnp_50_source_pool.py \
   --franka-datagen-root /path/to/datagen/pick_and_place_planner_v1
 ```
 
-Franka 模式要求 terminal/persistent success、完整 `0..9` planner phases、末帧 `task_info.success=true`、下游 replay 所需字段和唯一初始状态/动作指纹。输出与后续 MimicGen 脚本兼容。
+Franka 模式递归读取 `house_*/trajectories_batch_*.h5`，要求 terminal/persistent success、完整 `0..9` planner phases、末帧 `task_info.success=true`、下游 replay 所需字段和唯一初始状态/动作指纹。
 
-也可以继续使用原有 MolmoBot shard 路线。下载官方 Pick-and-Place validation shard 并放到：
-
-```text
-runtime/mimicgen_pick_and_place/data/molmobot_data/FrankaPickAndPlaceOmniCamConfig/val_shards/00000.tar
-```
-
-本仓库包含轻量 manifest 和摘要，不包含官方数据 shard 或生成产物。
+本仓库包含轻量 manifest 和摘要，不包含官方 shards、本地生成的 HDF5、视频或其他 runtime artifacts。
 
 ### 4. 首次运行资源 cache 说明
 
@@ -338,8 +368,13 @@ $MOLMOSPACES_PYTHON src/pnp/generate_pick_place_rollout.py \
 以上流程每个 rollout 使用一条源 demo。cross-subtask 路线使用更大的 50-demo 源池，调用 MimicGen `select_src_per_subtask=True`，允许同一 rollout 的不同子任务从不同源 demo 采样：
 
 ```bash
-# 从官方 MolmoBot shard 选取源池。
+# 严格选择一种路线来选取 50 条 sources。
+# 选项 A：官方 MolmoData / MolmoBot-Data shard（默认模式）。
 $MOLMOSPACES_PYTHON src/pnp/select_pnp_50_source_pool.py
+
+# 选项 B：本地采集的 Franka HDF5（与选项 A 二选一）。
+PNP_SELECT_N=50 $MOLMOSPACES_PYTHON src/pnp/select_pnp_50_source_pool.py \
+  --franka-datagen-root /path/to/datagen/pick_and_place_planner_v1
 
 # 收集候选的严格回放 + datagen_info。
 bash src/pnp/run_collect_50cross_datagen_parallel.sh

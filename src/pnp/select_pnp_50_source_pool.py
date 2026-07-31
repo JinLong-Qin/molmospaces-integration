@@ -15,10 +15,7 @@ import numpy as np
 import zstandard as zstd
 
 WORK = Path(os.environ.get("MOLMOSPACES_PNP_WORKDIR", "runtime/mimicgen_pick_and_place"))
-DEFAULT_TAR = (
-    WORK
-    / "data/molmobot_data/FrankaPickAndPlaceOmniCamConfig/val_shards/00000.tar"
-)
+DEFAULT_TAR = WORK / "data/molmobot_data/FrankaPickAndPlaceOmniCamConfig/val_shards/00000.tar"
 OUT = WORK / "artifacts/seeds"
 RAW = OUT / "raw_50demo_crossmix"
 
@@ -199,7 +196,9 @@ def select_from_molmobot_shard(tar_path: Path, count: int):
                                 }
                             )
                             rows.append(candidate)
-                            print("SELECT", len(rows) - 1, house_id, candidate["traj_key"], flush=True)
+                            print(
+                                "SELECT", len(rows) - 1, house_id, candidate["traj_key"], flush=True
+                            )
             finally:
                 reader.close()
     return {
@@ -260,7 +259,14 @@ def select_from_franka_datagen(root: Path, count: int):
                 }
             )
             rows.append(candidate)
-            print("SELECT", len(rows) - 1, house_id, candidate["traj_key"], fingerprint[:12], flush=True)
+            print(
+                "SELECT",
+                len(rows) - 1,
+                house_id,
+                candidate["traj_key"],
+                fingerprint[:12],
+                flush=True,
+            )
 
     if len(rows) < count:
         raise SystemExit(
@@ -310,7 +316,16 @@ def main():
         raise SystemExit(f"only found {len(manifest['seeds'])}/{count}")
     output = OUT / "pnp_seed_manifest_50demo_crossmix.json"
     output.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
-    print(json.dumps({"manifest": str(output), "n": len(manifest["seeds"]), "input_kind": manifest["input_kind"]}, indent=2))
+    print(
+        json.dumps(
+            {
+                "manifest": str(output),
+                "n": len(manifest["seeds"]),
+                "input_kind": manifest["input_kind"],
+            },
+            indent=2,
+        )
+    )
 
 
 if __name__ == "__main__":

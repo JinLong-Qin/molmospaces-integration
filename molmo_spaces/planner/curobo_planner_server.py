@@ -307,7 +307,11 @@ class _CuroboPlannerServicer:
             except Exception as e:
                 log.warning(f"plan_batch failed: {e}")
                 n = len(joint_positions)
-                return {"successes": [False] * n, "trajectories": [[] for _ in range(n)], "solve_time": None}
+                return {
+                    "successes": [False] * n,
+                    "trajectories": [[] for _ in range(n)],
+                    "solve_time": None,
+                }
             # Immediately pull everything to CPU then release the GPU result.
             successes = result.success.cpu().numpy().tolist()
             solve_time = float(result.solve_time) if result.solve_time is not None else None

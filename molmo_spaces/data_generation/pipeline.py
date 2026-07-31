@@ -592,6 +592,7 @@ class ParallelRolloutRunner:
             self.logger.info("Initializing WandB logging...")
             try:
                 import wandb
+
                 self._wandb = wandb
                 self._wandb.init(
                     project=os.environ["WANDB_PROJECT_NAME"],

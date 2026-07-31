@@ -168,9 +168,7 @@ class PickTaskSampler(BaseMujocoTaskSampler):
     def _remove_candidate_object(self, obj_name: str) -> None:
         """Remove an object from candidate_objects list."""
         if obj_name == self.config.task_sampler_config.fixed_pickup_obj_name:
-            log.info(
-                f"Keeping fixed pickup object {obj_name} for retry after scene reset"
-            )
+            log.info(f"Keeping fixed pickup object {obj_name} for retry after scene reset")
             return
         if self.candidate_objects is not None:
             original_len = len(self.candidate_objects)
@@ -585,15 +583,11 @@ class PickTaskSampler(BaseMujocoTaskSampler):
                         f"got {reference_obj_name!r}"
                     )
                 if task_sampler_config.randomize_fixed_pickup_pose:
-                    min_dist, max_dist = (
-                        task_sampler_config.fixed_pickup_placement_radius_range
-                    )
+                    min_dist, max_dist = task_sampler_config.fixed_pickup_placement_radius_range
                     try:
                         placement_point = self._fixed_pickup_placement_point
                         if placement_point is None:
-                            raise RuntimeError(
-                                "Fixed pickup placement point was not initialized"
-                            )
+                            raise RuntimeError("Fixed pickup placement point was not initialized")
                         place_object_near(
                             data=env.current_data,
                             object_id=reference_obj_id,
@@ -605,10 +599,7 @@ class PickTaskSampler(BaseMujocoTaskSampler):
                             z_eps=0.003,
                         )
                     except ObjectPlacementError:
-                        log.info(
-                            f"Failed to randomize fixed pickup object "
-                            f"{fixed_pickup_obj_name}"
-                        )
+                        log.info(f"Failed to randomize fixed pickup object {fixed_pickup_obj_name}")
                         return False
             return True
 
