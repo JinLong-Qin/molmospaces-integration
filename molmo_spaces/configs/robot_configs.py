@@ -113,6 +113,9 @@ class BaseRobotConfig(Config):
     # Action noise configuration - applied per-robot in Robot.apply_action_noise()
     action_noise_config: ActionNoiseConfig | None = None
 
+    # Warp device used by robots with a parallel kinematics implementation.
+    parallel_kinematics_device: str = "cpu"
+
     def model_post_init(self, _context):
         """Ensure action_noise_config is always initialized, even when loading from old configs."""
         if self.action_noise_config is None:

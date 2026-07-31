@@ -298,11 +298,16 @@ class _CuroboPlannerServicer:
                 _apply_world(p, req["obstacles"], context)
             if "lock_joints" in req:
                 _apply_lock_joints(p, req["lock_joints"])
-            result = p.plan_batch(
-                joint_positions=joint_positions,
-                goal_pose_lists=goal_poses,
-                verbose=req.get("verbose", False),
-            )
+            try:
+                result = p.plan_batch(
+                    joint_positions=joint_positions,
+                    goal_pose_lists=goal_poses,
+                    verbose=req.get("verbose", False),
+                )
+            except Exception as e:
+                log.warning(f"plan_batch failed: {e}")
+                n = len(joint_positions)
+                return {"successes": [False] * n, "trajectories": [[] for _ in range(n)], "solve_time": None}
             # Immediately pull everything to CPU then release the GPU result.
             successes = result.success.cpu().numpy().tolist()
             solve_time = float(result.solve_time) if result.solve_time is not None else None

@@ -136,6 +136,25 @@ class AbstractPickAndPlaceObjectTargetTaskSampler(PickTaskSampler, ABC):
         supporting_geom_id = self._select_pickup_object(env)
         pickup_obj_name = self.config.task_config.pickup_obj_name
 
+        task_config = self.config.task_config
+        supporting_body_id = env.current_model.geom_bodyid[supporting_geom_id]
+        task_config.house_index = int(self.current_house_index)
+        task_config.supporting_geom_name = (
+            env.current_model.geom(supporting_geom_id).name
+            or f"geom_id:{supporting_geom_id}"
+        )
+        task_config.supporting_body_name = (
+            env.current_model.body(supporting_body_id).name
+            or f"body_id:{supporting_body_id}"
+        )
+        task_config.robot_name = self.config.robot_config.name
+        task_config.pickup_asset_uid = self.get_asset_uid_from_object(
+            env, pickup_obj_name
+        )
+        task_config.place_receptacle_asset_uid = self.get_asset_uid_from_object(
+            env, self.place_receptacle_name
+        )
+
         context_objects = self._build_context_objects(env, om, pickup_obj_name, supporting_geom_id)
 
         expression_priority, filtered_expression_priority = self._generate_referral_expressions(

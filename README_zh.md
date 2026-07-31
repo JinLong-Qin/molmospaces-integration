@@ -482,3 +482,36 @@ tools/setup_mimicgen_dependency.sh   拉取 MimicGen 和 robomimic 到 vendor/ �
 ## License
 
 上游 MolmoSpaces 代码遵循 Apache License 2.0；见 `LICENSE`。第三方依赖和数据集保留各自 license。本仓库中的集成代码按本仓库 license 作为 research code 发布，除非文件另有说明。
+
+
+## 使用新生成的 Franka PnP HDF5 作为 MimicGen 输入
+
+原有 MolmoBot shard 输入仍是默认方式。若要把本地新生成的 Franka Pick-and-Place HDF5 接入同一 source manifest，先查看固定身份 pool，再用不同 seed 运行独立任务：
+
+```bash
+python scripts/datagen/run_pipeline.py --list_pools
+
+export CUDA_VISIBLE_DEVICES=1
+
+$MOLMOSPACES_PYTHON scripts/datagen/run_pipeline.py \
+  --robot droid --policy planner --task_type pick_and_place \
+  --pool molmodata_potato_bowl_1716 \
+  --samples_per_house 10 --randomize_fixed_pickup_pose \
+  --filter_for_successful_trajectories \
+  --disable_action_noise --require_clean_success \
+  --device gpu --num_workers 1 \
+  --seed 111 --run_name_prefix potato_bowl_1716_seed111
+```
+
+每个 pool 会固定 scene dataset、split、house、pickup object 和 receptacle。不同 pool 必须使用独立输出目录和独立 source HDF5，不能混合计数。每次使用未使用过的 seed 和不同 prefix。`samples_per_house` 是请求保存的轨迹目标数，不是成功保证；每个 run 都要核验 `Success count`、身份元数据、无重试且单调的 planner phases、视频和 HDF5 内实际 trajectory 数。`--device gpu` 只将 Warp parallel IK 切到 CUDA，MuJoCo physics 仍在 CPU。`--num_workers` 控制独立 work item，不能把单 house pool 自动拆分给多个 worker。
+
+选择一个 run 根目录，或包含多个 run 的共同父目录：
+
+```bash
+PNP_SELECT_N=50 $MOLMOSPACES_PYTHON src/pnp/select_pnp_50_source_pool.py \
+  --franka-datagen-root /path/to/datagen/pick_and_place_planner_v1
+```
+
+不传该选项时，selector 仍按原逻辑读取 MolmoBot shard。Franka 模式递归读取 `house_*/trajectories_batch_*.h5`，要求 terminal/persistent success、完整 `0..9` planner phases、末帧 `task_info.success=true`，以及现有 replay/conversion 所需字段；同时按初始任务状态与动作序列的组合指纹去重。输出仍为兼容的 `pnp_seed_manifest_50demo_crossmix.json`，因此后续 datagen-info 与 conversion 命令不变。
+
+这批数据的准确 provenance 是 **synthetic scripted-IK planner expert demos**，不是 human demonstrations，也不是 RB-Y1 CuRobo planner-server trajectories。训练前还必须检查 wrist/exocentric 视频、replay、完整 Pick → grasp/lift → transport → place/release 行为、schema/timing，并确认恰好 50 条唯一且通过验收的轨迹。

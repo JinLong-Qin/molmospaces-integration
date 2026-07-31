@@ -509,3 +509,36 @@ tools/setup_mimicgen_dependency.sh   Helper to fetch MimicGen and robomimic into
 ## License
 
 The upstream MolmoSpaces code is distributed under the Apache License 2.0; see `LICENSE`. Third-party dependencies and datasets retain their own licenses. The integration code in this repository is provided as research code under the same repository license unless a file states otherwise.
+
+
+## Using Newly Generated Franka PnP HDF5 as MimicGen Source Input
+
+The existing MolmoBot shard input remains the default. To build the same source manifest from locally generated Franka Pick-and-Place HDF5 files, first inspect the fixed identity pools and collect independent runs with different seeds:
+
+```bash
+python scripts/datagen/run_pipeline.py --list_pools
+
+export CUDA_VISIBLE_DEVICES=1
+
+$MOLMOSPACES_PYTHON scripts/datagen/run_pipeline.py \
+  --robot droid --policy planner --task_type pick_and_place \
+  --pool molmodata_potato_bowl_1716 \
+  --samples_per_house 10 --randomize_fixed_pickup_pose \
+  --filter_for_successful_trajectories \
+  --disable_action_noise --require_clean_success \
+  --device gpu --num_workers 1 \
+  --seed 111 --run_name_prefix potato_bowl_1716_seed111
+```
+
+Each pool fixes its scene dataset, split, house, pickup object, and receptacle. Keep each pool in a separate output directory and source HDF5 dataset. Repeat with unused seeds and distinct prefixes. `samples_per_house` is a requested saved-trajectory target, not a guaranteed success count: verify `Success count`, identities, retry-free planner phases, videos, and the actual HDF5 trajectory count after every run. `--device gpu` selects CUDA only for Warp parallel IK; MuJoCo physics remains CPU-based. `--num_workers` controls independent work items and does not split a single-house pool across workers.
+
+Point the selector at one run directory or a parent containing several run directories:
+
+```bash
+PNP_SELECT_N=50 $MOLMOSPACES_PYTHON src/pnp/select_pnp_50_source_pool.py \
+  --franka-datagen-root /path/to/datagen/pick_and_place_planner_v1
+```
+
+When this option is omitted, the selector continues to read the original MolmoBot shard. Franka mode recursively reads `house_*/trajectories_batch_*.h5`, requires terminal and persistent success, the complete planner phase set `0..9`, terminal `task_info.success=true`, and the fields needed by the existing replay/conversion path. It rejects duplicate combined initial-state/action fingerprints and emits the existing `pnp_seed_manifest_50demo_crossmix.json` schema, so the downstream datagen-info and conversion commands above remain unchanged.
+
+These locally generated trajectories are **synthetic scripted-IK planner expert demos**. They are not human demonstrations and are not RB-Y1 CuRobo planner-server trajectories. Before training, also inspect wrist/exocentric videos and verify replay, full Pick → grasp/lift → transport → place/release behavior, schema/timing, and exactly 50 unique accepted trajectories.

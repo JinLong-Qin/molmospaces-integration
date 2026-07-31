@@ -46,3 +46,15 @@ Committed lightweight evidence:
 Valid claim: the repository includes a 50-demo cross-subtask MimicGen diagnostic route, including source-pool selection, datagen-info collection, HDF5 summary, and bounded select-src-per-subtask pilot traces.
 
 Invalid claim: do not report the broad random 50-demo cross-subtask pilot as a successful generated dataset. The committed pilot evidence records diagnostic failures under broad random mixing and motivates compatibility-filtered source/target subsets.
+
+
+## Alternative Franka datagen source
+
+The existing command without extra options continues to read the official MolmoBot shard. To select the 50-demo manifest from newly generated Franka PnP HDF5 files:
+
+```bash
+PNP_SELECT_N=50 python src/pnp/select_pnp_50_source_pool.py \
+  --franka-datagen-root /path/to/datagen/pick_and_place_planner_v1
+```
+
+This scans one or more run directories recursively, applies strict success/schema/full-phase gates, removes duplicate combined initial-state/action fingerprints, and writes the same manifest consumed by the remaining commands in this workline. Confirm exactly 50 unique full Pick-and-Place trajectories and inspect replay plus wrist/exocentric videos before treating the pool as training input.

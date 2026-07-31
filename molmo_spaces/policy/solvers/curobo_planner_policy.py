@@ -268,9 +268,13 @@ class CuroboPlannerPolicy(PlannerPolicy):
         else:
             max_steps = getattr(self.config.policy_config, "max_steps_per_waypoint", 100)
             if self.steps_spent_in_waypoint >= max_steps:
+                current_joint_pos = self._get_current_joint_positions()
+                joint_diff = np.abs(np.array(current_joint_pos) - np.array(waypoint))
                 log.warning(
-                    f"[TIMEOUT] Timed out on reaching waypoint {self.trajectory_index} after "
-                    f"{self.steps_spent_in_waypoint} steps. Will re-plan..."
+                    f"[TIMEOUT DIAG] waypoint={self.trajectory_index}/{len(self.planned_trajectory)}, "
+                    f"max_joint_err={float(np.max(joint_diff)):.4f} rad, "
+                    f"mean_joint_err={float(np.mean(joint_diff)):.4f} rad, "
+                    f"steps={self.steps_spent_in_waypoint}/{max_steps}"
                 )
                 max_reattempts = getattr(self.config.policy_config, "max_planning_reattempts", 3)
                 if self.retry_count > max_reattempts:

@@ -186,3 +186,15 @@ The 100-success collection was still in progress at the time of this snapshot. D
 ## License
 
 This repository contains integration glue and experiment scripts. Upstream MolmoSpaces, MimicGen, robomimic, and MolmoBot-Data retain their own licenses and terms. Check those upstream licenses before redistributing data or derived artifacts.
+
+
+## Optional locally generated Franka source pool
+
+The released workflow still reads the official MolmoBot shard by default. To use newly generated Franka Pick-and-Place HDF5 files without changing the downstream MimicGen workflow:
+
+```bash
+PNP_SELECT_N=50 ${MOLMOSPACES_PYTHON} src/pnp/select_pnp_50_source_pool.py \
+  --franka-datagen-root /path/to/datagen/pick_and_place_planner_v1
+```
+
+The path may be one run or a parent containing several runs. The selector recursively scans `house_*/trajectories_batch_*.h5`, keeps only complete strict-success PnP trajectories, deduplicates combined initial-state/action fingerprints, and writes the existing compatible manifest. Verify actual saved counts, videos, replay, and exactly 50 unique trajectories before conversion or training. Provenance: synthetic scripted-IK planner expert demos; not human demonstrations and not RB-Y1 planner-server trajectories.

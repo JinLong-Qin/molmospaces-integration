@@ -74,7 +74,10 @@ class FrankaRobot(Robot):
         )
         self._kinematics = MlSpacesKinematics(config.robot_config)
 
-        self._parallel_kinematics = SimpleWarpKinematics(config.robot_config)
+        self._parallel_kinematics = SimpleWarpKinematics(
+            config.robot_config,
+            device=config.robot_config.parallel_kinematics_device,
+        )
         arm_controller_cls = (
             JointPosController
             if config.robot_config.command_mode == {}

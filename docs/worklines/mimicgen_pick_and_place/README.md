@@ -46,3 +46,15 @@ Lightweight committed evidence includes source manifests, HDF5 summaries, parser
 Valid claim: this repository contains a reproducible MolmoSpaces Pick-and-Place integration path for source replay, MimicGen-format conversion, datagen-info extraction, and generated rollout execution.
 
 Invalid claim: do not treat a summary file or HDF5 conversion alone as task success. Accepted generated demonstrations require full simulator rollout, final success, success persistence to the end, a post-hold stability window, and non-empty video/trace evidence.
+
+
+## Newly generated Franka HDF5 input
+
+The source selector can now consume locally generated Franka Pick-and-Place HDF5 while retaining the original MolmoBot shard input:
+
+```bash
+PNP_SELECT_N=50 python src/pnp/select_pnp_50_source_pool.py \
+  --franka-datagen-root /path/to/datagen/pick_and_place_planner_v1
+```
+
+Franka mode recursively reads `house_*/trajectories_batch_*.h5`, requires complete phases `0..9`, terminal/persistent task success and the replay fields used downstream, and rejects duplicate initial-state/action fingerprints. Its manifest remains compatible with the existing replay, datagen-info, robomimic conversion, and MimicGen generation path. Treat `samples_per_house` only as a requested workload and verify actual HDF5 success counts. The source provenance is synthetic scripted-IK planner expert, not human or RB-Y1 planner-server data.

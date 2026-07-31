@@ -67,3 +67,15 @@ bash -n src/pnp/run_50cross_selectsrc_pilot.sh
 ## Evidence boundary
 
 Scripts that convert or generate files are not by themselves task-success evidence. Accepted generated demonstrations require full simulator rollout, final success, persistent success through the end, post-hold stability, and visual/trace evidence.
+
+
+## Optional Franka datagen HDF5 input
+
+`select_pnp_50_source_pool.py` keeps the original MolmoBot shard behavior by default. Pass `--franka-datagen-root PATH` to recursively select strict-success trajectories from locally generated `house_*/trajectories_batch_*.h5` files instead:
+
+```bash
+PNP_SELECT_N=50 python src/pnp/select_pnp_50_source_pool.py \
+  --franka-datagen-root /path/to/datagen/pick_and_place_planner_v1
+```
+
+The resulting manifest is compatible with `collect_datagen_info_50cross.py` and `convert_seed_set_to_robomimic_50cross.py`. Franka selection requires terminal/persistent success, phases `0..9`, terminal task success, required replay fields, and unique initial-state/action fingerprints. These are synthetic scripted-IK planner expert demos, not human demonstrations or RB-Y1 planner-server trajectories.

@@ -80,7 +80,19 @@ class PickAndPlaceReceptacleTaskSampler(AbstractPickAndPlaceObjectTargetTaskSamp
 
         task_sampler_config = self.config.task_sampler_config
 
-        if not task_sampler_config.place_receptacle_types:
+        fixed_uid = task_sampler_config.fixed_place_receptacle_uid
+        if fixed_uid is not None:
+            cache_key = f"fixed:{fixed_uid}"
+            annotation = ObjectMeta.annotation(fixed_uid)
+            if annotation is None:
+                raise ValueError(f"Unknown fixed receptacle asset UID: {fixed_uid}")
+            if not valid_receptacle(annotation):
+                raise ValueError(
+                    f"Fixed receptacle does not pass size/property filters: {fixed_uid}"
+                )
+            valid_uids = [fixed_uid]
+            self._receptacle_cache[cache_key] = {fixed_uid: annotation}
+        elif not task_sampler_config.place_receptacle_types:
             cache_key = "synset_receptacles"
             if cache_key not in self._receptacle_cache:
                 all_valid = _get_cached_valid_receptacles()
@@ -120,6 +132,9 @@ class PickAndPlaceReceptacleTaskSampler(AbstractPickAndPlaceObjectTargetTaskSamp
 
         if len(valid_uids) == 0:
             raise ValueError("No valid receptacle assets found")
+
+        if fixed_uid is not None and task_sampler_config.num_place_receptacles != 1:
+            raise ValueError("A fixed receptacle UID requires num_place_receptacles=1")
 
         num_receptacles = getattr(task_sampler_config, "num_place_receptacles", 2)
         num_receptacles = min(num_receptacles, len(valid_uids))

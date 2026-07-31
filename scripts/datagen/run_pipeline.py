@@ -6,6 +6,7 @@ from typing import Any
 
 import mujoco
 import numpy as np
+import warp as wp
 
 import molmo_spaces.configs.policy_configs_baselines  # noqa: F401
 from molmo_spaces.configs.abstract_exp_config import MlSpacesExpConfig
@@ -18,6 +19,7 @@ from molmo_spaces.configs.policy_configs_baselines import (
     TeleopPolicyConfig,
 )
 from robot_conversion_patches import patch_droid_config_for_rum
+from pnp_pools import PNP_POOLS, get_pool
 
 from molmo_spaces.configs.camera_configs import (
     BimanualYamCameraSystem,
@@ -131,6 +133,16 @@ class MyRolloutRunner(ParallelRolloutRunner):
 
         # Check success if method exists
         success = task.judge_success() if hasattr(task, "judge_success") else False
+        if (
+            success
+            and getattr(getattr(policy, "policy_config", None), "max_retries", None) == 0
+            and getattr(policy, "retry_count", 0) != 0
+        ):
+            log.warning(
+                "Rejecting successful trajectory because clean-success mode observed "
+                f"{policy.retry_count} planner retries"
+            )
+            success = False
 
         return success
 
@@ -139,6 +151,28 @@ def setup_config(args: argparse.ArgumentParser) -> MlSpacesExpConfig:
     task_type = args.task_type  # pick or open or nav_to_obj
     robot = args.robot  #  droid or rum
     single_step = args.single_step
+
+    if args.pool:
+        pool = get_pool(args.pool)
+        if task_type != "pick_and_place":
+            raise ValueError("--pool requires --task_type pick_and_place")
+        args.scene_dataset = pool["scene_dataset"]
+        args.data_split = pool["data_split"]
+        args.house_inds = pool["house_inds"]
+        args.pickup_obj_name = pool["pickup_obj_name"]
+        args.fixed_place_receptacle_uid = pool["fixed_place_receptacle_uid"]
+        log.info(
+            "Using PnP pool %s: scene=%s split=%s house=%s pickup=%s "
+            "receptacle=%s source=%s status=%s",
+            args.pool,
+            args.scene_dataset,
+            args.data_split,
+            args.house_inds,
+            args.pickup_obj_name,
+            args.fixed_place_receptacle_uid,
+            pool["source"],
+            pool["status"],
+        )
 
     if task_type == "pick":
         datagen_cfg = PickBaseConfig()
@@ -175,9 +209,27 @@ def setup_config(args: argparse.ArgumentParser) -> MlSpacesExpConfig:
     datagen_cfg.task_horizon = 300
     if args.target_types:
         datagen_cfg.task_sampler_config.pickup_types = args.target_types.split(",")
-    datagen_cfg.task_sampler_config.samples_per_house = (
-        args.samples_per_house
-    )  # overwrite with scene samples
+    if args.pickup_obj_name:
+        datagen_cfg.task_config.pickup_obj_name = args.pickup_obj_name
+        datagen_cfg.task_sampler_config.fixed_pickup_obj_name = args.pickup_obj_name
+        datagen_cfg.task_sampler_config.randomize_fixed_pickup_pose = (
+            args.randomize_fixed_pickup_pose
+        )
+        datagen_cfg.task_sampler_config.fixed_pickup_placement_radius_range = (
+            args.fixed_pickup_min_dist,
+            args.fixed_pickup_max_dist,
+        )
+    if args.fixed_place_receptacle_uid:
+        if task_type != "pick_and_place":
+            raise ValueError(
+                "--fixed_place_receptacle_uid is only valid for pick_and_place"
+            )
+        datagen_cfg.task_sampler_config.fixed_place_receptacle_uid = (
+            args.fixed_place_receptacle_uid
+        )
+        datagen_cfg.task_sampler_config.num_place_receptacles = 1
+        datagen_cfg.task_sampler_config.episodes_per_receptacle = 0
+    datagen_cfg.task_sampler_config.samples_per_house = args.samples_per_house
 
     # randomize scene
     datagen_cfg.task_sampler_config.randomize_lighting = (
@@ -190,10 +242,7 @@ def setup_config(args: argparse.ArgumentParser) -> MlSpacesExpConfig:
         args.randomize_dynamics or args.randomize_scene
     )
 
-    # datagen_cfg.num_workers = args.samples_per_house if not args.use_passive_viewer else 1
-    datagen_cfg.filter_for_successful_trajectories = (
-        True if args.filter_for_successful_trajectories else False
-    )  # if False, Save both successful and failed trajectories
+    datagen_cfg.filter_for_successful_trajectories = args.filter_for_successful_trajectories
 
     if args.eval is not None:
         datagen_cfg.frozen_config_path = Path(args.eval)
@@ -282,6 +331,9 @@ def get_output_dir(args, exp_config):
 
 
 def main(args: argparse.ArgumentParser) -> None:
+    if args.pool and (args.eval or args.config):
+        raise ValueError("--pool cannot be combined with --eval or --config")
+
     if args.eval:  # 1) load an benchmark config
         log.info(f"Loading pre-saved config from {args.eval}. This will override other settings.")
         exp_config = MlSpacesExpConfig.load_config(Path(args.eval))
@@ -295,13 +347,27 @@ def main(args: argparse.ArgumentParser) -> None:
         exp_config = setup_config(args)
 
     # overload some config values
-    exp_config.num_workers = 1
+    if args.num_workers < 1:
+        raise ValueError("--num_workers must be at least 1")
+    if args.compute_device == "gpu" and not wp.is_cuda_available():
+        raise RuntimeError("--compute_device gpu requested, but Warp CUDA is unavailable")
+    exp_config.num_workers = args.num_workers
     exp_config.use_passive_viewer = args.viewer
 
     # Overload robot
     if args.robot == "rum" or args.policy == "rum":
         exp_config.robot_config = FloatingRUMRobotConfig()
         exp_config.robot_config.init_qpos_noise_range = None  # no randomization
+    exp_config.robot_config.parallel_kinematics_device = (
+        "cuda" if args.compute_device == "gpu" else "cpu"
+    )
+    log.info(
+        "Runtime devices: mujoco_physics=cpu parallel_kinematics=%s; num_workers=%d",
+        exp_config.robot_config.parallel_kinematics_device,
+        exp_config.num_workers,
+    )
+    if args.disable_action_noise:
+        exp_config.robot_config.action_noise_config.enabled = False
 
     # Overload policy
     policy = None
@@ -322,6 +388,11 @@ def main(args: argparse.ArgumentParser) -> None:
     else:
         raise ValueError(f"Unknown policy option {args.policy}")
 
+    if args.require_clean_success:
+        if args.policy != "planner" or not hasattr(exp_config.policy_config, "max_retries"):
+            raise ValueError("--require_clean_success requires an object-manipulation planner")
+        exp_config.policy_config.max_retries = 0
+
     exp_config.output_dir = get_output_dir(args, exp_config)
     exp_config.save_config()
     runner = MyRolloutRunner(exp_config)
@@ -333,6 +404,25 @@ if __name__ == "__main__":
     args.add_argument("--eval", type=str, default=None, help="Load a fixed benchmark")
     args.add_argument("--config", type=str, default=None, help="Load a fixed config")
     args.add_argument("--viewer", action="store_true", help="single step")
+    args.add_argument(
+        "--device",
+        "--compute_device",
+        dest="compute_device",
+        choices=["cpu", "gpu"],
+        default="cpu",
+        help=(
+            "device for Warp parallel IK; use CUDA_VISIBLE_DEVICES to select a GPU; "
+            "MuJoCo physics remains on CPU"
+        ),
+    )
+    args.add_argument(
+        "--worker_num",
+        "--num_workers",
+        dest="num_workers",
+        type=int,
+        default=1,
+        help="number of rollout worker processes; one work item cannot be split across workers",
+    )
     args.add_argument(
         "--robot", type=str, default="droid", help="franka, droid, rum, rby1, yam, or bimanual_yam"
     )
@@ -353,11 +443,32 @@ if __name__ == "__main__":
         default="ithor",
         help="ithor, procthor-10k, procthor-objaverse, procthor-100k-debug",
     )
-    args.add_argument("--data_split", type=str, default="train", help="train or test")
+    args.add_argument(
+        "--data_split",
+        type=str,
+        default="train",
+        help="train, val, or test; fixed automatically when --pool is used",
+    )
     args.add_argument("--house_inds", type=int, default=1, help="house indices")
     args.add_argument(
         "--target_types", type=str, default=None, help="comma separated list of target types"
     )
+    args.add_argument(
+        "--pickup_obj_name", type=str, default=None, help="exact scene pickup body name"
+    )
+    args.add_argument(
+        "--fixed_place_receptacle_uid",
+        type=str,
+        default=None,
+        help="exact added receptacle asset UID",
+    )
+    args.add_argument(
+        "--randomize_fixed_pickup_pose",
+        action="store_true",
+        help="resample the fixed pickup on its original supporting geometry",
+    )
+    args.add_argument("--fixed_pickup_min_dist", type=float, default=0.02)
+    args.add_argument("--fixed_pickup_max_dist", type=float, default=0.12)
     args.add_argument(
         "--samples_per_house", type=int, default=4, help="number of samples per house"
     )
@@ -370,7 +481,38 @@ if __name__ == "__main__":
     args.add_argument("--randomize_textures", type=bool, default=False, help="randomize textures")
     args.add_argument("--randomize_dynamics", type=bool, default=False, help="randomize dynamics")
     args.add_argument("--randomize_scene", type=bool, default=False, help="randomize scene all")
+    args.add_argument(
+        "--disable_action_noise",
+        action="store_true",
+        help="disable per-step robot action noise",
+    )
+    args.add_argument(
+        "--require_clean_success",
+        action="store_true",
+        help="reject planner trajectories that require any retry",
+    )
+    args.add_argument(
+        "--pool",
+        type=str,
+        default=None,
+        choices=sorted(PNP_POOLS),
+        help="use a fixed MolmoData-derived PnP identity pool",
+    )
+    args.add_argument(
+        "--list_pools",
+        action="store_true",
+        help="list available fixed PnP pools and exit",
+    )
     args.add_argument("--seed", type=int, default=2, help="random seed")
     args.add_argument("--run_name_prefix", type=str, default="", help="prefix for run name")
     args = args.parse_args()
+    if args.list_pools:
+        for name in sorted(PNP_POOLS):
+            pool = PNP_POOLS[name]
+            print(
+                f"{name}\tscene={pool['scene_dataset']}\tsplit={pool['data_split']}\t"
+                f"house={pool['house_inds']}\tpickup={pool['pickup_obj_name']}\t"
+                f"receptacle={pool['fixed_place_receptacle_uid']}\tstatus={pool['status']}"
+            )
+        raise SystemExit(0)
     main(args)

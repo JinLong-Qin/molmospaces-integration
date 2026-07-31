@@ -81,6 +81,13 @@ class PickAndPlaceTaskConfig(PickTaskConfig):
     max_place_receptacle_rot_displacement: float = np.radians(
         45
     )  # maximum rotation the receptacle can be rotated
+    # Stable task identity saved with each controlled source trajectory.
+    house_index: int | None = None
+    supporting_geom_name: str | None = None
+    supporting_body_name: str | None = None
+    robot_name: str | None = None
+    pickup_asset_uid: str | None = None
+    place_receptacle_asset_uid: str | None = None
     carry_forward_rel_pos_threshold: float = 0.005  # meters
     carry_forward_rel_rot_threshold: float = np.radians(10)  # radians
 

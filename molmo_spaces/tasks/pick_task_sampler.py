@@ -162,9 +162,16 @@ class PickTaskSampler(BaseMujocoTaskSampler):
         self._added_pickup_staging_poses: dict = {}
         self.added_objects: dict = {}
         self._valid_candidate_uids: list[str] | None = None
+        self._fixed_pickup_supporting_geom_id: int | None = None
+        self._fixed_pickup_placement_point: np.ndarray | None = None
 
     def _remove_candidate_object(self, obj_name: str) -> None:
         """Remove an object from candidate_objects list."""
+        if obj_name == self.config.task_sampler_config.fixed_pickup_obj_name:
+            log.info(
+                f"Keeping fixed pickup object {obj_name} for retry after scene reset"
+            )
+            return
         if self.candidate_objects is not None:
             original_len = len(self.candidate_objects)
             self.candidate_objects = [obj for obj in self.candidate_objects if obj.name != obj_name]
@@ -210,6 +217,31 @@ class PickTaskSampler(BaseMujocoTaskSampler):
 
         # Shuffle order deterministically per house/task for variety
         candidate_objects = self._get_scene_objects(env)
+        fixed_pickup_obj_name = self.config.task_sampler_config.fixed_pickup_obj_name
+        if fixed_pickup_obj_name is not None:
+            candidate_objects = [
+                obj for obj in candidate_objects if obj.name == fixed_pickup_obj_name
+            ]
+            if not candidate_objects:
+                raise HouseInvalidForTask(
+                    f"Fixed pickup object {fixed_pickup_obj_name!r} is not a valid "
+                    f"candidate in house {self.current_house_index}"
+                )
+            fixed_pickup_obj = candidate_objects[0]
+            self._fixed_pickup_supporting_geom_id = get_supporting_geom(
+                data, fixed_pickup_obj.object_id
+            )
+            if self._fixed_pickup_supporting_geom_id is None:
+                raise HouseInvalidForTask(
+                    f"Fixed pickup object {fixed_pickup_obj_name!r} has no supporting "
+                    f"geometry in house {self.current_house_index}"
+                )
+            self._fixed_pickup_placement_point = body_base_pos(
+                data, fixed_pickup_obj.object_id
+            ).copy()
+        else:
+            self._fixed_pickup_supporting_geom_id = None
+            self._fixed_pickup_placement_point = None
         candidate_objects = self.balance_sample_names(candidate_objects)
         np.random.shuffle(candidate_objects)
         self.candidate_objects = candidate_objects
@@ -542,8 +574,42 @@ class PickTaskSampler(BaseMujocoTaskSampler):
         candidate.  Raise ``ValueError`` to skip *and* permanently remove
         the candidate from the list.
         """
-        from_set_mode = self.config.task_sampler_config.added_pickup_objects is not None
+        task_sampler_config = self.config.task_sampler_config
+        from_set_mode = task_sampler_config.added_pickup_objects is not None
         if not from_set_mode:
+            fixed_pickup_obj_name = task_sampler_config.fixed_pickup_obj_name
+            if fixed_pickup_obj_name is not None:
+                if reference_obj_name != fixed_pickup_obj_name:
+                    raise ValueError(
+                        f"Expected fixed pickup object {fixed_pickup_obj_name!r}, "
+                        f"got {reference_obj_name!r}"
+                    )
+                if task_sampler_config.randomize_fixed_pickup_pose:
+                    min_dist, max_dist = (
+                        task_sampler_config.fixed_pickup_placement_radius_range
+                    )
+                    try:
+                        placement_point = self._fixed_pickup_placement_point
+                        if placement_point is None:
+                            raise RuntimeError(
+                                "Fixed pickup placement point was not initialized"
+                            )
+                        place_object_near(
+                            data=env.current_data,
+                            object_id=reference_obj_id,
+                            placement_point=placement_point,
+                            min_dist=min_dist,
+                            max_dist=max_dist,
+                            max_tries=task_sampler_config.max_object_placement_attempts,
+                            supporting_geom_id=supporting_geom_id,
+                            z_eps=0.003,
+                        )
+                    except ObjectPlacementError:
+                        log.info(
+                            f"Failed to randomize fixed pickup object "
+                            f"{fixed_pickup_obj_name}"
+                        )
+                        return False
             return True
 
         om = env.object_managers[env.current_batch_index]
@@ -631,7 +697,10 @@ class PickTaskSampler(BaseMujocoTaskSampler):
             reference_obj_name = self.config.task_config.pickup_obj_name
             reference_obj_id = om.get_object_body_id(reference_obj_name)
 
-            supporting_geom_id = get_supporting_geom(env.current_data, reference_obj_id)
+            if reference_obj_name == self.config.task_sampler_config.fixed_pickup_obj_name:
+                supporting_geom_id = self._fixed_pickup_supporting_geom_id
+            else:
+                supporting_geom_id = get_supporting_geom(env.current_data, reference_obj_id)
             if supporting_geom_id is None:
                 log.info(f"Failed to get a valid supporting geom_id for {reference_obj_name}")
                 self._remove_candidate_object(reference_obj_name)

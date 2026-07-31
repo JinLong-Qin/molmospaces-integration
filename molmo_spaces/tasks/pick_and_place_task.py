@@ -246,6 +246,14 @@ class PickAndPlaceTask(BaseMujocoTask):
             text=text,
             object_name=self.config.task_config.pickup_obj_name,
             place_receptacle_name=self.config.task_config.place_receptacle_name,
+            house_index=self.config.task_config.house_index,
+            supporting_geom_name=self.config.task_config.supporting_geom_name,
+            supporting_body_name=self.config.task_config.supporting_body_name,
+            robot_name=self.config.task_config.robot_name,
+            pickup_asset_uid=self.config.task_config.pickup_asset_uid,
+            place_receptacle_asset_uid=(
+                self.config.task_config.place_receptacle_asset_uid
+            ),
         )
         obs_scene.update(obs_extra)
         return obs_scene

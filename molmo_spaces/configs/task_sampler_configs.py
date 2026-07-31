@@ -107,6 +107,11 @@ class PickTaskSamplerConfig(ObjectCentricTaskSamplerConfig):
     max_object_placement_attempts: int = 200
     max_robot_placement_attempts: int = 10
 
+    # Exact scene object used by controlled source-data collection.
+    fixed_pickup_obj_name: str | None = None
+    randomize_fixed_pickup_pose: bool = False
+    fixed_pickup_placement_radius_range: tuple[float, float] = (0.02, 0.12)
+
     # Receptacle retry parameters
     max_receptacle_attempts: int = 10  # Maximum number of different receptacles to try
 
@@ -203,6 +208,8 @@ class PickAndPlaceTaskSamplerConfig(PickTaskSamplerConfig):
     # When empty or None, uses synset-based filtering for receptacles/all synsets we have judged to be appropriate for "in or on" placement.
     # Otherwise, uses explicit type list (legacy behavior).
     place_receptacle_types: list[str] = []
+    # Exact added-object asset UID. None preserves the existing random selection.
+    fixed_place_receptacle_uid: str | None = None
     place_receptacle_namespace: str = "place_receptacle/"
     max_robot_to_place_receptacle_dist: float = 0.7
     min_object_to_receptacle_dist: float = 0.15

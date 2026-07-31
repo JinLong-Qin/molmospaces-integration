@@ -122,3 +122,54 @@ Other useful scripts in `scripts/datagen/`:
 1. **Start small** — use a debug config (e.g. `DoorOpeningDebugConfig`) before scaling up.
 2. **Check outputs** — inspect a few houses to confirm trajectories and videos look correct.
 4. **WandB logging** — configs can enable WandB tracking; set `use_wandb=True` and configure `wandb_project` in your config.
+
+
+## Franka Pick-and-Place source collection for MimicGen
+
+`run_pipeline.py` includes fixed identity pools derived from successful MolmoData
+demonstrations. List them before collection:
+
+```bash
+python scripts/datagen/run_pipeline.py --list_pools
+```
+
+Each pool fixes the scene dataset, data split, house, pickup object, and receptacle.
+Do not combine trajectories from different pools in one source HDF5 dataset.
+
+The following example requests ten clean trajectories from one pool on physical
+GPU 1. MuJoCo physics remains CPU-based; `--device gpu` moves Franka's Warp
+parallel IK to the selected CUDA device.
+
+```bash
+export CUDA_VISIBLE_DEVICES=1
+
+python scripts/datagen/run_pipeline.py \
+  --robot droid --policy planner --task_type pick_and_place \
+  --pool molmodata_potato_bowl_1716 \
+  --samples_per_house 10 --randomize_fixed_pickup_pose \
+  --filter_for_successful_trajectories \
+  --disable_action_noise --require_clean_success \
+  --device gpu --num_workers 1 \
+  --seed 111 --run_name_prefix potato_bowl_1716_seed111
+```
+
+The pool supplies `scene_dataset`, `data_split`, and `house_inds`; command-line
+values for those fields are intentionally overridden. `--num_workers` controls
+independent rollout work items, so increasing it does not split this single-house
+pool across workers. Use distinct seeds and output prefixes for separate runs.
+
+`samples_per_house=10` is the target number of saved trajectories, not proof that
+ten valid demonstrations were produced. IK or task-sampling failures can stop a
+run early. Accept a run only after checking the final `Success count`, HDF5
+trajectory count and identities, monotonic planner phases, retry count, and both
+wrist and exocentric videos. These are synthetic scripted-IK planner expert
+demonstrations, not human demonstrations.
+
+To feed collected HDF5 files into the existing MimicGen workline:
+
+```bash
+PNP_SELECT_N=50 python src/pnp/select_pnp_50_source_pool.py \
+  --franka-datagen-root /path/to/datagen/pick_and_place_planner_v1
+```
+
+The selector requires full PnP phases, persistent terminal success and downstream schema fields, and deduplicates initial-state/action fingerprints. The data are synthetic scripted-IK planner expert demonstrations, not human demonstrations or RB-Y1 planner-server trajectories.

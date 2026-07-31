@@ -18,7 +18,6 @@ import mujoco
 import psutil
 import torch
 
-import wandb
 from molmo_spaces.configs.abstract_exp_config import MlSpacesExpConfig
 from molmo_spaces.molmo_spaces_constants import get_scenes
 from molmo_spaces.policy.base_policy import BasePolicy
@@ -588,10 +587,13 @@ class ParallelRolloutRunner:
 
         # WandB initialization (optional, based on environment variables)
         self.wandb_enabled = False
+        self._wandb = None
         if "WANDB_RUN_NAME" in os.environ and "WANDB_PROJECT_NAME" in os.environ:
             self.logger.info("Initializing WandB logging...")
             try:
-                wandb.init(
+                import wandb
+                self._wandb = wandb
+                self._wandb.init(
                     project=os.environ["WANDB_PROJECT_NAME"],
                     entity=os.environ.get("WANDB_ENTITY", None),
                     name=os.environ["WANDB_RUN_NAME"],
@@ -1197,7 +1199,7 @@ class ParallelRolloutRunner:
         self.logger.info("Received SIGTERM. Initiating graceful shutdown...")
         if self.wandb_enabled:
             try:
-                wandb.finish()
+                self._wandb.finish()
             except Exception as e:
                 self.logger.warning(f"WandB cleanup on SIGTERM failed: {e}")
 
@@ -1279,7 +1281,7 @@ class ParallelRolloutRunner:
                         completion_percentage = (completed + skipped) / total_work_items * 100
 
                         # Log to WandB
-                        wandb.log(
+                        self._wandb.log(
                             {
                                 "elapsed_time_seconds": elapsed_time,
                                 "elapsed_time_hours": elapsed_time / 3600,
@@ -1349,7 +1351,7 @@ class ParallelRolloutRunner:
         if self.wandb_enabled:
             try:
                 final_elapsed_time = time.time() - start_time
-                wandb.log(
+                self._wandb.log(
                     {
                         "final_success_count": success_count_val,
                         "final_total_count": total_count_val,
@@ -1360,7 +1362,7 @@ class ParallelRolloutRunner:
                         "final_elapsed_time_hours": final_elapsed_time / 3600,
                     }
                 )
-                wandb.finish()
+                self._wandb.finish()
                 self.logger.info("WandB logging finished")
             except Exception as e:
                 self.logger.warning(f"WandB final logging failed: {e}")
