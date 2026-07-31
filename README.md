@@ -47,19 +47,15 @@ Also included: the upstream MolmoSpaces source snapshot, lightweight manifests a
 
 Large runtime data are excluded from Git: official shards, generated HDF5 files, rollout directories, simulator logs, PID files, caches, videos, local machine paths, and internal planning ledgers. Worklines that use such files keep a README, lightweight inventory, or regeneration entrypoint instead of committing the raw artifact.
 
-## Reproduction Notes
+## Primary Reproduction Path
 
-This repository contains multiple worklines with different dependency surfaces. The default `pip install -e ".[mujoco]"` setup is enough for MuJoCo-based replay, inspection, and the public `src/pnp/` MimicGen integration scripts, but it is not enough for RB-Y1 scripted-planner data generation.
+The primary workflow in this repository is:
 
-In particular:
+> Franka Pick-and-Place datagen -> validated HDF5/video artifacts -> MimicGen source conversion and rollout generation
 
-- `src/pnp/` worklines use the Pick-and-Place integration code on top of MolmoBot source trajectories and do not require CuRobo just to inspect manifests, replay source episodes, or parse source datasets.
-- `molmo_spaces.data_generation.main RBY1PickDataGenConfig` and `RBY1PickAndPlaceDataGenConfig` are a different path: they instantiate the official RB-Y1 scripted/planner data-generation pipeline and require `curobo`.
-- Browser teleoperation for bimanual YAM is yet another path and should not be conflated with scripted/planner expert collection.
+The command-line value `--robot droid` selects a **Franka robot with DROID-style cameras**. It does not select an RB-Y1 robot. The RB-Y1 CuRobo/planner-server pipeline is a separate optional upstream workline and is not required for the Franka workflow below. See [`docs/worklines/molmospaces_official_reproduction/README.md`](docs/worklines/molmospaces_official_reproduction/README.md) only if that separate workline is your goal.
 
-If your goal is to reproduce single-arm RB-Y1 scripted/planner expert rollouts, read the CuRobo section below before trying to instantiate `RBY1PickDataGenConfig` or `RBY1PickAndPlaceDataGenConfig`.
-
-## Quick Start
+## Franka Datagen Quick Start
 
 ### 1. Clone
 
@@ -95,108 +91,82 @@ source .venv/bin/activate
 uv pip install --upgrade pip setuptools wheel
 ```
 
-### 3. Install MolmoSpaces
+### 3. Install the Franka datagen dependencies
 
-For the MuJoCo-based Pick-and-Place integration:
+Install MolmoSpaces with the MuJoCo extra. Franka datagen does not require CuRobo or an RB-Y1 planner server.
 
 ```bash
 pip install -e ".[mujoco]"
-```
-
-**Note on `pip install -e`**: the upstream MolmoSpaces `pyproject.toml` uses a build backend that does not support `build_editable` (PEP 660). If `pip install -e` fails with a message about missing `build_editable`, the package may still import correctly. If you see `ModuleNotFoundError: No module named 'molmo_spaces'` when running scripts, add the project root to `PYTHONPATH`:
-
-```bash
 export PYTHONPATH=$PWD:${PYTHONPATH:-}
 ```
 
-**Note on SOCKS proxies**: if your machine uses a SOCKS proxy (e.g. `all_proxy=socks5://...`), MolmoSpaces downloads CLIP weights through `httpx`, which requires the `socksio` package. If you see `Using SOCKS proxy, but the 'socksio' package is not installed`, install it:
+If a SOCKS proxy is configured and `httpx` reports that `socksio` is missing, install:
 
 ```bash
 pip install httpx[socks]
 ```
 
-**Note on CLIP model cache**: MolmoSpaces downloads a CLIP model on first use (cached under `HF_HOME`). If the model is already cached elsewhere (e.g. `/mnt/vqa/.cache/huggingface`), set `HF_HOME` to that path before running any script to avoid a redundant download:
+Set persistent model and language-resource cache locations before the first run:
 
 ```bash
-export HF_HOME=/path/to/your/huggingface/cache
+export HF_HOME=${HF_HOME:-$HOME/.cache/huggingface}
+export NLTK_DATA=${NLTK_DATA:-$HOME/nltk_data}
+export MOLMOSPACES_NLTK_DATA=$NLTK_DATA
 ```
 
-The teleop command below includes `HF_HOME` inline so it works correctly from any new terminal without requiring a prior `export`.
-
-Optional upstream extras can be installed as needed, for example:
+### 4. Verify the base installation
 
 ```bash
-pip install -e ".[mujoco,grasp,housegen]"
-```
-
-See `docs/upstream_molmospaces_readme.md` for upstream MolmoSpaces installation details.
-
-### 3.1 Install CuRobo for RB-Y1 scripted/planner datagen
-
-If you need the official single-arm RB-Y1 scripted/planner data-generation configs such as `RBY1PickDataGenConfig` or `RBY1PickAndPlaceDataGenConfig`, you must install the CuRobo extra as well.
-
-These configs use the upstream package entrypoint:
-
-```bash
-python -m molmo_spaces.data_generation.main RBY1PickDataGenConfig
-python -m molmo_spaces.data_generation.main RBY1PickAndPlaceDataGenConfig
-```
-
-They are a different path from the public `src/pnp/` MimicGen integration scripts in this repository. Do not treat `src/pnp/` as a drop-in replacement for the official RB-Y1 scripted/planner datagen entrypoint.
-
-The upstream extra is declared in `pyproject.toml` as:
-
-```text
-nvidia-curobo @ git+https://github.com/allenai/curobo.git@87e857d46fa5398f268c7f31d26566351be8671d
-```
-
-On some machines, `pip install -e ".[mujoco,curobo]"` may fail because pip build isolation tries to download a separate large `torch` wheel. If that happens, install CuRobo against the already-activated environment instead of letting pip create an isolated build env:
-
-```bash
-PIP_NO_BUILD_ISOLATION=1 pip install --no-build-isolation \
-  "nvidia-curobo @ git+https://github.com/allenai/curobo.git@87e857d46fa5398f268c7f31d26566351be8671d"
-```
-
-If your network is flaky and pip repeatedly breaks while downloading transitive wheels, install the missing wheels first, then retry CuRobo without dependency resolution:
-
-```bash
-pip install embreex rtree pycollada colorlog manifold3d mapbox_earcut svg.path \
-  vhacdx yourdfpy pybind11 setuptools_scm vcs-versioning warp-lang==1.11.1 \
-  importlib_resources
-
-PIP_NO_BUILD_ISOLATION=1 pip install --no-build-isolation --no-deps \
-  "nvidia-curobo @ git+https://github.com/allenai/curobo.git@87e857d46fa5398f268c7f31d26566351be8671d"
-```
-
-After installation, verify the planner dependency before attempting RB-Y1 datagen:
-
-```bash
-python -c "import curobo; print(curobo.__file__)"
 python - <<'PY'
-from molmo_spaces.data_generation.config.object_manipulation_datagen_configs import RBY1PickAndPlaceDataGenConfig
-cfg = RBY1PickAndPlaceDataGenConfig()
-print(type(cfg).__name__)
-print("house_inds:", cfg.task_sampler_config.house_inds)
-print("samples_per_house:", cfg.task_sampler_config.samples_per_house)
-print("episodes_per_batch:", cfg.task_sampler_config.episodes_per_batch)
+import mujoco
+import torch
+import warp
+import molmo_spaces
+
+print("MolmoSpaces:", molmo_spaces.__file__)
+print("MuJoCo:", mujoco.__version__)
+print("Torch:", torch.__version__)
+print("Torch CUDA:", torch.cuda.is_available())
+print("Warp CUDA:", warp.is_cuda_available())
 PY
 ```
 
-If `import curobo` fails, the RB-Y1 planner configs will fail during `model_post_init()` and the official single-arm scripted-expert pipeline is not yet runnable on that machine.
+### 5. List the fixed Franka PnP pools
 
-### 3.2 Planner-server note for official RB-Y1 datagen
+```bash
+python scripts/datagen/run_pipeline.py --list_pools
+```
 
-The official RB-Y1 scripted/planner datagen path uses planner-backed policy configs. Repository tests and helper code indicate that this path supports both configured planner server URLs and a local planner-server workflow.
+Each pool fixes the scene dataset, split, house, pickup object, and receptacle. A pool remains a research candidate until it passes the full behavior and artifact gates on the target machine.
 
-For reproduction-facing documentation, the important boundary is:
+### 6. Run a bounded Franka PnP datagen smoke
 
-- first verify that `curobo` imports and the target config instantiates successfully;
-- then use the policy configuration expected by your environment for planner-server connectivity;
-- only treat the datagen path as runnable after both config construction and planner-server connectivity are verified on your machine.
+On native Linux with an NVIDIA GPU, select a GPU for Warp parallel IK. MuJoCo physics remains on CPU:
 
-Because planner-server deployment differs across environments, this README does not hard-code a single host or local-only recipe as a universal requirement.
+```bash
+export CUDA_VISIBLE_DEVICES=0
 
-### 4. Fetch pinned MimicGen and robomimic dependencies
+python scripts/datagen/run_pipeline.py \
+  --robot droid --policy planner --task_type pick_and_place \
+  --pool molmodata_potato_bowl_1716 \
+  --samples_per_house 1 --randomize_fixed_pickup_pose \
+  --filter_for_successful_trajectories \
+  --disable_action_noise --require_clean_success \
+  --device gpu --num_workers 1 \
+  --seed 111 --run_name_prefix fresh_clone_smoke
+```
+
+Here `--robot droid` means `FrankaRobotConfig` with `FrankaDroidCameraSystem`. Use `--device cpu` only as a slower diagnostic fallback. WSL2 does not expose the NVIDIA EGL device extension required by MolmoSpaces headless rendering, so complete GPU-rendered datagen acceptance requires native Linux with the NVIDIA EGL vendor configuration.
+
+`samples_per_house=1` requests one saved trajectory; it does not prove that a valid demonstration was produced. Accept a datagen run only when the process exits successfully, a non-empty HDF5 trajectory and expected videos are present, arrays are finite, the task identity matches the pool, planner phases cover full Pick-and-Place behavior, replay/video shows approach through stable release, and `--require_clean_success` observed no planner retry.
+
+Generated files are written under the MolmoSpaces resource datagen directory printed by the run. Config construction, scene loading, or an HDF5 file alone is not datagen success.
+
+## Continue to MimicGen
+
+Complete the Franka datagen and artifact gates before using its HDF5 as MimicGen source input.
+
+### 1. Fetch pinned MimicGen and robomimic dependencies
 
 `vendor/` is intentionally not committed to Git. Fetch the upstream repositories at the commits used by this workline:
 
@@ -226,7 +196,7 @@ export PYTHONPATH=$PWD:$MIMICGEN_ROOT:$ROBOMIMIC_ROOT:${PYTHONPATH:-}
 
 If existing local checkouts are used instead, point `MIMICGEN_ROOT` and `ROBOMIMIC_ROOT` to those directories.
 
-### 5. Set runtime paths
+### 2. Set runtime paths
 
 ```bash
 export MOLMOSPACES_ROOT=$PWD
@@ -241,9 +211,18 @@ mkdir -p "$MOLMOSPACES_PNP_WORKDIR"/{artifacts/seeds,artifacts/mimicgen_pnp,data
 
 `HF_HOME` is used by robomimic's CLIP language embedding utility. `NLTK_DATA` / `MOLMOSPACES_NLTK_DATA` are useful when MolmoSpaces needs a local WordNet cache.
 
-### 6. Place the MolmoBot-Data shard
+### 3. Choose the source input
 
-Download the official MolmoBot Pick-and-Place validation shard and place it here:
+For newly generated Franka HDF5, point the selector at one run directory or a parent containing several runs:
+
+```bash
+PNP_SELECT_N=50 $MOLMOSPACES_PYTHON src/pnp/select_pnp_50_source_pool.py \
+  --franka-datagen-root /path/to/datagen/pick_and_place_planner_v1
+```
+
+Franka mode requires terminal and persistent success, planner phases `0..9`, terminal `task_info.success=true`, required replay fields, and unique initial-state/action fingerprints. Its output is compatible with the downstream MimicGen scripts.
+
+Alternatively, the original MolmoBot shard route remains supported. Download the official Pick-and-Place validation shard and place it here:
 
 ```text
 runtime/mimicgen_pick_and_place/data/molmobot_data/FrankaPickAndPlaceOmniCamConfig/val_shards/00000.tar
@@ -251,7 +230,7 @@ runtime/mimicgen_pick_and_place/data/molmobot_data/FrankaPickAndPlaceOmniCamConf
 
 The repository includes lightweight manifests and summaries but not official data shards or generated artifacts.
 
-### 7. First-run resource cache notes
+### 4. First-run resource cache notes
 
 MolmoSpaces may download/extract iTHOR assets on first use. If a run is interrupted during extraction, you may see an error like:
 
@@ -269,7 +248,7 @@ mv "$HOME/.cache/molmo-spaces-resources/objects/thor/20251117" \
 
 If your network requires a proxy, export it before the first asset/model download.
 
-### 8. Run a smoke check
+### 5. Run a MolmoBot-source replay smoke check
 
 Copy a manifest into the runtime work directory:
 
@@ -298,7 +277,7 @@ MolmoAct2 official `sim_eval` success, MolmoSpaces adapter diagnostics, bimanual
 
 ## Pick-and-Place Integration Workflow
 
-The Pick-and-Place pipeline generates MimicGen rollouts from MolmoBot-Data source trajectories in a reproducible sequence:
+The Pick-and-Place pipeline accepts either validated Franka datagen HDF5 or MolmoBot-Data source trajectories, then generates MimicGen rollouts in a reproducible sequence:
 
 1. inspect or prepare source-candidate metadata;
 2. replay source trajectories and collect MimicGen datagen information;
@@ -509,36 +488,3 @@ tools/setup_mimicgen_dependency.sh   Helper to fetch MimicGen and robomimic into
 ## License
 
 The upstream MolmoSpaces code is distributed under the Apache License 2.0; see `LICENSE`. Third-party dependencies and datasets retain their own licenses. The integration code in this repository is provided as research code under the same repository license unless a file states otherwise.
-
-
-## Using Newly Generated Franka PnP HDF5 as MimicGen Source Input
-
-The existing MolmoBot shard input remains the default. To build the same source manifest from locally generated Franka Pick-and-Place HDF5 files, first inspect the fixed identity pools and collect independent runs with different seeds:
-
-```bash
-python scripts/datagen/run_pipeline.py --list_pools
-
-export CUDA_VISIBLE_DEVICES=1
-
-$MOLMOSPACES_PYTHON scripts/datagen/run_pipeline.py \
-  --robot droid --policy planner --task_type pick_and_place \
-  --pool molmodata_potato_bowl_1716 \
-  --samples_per_house 10 --randomize_fixed_pickup_pose \
-  --filter_for_successful_trajectories \
-  --disable_action_noise --require_clean_success \
-  --device gpu --num_workers 1 \
-  --seed 111 --run_name_prefix potato_bowl_1716_seed111
-```
-
-Each pool fixes its scene dataset, split, house, pickup object, and receptacle. Keep each pool in a separate output directory and source HDF5 dataset. Repeat with unused seeds and distinct prefixes. `samples_per_house` is a requested saved-trajectory target, not a guaranteed success count: verify `Success count`, identities, retry-free planner phases, videos, and the actual HDF5 trajectory count after every run. `--device gpu` selects CUDA only for Warp parallel IK; MuJoCo physics remains CPU-based. `--num_workers` controls independent work items and does not split a single-house pool across workers.
-
-Point the selector at one run directory or a parent containing several run directories:
-
-```bash
-PNP_SELECT_N=50 $MOLMOSPACES_PYTHON src/pnp/select_pnp_50_source_pool.py \
-  --franka-datagen-root /path/to/datagen/pick_and_place_planner_v1
-```
-
-When this option is omitted, the selector continues to read the original MolmoBot shard. Franka mode recursively reads `house_*/trajectories_batch_*.h5`, requires terminal and persistent success, the complete planner phase set `0..9`, terminal `task_info.success=true`, and the fields needed by the existing replay/conversion path. It rejects duplicate combined initial-state/action fingerprints and emits the existing `pnp_seed_manifest_50demo_crossmix.json` schema, so the downstream datagen-info and conversion commands above remain unchanged.
-
-These locally generated trajectories are **synthetic scripted-IK planner expert demos**. They are not human demonstrations and are not RB-Y1 CuRobo planner-server trajectories. Before training, also inspect wrist/exocentric videos and verify replay, full Pick → grasp/lift → transport → place/release behavior, schema/timing, and exactly 50 unique accepted trajectories.

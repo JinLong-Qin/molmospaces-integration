@@ -47,9 +47,15 @@
 
 大体积运行数据不提交到 Git：官方 shards、生成的 HDF5、rollout 目录、simulator logs、PID 文件、cache、视频、本地机器路径和内部 planning ledger。使用此类文件的 workline 会在仓库中保留 README、轻量 inventory 或再生成入口，而非提交原始产物。
 
-## Quick Start
+## 主复现路线
 
-Clone 仓库，安装 MolmoSpaces 和依赖，放置官方 MolmoBot-Data shard，运行 smoke check。
+本仓库的主流程是：
+
+> Franka Pick-and-Place datagen -> 验收 HDF5/视频 -> 转换为 MimicGen source 并生成 rollout
+
+命令行参数 `--robot droid` 表示 **Franka 机器人搭配 DROID 风格相机**，不是 RB-Y1。RB-Y1 的 CuRobo/planner-server pipeline 是另一条可选上游工作线，不是下面 Franka 主流程的依赖。只有确实需要 RB-Y1 时，才阅读 [`docs/worklines/molmospaces_official_reproduction/README.md`](docs/worklines/molmospaces_official_reproduction/README.md)。
+
+## Franka Datagen Quick Start
 
 ### 1. Clone
 
@@ -85,94 +91,82 @@ source .venv/bin/activate
 uv pip install --upgrade pip setuptools wheel
 ```
 
-### 3. 安装 MolmoSpaces
+### 3. 安装 Franka datagen 依赖
 
-MuJoCo Pick-and-Place 集成通常使用：
+安装 MolmoSpaces 的 MuJoCo extra。Franka datagen 不需要 CuRobo，也不需要 RB-Y1 planner server。
 
 ```bash
 pip install -e ".[mujoco]"
-```
-
-**关于 `pip install -e` 的说明**：上游 MolmoSpaces `pyproject.toml` 使用的 build backend 不支持 `build_editable`（PEP 660）。如果 `pip install -e` 报错缺少 `build_editable`，包可能仍然能正常 import。如果运行脚本时出现 `ModuleNotFoundError: No module named 'molmo_spaces'`，将项目根目录加入 `PYTHONPATH`：
-
-```bash
 export PYTHONPATH=$PWD:${PYTHONPATH:-}
 ```
 
-需要上游可选模块时可以安装 extras，例如：
+如果机器使用 SOCKS proxy 且 `httpx` 报缺少 `socksio`，安装：
 
 ```bash
-pip install -e ".[mujoco,grasp,housegen]"
+pip install httpx[socks]
 ```
 
-上游 MolmoSpaces 安装细节见 `docs/upstream_molmospaces_readme.md`。
-
-### 3.1 安装 RB-Y1 scripted/planner datagen 所需的 CuRobo
-
-如果你要运行官方 single-arm RB-Y1 scripted/planner data-generation config，例如 `RBY1PickDataGenConfig` 或 `RBY1PickAndPlaceDataGenConfig`，还需要安装 CuRobo extra。
-
-这些 config 使用的是上游 package 入口：
+首次运行会下载模型和仿真资源，先设置持久 cache 路径：
 
 ```bash
-python -m molmo_spaces.data_generation.main RBY1PickDataGenConfig
-python -m molmo_spaces.data_generation.main RBY1PickAndPlaceDataGenConfig
+export HF_HOME=${HF_HOME:-$HOME/.cache/huggingface}
+export NLTK_DATA=${NLTK_DATA:-$HOME/nltk_data}
+export MOLMOSPACES_NLTK_DATA=$NLTK_DATA
 ```
 
-它们与本仓库公开的 `src/pnp/` MimicGen 集成脚本是不同路径。不要把 `src/pnp/` 误当成官方 RB-Y1 scripted/planner datagen 入口的直接替代。
-
-上游 `pyproject.toml` 中对应的 extra 依赖为：
-
-```text
-nvidia-curobo @ git+https://github.com/allenai/curobo.git@87e857d46fa5398f268c7f31d26566351be8671d
-```
-
-在某些机器上，`pip install -e ".[mujoco,curobo]"` 可能失败，因为 pip build isolation 会尝试额外下载较大的 `torch` wheel。这种情况下，更稳妥的方式是针对当前已激活环境安装 CuRobo，而不是让 pip 创建 isolated build env：
+### 4. 验证基础安装
 
 ```bash
-PIP_NO_BUILD_ISOLATION=1 pip install --no-build-isolation \
-  "nvidia-curobo @ git+https://github.com/allenai/curobo.git@87e857d46fa5398f268c7f31d26566351be8671d"
-```
-
-如果网络不稳定，pip 在下载传递依赖时频繁中断，可以先安装缺失 wheel，再关闭依赖解析重试 CuRobo：
-
-```bash
-pip install embreex rtree pycollada colorlog manifold3d mapbox_earcut svg.path \
-  vhacdx yourdfpy pybind11 setuptools_scm vcs-versioning warp-lang==1.11.1 \
-  importlib_resources
-
-PIP_NO_BUILD_ISOLATION=1 pip install --no-build-isolation --no-deps \
-  "nvidia-curobo @ git+https://github.com/allenai/curobo.git@87e857d46fa5398f268c7f31d26566351be8671d"
-```
-
-安装后，先验证 planner 依赖，再尝试 RB-Y1 datagen：
-
-```bash
-python -c "import curobo; print(curobo.__file__)"
 python - <<'PY'
-from molmo_spaces.data_generation.config.object_manipulation_datagen_configs import RBY1PickAndPlaceDataGenConfig
-cfg = RBY1PickAndPlaceDataGenConfig()
-print(type(cfg).__name__)
-print("house_inds:", cfg.task_sampler_config.house_inds)
-print("samples_per_house:", cfg.task_sampler_config.samples_per_house)
-print("episodes_per_batch:", cfg.task_sampler_config.episodes_per_batch)
+import mujoco
+import torch
+import warp
+import molmo_spaces
+
+print("MolmoSpaces:", molmo_spaces.__file__)
+print("MuJoCo:", mujoco.__version__)
+print("Torch:", torch.__version__)
+print("Torch CUDA:", torch.cuda.is_available())
+print("Warp CUDA:", warp.is_cuda_available())
 PY
 ```
 
-如果 `import curobo` 失败，RB-Y1 planner config 会在 `model_post_init()` 阶段失败，此时官方 single-arm scripted-expert pipeline 还不能在该机器上运行。
+### 5. 查看固定 Franka PnP pools
 
-### 3.2 官方 RB-Y1 datagen 的 planner-server 说明
+```bash
+python scripts/datagen/run_pipeline.py --list_pools
+```
 
-官方 RB-Y1 scripted/planner datagen 路径使用带 planner 的 policy config。仓库中的 tests 和 helper code 表明，这条路径既支持配置好的 planner server URL，也支持本地 planner-server workflow。
+每个 pool 固定 scene dataset、split、house、pickup object 和 receptacle。在目标机器通过完整行为与产物 gate 之前，这些 pool 仍是研究候选。
 
-对复现者来说，真正重要的边界是：
+### 6. 运行有界 Franka PnP datagen smoke
 
-- 先验证 `curobo` 能 import，目标 config 能成功实例化；
-- 再根据你自己的环境使用合适的 planner-server 连接配置；
-- 只有当 config 构造和 planner-server 连通性都在你的机器上验证通过后，才应认为 datagen 路径具备可运行前提。
+在原生 Linux NVIDIA 机器上，为 Warp parallel IK 选择 GPU；MuJoCo physics 仍在 CPU：
 
-由于 planner-server 的部署方式依赖具体环境，本 README 不把某个特定 host 或某种仅限本地机器的做法硬编码成唯一标准步骤。
+```bash
+export CUDA_VISIBLE_DEVICES=0
 
-### 4. 拉取固定版本的 MimicGen 和 robomimic
+python scripts/datagen/run_pipeline.py \
+  --robot droid --policy planner --task_type pick_and_place \
+  --pool molmodata_potato_bowl_1716 \
+  --samples_per_house 1 --randomize_fixed_pickup_pose \
+  --filter_for_successful_trajectories \
+  --disable_action_noise --require_clean_success \
+  --device gpu --num_workers 1 \
+  --seed 111 --run_name_prefix fresh_clone_smoke
+```
+
+这里 `--robot droid` 实际使用 `FrankaRobotConfig` 和 `FrankaDroidCameraSystem`。`--device cpu` 只建议作为较慢的诊断 fallback。WSL2 不提供 MolmoSpaces headless rendering 所需的 NVIDIA EGL device extension，因此完整 GPU 渲染 datagen 验收需要带 NVIDIA EGL vendor 配置的原生 Linux。
+
+`samples_per_house=1` 只是请求保存一条轨迹，不证明已经生成有效 demo。只有进程正常退出、输出目录包含非空 HDF5 和预期视频、数组 finite、task identity 与 pool 一致、planner phases 覆盖完整行为、视频/replay 显示 approach 到稳定 release，并且没有 planner retry，才能验收 datagen。
+
+生成文件位于运行日志打印的 MolmoSpaces resource datagen 目录。仅有 config 构造、scene load 或 HDF5 文件不能证明 datagen 成功。
+
+## 继续进入 MimicGen
+
+先完成 Franka datagen 与产物验收，再把 HDF5 作为 MimicGen source。
+
+### 1. 拉取固定版本的 MimicGen 和 robomimic
 
 `vendor/` 不直接提交到 Git。请用脚本拉取本工作线实际使用的 upstream commit：
 
@@ -202,7 +196,7 @@ export PYTHONPATH=$PWD:$MIMICGEN_ROOT:$ROBOMIMIC_ROOT:${PYTHONPATH:-}
 
 如果使用已有本地 checkout，把 `MIMICGEN_ROOT` 和 `ROBOMIMIC_ROOT` 指向对应目录即可。
 
-### 5. 设置运行路径
+### 2. 设置运行路径
 
 ```bash
 export MOLMOSPACES_ROOT=$PWD
@@ -217,9 +211,18 @@ mkdir -p "$MOLMOSPACES_PNP_WORKDIR"/{artifacts/seeds,artifacts/mimicgen_pnp,data
 
 `HF_HOME` 会被 robomimic 的 CLIP language embedding 工具使用。`NLTK_DATA` / `MOLMOSPACES_NLTK_DATA` 用于 MolmoSpaces 需要本地 WordNet cache 的情况。
 
-### 6. 放置 MolmoBot-Data shard
+### 3. 选择 source 输入
 
-下载官方 MolmoBot Pick-and-Place validation shard，放到：
+使用新生成的 Franka HDF5 时，将 selector 指向一个 run 目录，或多个 run 的共同父目录：
+
+```bash
+PNP_SELECT_N=50 $MOLMOSPACES_PYTHON src/pnp/select_pnp_50_source_pool.py \
+  --franka-datagen-root /path/to/datagen/pick_and_place_planner_v1
+```
+
+Franka 模式要求 terminal/persistent success、完整 `0..9` planner phases、末帧 `task_info.success=true`、下游 replay 所需字段和唯一初始状态/动作指纹。输出与后续 MimicGen 脚本兼容。
+
+也可以继续使用原有 MolmoBot shard 路线。下载官方 Pick-and-Place validation shard 并放到：
 
 ```text
 runtime/mimicgen_pick_and_place/data/molmobot_data/FrankaPickAndPlaceOmniCamConfig/val_shards/00000.tar
@@ -227,7 +230,7 @@ runtime/mimicgen_pick_and_place/data/molmobot_data/FrankaPickAndPlaceOmniCamConf
 
 本仓库包含轻量 manifest 和摘要，不包含官方数据 shard 或生成产物。
 
-### 7. 首次运行资源 cache 说明
+### 4. 首次运行资源 cache 说明
 
 MolmoSpaces 首次运行时可能下载/解压 iTHOR assets。如果中途被打断，可能出现类似错误：
 
@@ -245,7 +248,7 @@ mv "$HOME/.cache/molmo-spaces-resources/objects/thor/20251117" \
 
 如果网络需要代理，请在首次下载 asset/model 前设置代理环境变量。
 
-### 8. 运行 smoke check
+### 5. 运行 MolmoBot source replay smoke check
 
 把 manifest 复制到运行目录：
 
@@ -274,7 +277,7 @@ MolmoAct2 官方 `sim_eval` 成功、MolmoSpaces adapter 诊断、bimanual 浏�
 
 ## Pick-and-Place 集成流程
 
-Pick-and-Place pipeline 从 MolmoBot-Data 源轨迹生成 MimicGen rollout，流程如下：
+Pick-and-Place pipeline 接受通过验收的 Franka datagen HDF5 或 MolmoBot-Data 源轨迹，然后生成 MimicGen rollout：
 
 1. 检查或准备 source candidate 元数据；
 2. 回放 source trajectory 并收集 MimicGen datagen 信息；
@@ -482,36 +485,3 @@ tools/setup_mimicgen_dependency.sh   拉取 MimicGen 和 robomimic 到 vendor/ �
 ## License
 
 上游 MolmoSpaces 代码遵循 Apache License 2.0；见 `LICENSE`。第三方依赖和数据集保留各自 license。本仓库中的集成代码按本仓库 license 作为 research code 发布，除非文件另有说明。
-
-
-## 使用新生成的 Franka PnP HDF5 作为 MimicGen 输入
-
-原有 MolmoBot shard 输入仍是默认方式。若要把本地新生成的 Franka Pick-and-Place HDF5 接入同一 source manifest，先查看固定身份 pool，再用不同 seed 运行独立任务：
-
-```bash
-python scripts/datagen/run_pipeline.py --list_pools
-
-export CUDA_VISIBLE_DEVICES=1
-
-$MOLMOSPACES_PYTHON scripts/datagen/run_pipeline.py \
-  --robot droid --policy planner --task_type pick_and_place \
-  --pool molmodata_potato_bowl_1716 \
-  --samples_per_house 10 --randomize_fixed_pickup_pose \
-  --filter_for_successful_trajectories \
-  --disable_action_noise --require_clean_success \
-  --device gpu --num_workers 1 \
-  --seed 111 --run_name_prefix potato_bowl_1716_seed111
-```
-
-每个 pool 会固定 scene dataset、split、house、pickup object 和 receptacle。不同 pool 必须使用独立输出目录和独立 source HDF5，不能混合计数。每次使用未使用过的 seed 和不同 prefix。`samples_per_house` 是请求保存的轨迹目标数，不是成功保证；每个 run 都要核验 `Success count`、身份元数据、无重试且单调的 planner phases、视频和 HDF5 内实际 trajectory 数。`--device gpu` 只将 Warp parallel IK 切到 CUDA，MuJoCo physics 仍在 CPU。`--num_workers` 控制独立 work item，不能把单 house pool 自动拆分给多个 worker。
-
-选择一个 run 根目录，或包含多个 run 的共同父目录：
-
-```bash
-PNP_SELECT_N=50 $MOLMOSPACES_PYTHON src/pnp/select_pnp_50_source_pool.py \
-  --franka-datagen-root /path/to/datagen/pick_and_place_planner_v1
-```
-
-不传该选项时，selector 仍按原逻辑读取 MolmoBot shard。Franka 模式递归读取 `house_*/trajectories_batch_*.h5`，要求 terminal/persistent success、完整 `0..9` planner phases、末帧 `task_info.success=true`，以及现有 replay/conversion 所需字段；同时按初始任务状态与动作序列的组合指纹去重。输出仍为兼容的 `pnp_seed_manifest_50demo_crossmix.json`，因此后续 datagen-info 与 conversion 命令不变。
-
-这批数据的准确 provenance 是 **synthetic scripted-IK planner expert demos**，不是 human demonstrations，也不是 RB-Y1 CuRobo planner-server trajectories。训练前还必须检查 wrist/exocentric 视频、replay、完整 Pick → grasp/lift → transport → place/release 行为、schema/timing，并确认恰好 50 条唯一且通过验收的轨迹。
