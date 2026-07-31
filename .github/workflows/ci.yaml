@@ -52,6 +52,31 @@ jobs:
           source .venv/bin/activate
           uv pip install --no-cache -e .[dev,mujoco]
 
+      - name: Prepare NLTK resources
+        run: |
+          source .venv/bin/activate
+          export NLTK_DATA="$RUNNER_TEMP/nltk_data"
+          echo "NLTK_DATA=$NLTK_DATA" >> "$GITHUB_ENV"
+          python -m nltk.downloader -d "$NLTK_DATA" wordnet wordnet2022
+          python - <<'PY'
+          import nltk
+
+          resources = {
+              "wordnet": ("corpora/wordnet", "corpora/wordnet.zip"),
+              "wordnet2022": ("corpora/wordnet2022", "corpora/wordnet2022.zip"),
+          }
+          for name, candidates in resources.items():
+              for candidate in candidates:
+                  try:
+                      path = nltk.data.find(candidate)
+                      print(f"NLTK_RESOURCE_OK: {name} -> {path}")
+                      break
+                  except LookupError:
+                      continue
+              else:
+                  raise RuntimeError(f"NLTK_RESOURCE_MISSING: {name}")
+          PY
+
       - name: Log disk space
         run: |
           df -h /
