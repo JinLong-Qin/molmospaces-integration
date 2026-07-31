@@ -93,26 +93,28 @@ uv pip install --upgrade pip setuptools wheel
 
 ### 3. Install the Franka datagen dependencies
 
-Install MolmoSpaces with the MuJoCo extra. Franka datagen does not require CuRobo or an RB-Y1 planner server.
+Install MolmoSpaces with the MuJoCo extra. This extra includes HTTPX SOCKS transport, which is harmless without a proxy and prevents the first OpenCLIP download from failing with `socksio` missing when a SOCKS proxy is configured. Franka datagen does not require CuRobo or an RB-Y1 planner server.
 
 ```bash
-pip install -e ".[mujoco]"
+python -m pip install -e ".[mujoco]"
 export PYTHONPATH=$PWD:${PYTHONPATH:-}
 ```
 
-If a SOCKS proxy is configured and `httpx` reports that `socksio` is missing, install:
+`pip` may report resolver or `pip check` warnings for optional packages pulled in by the upstream research stack, including missing `rich`, `numba`, `scikit-learn`, `accelerate`, `transformers`, `ninja`, or `py-cpuinfo`, and a platform warning for `decord`. Do not treat those warnings alone as either installation success or failure. The supported Franka gate is the import check below, fixed-pool loading, and a real rollout with validated artifacts. Investigate a warning if one of those gates imports the affected package or fails.
+
+Set persistent cache locations before the first run. `MLSPACES_ASSETS_DIR` stores this checkout's extracted/link farm, LMDB indexes, and generated datagen outputs. `MLSPACES_CACHE_DIR` stores downloaded MolmoSpaces archives and can be shared across checkouts. `HF_HOME` stores model weights, while the NLTK variables store WordNet data.
 
 ```bash
-pip install httpx[socks]
-```
-
-Set persistent model and language-resource cache locations before the first run:
-
-```bash
+export MLSPACES_ASSETS_DIR=${MLSPACES_ASSETS_DIR:-$HOME/.cache/molmospaces/assets/current}
+export MLSPACES_CACHE_DIR=${MLSPACES_CACHE_DIR:-$HOME/.cache/molmo-spaces-resources}
 export HF_HOME=${HF_HOME:-$HOME/.cache/huggingface}
 export NLTK_DATA=${NLTK_DATA:-$HOME/nltk_data}
 export MOLMOSPACES_NLTK_DATA=$NLTK_DATA
 ```
+
+The first pool or rollout command may download/extract scenes, objects, and grasps, then print `LMDB: 100%` while building local lookup indexes. The LMDB progress is local indexing, not a model download. A checkout-local asset directory that links to an existing shared resource cache proves fresh code/environment setup, but not a cache-empty machine download.
+
+The commands in this interactive quick start intentionally do not use `set -euo pipefail`; a failed check should report the error without closing a VS Code terminal.
 
 ### 4. Verify the base installation
 
@@ -131,7 +133,94 @@ print("Warp CUDA:", warp.is_cuda_available())
 PY
 ```
 
-### 5. List the fixed Franka PnP pools
+### 5. Download and verify the NLTK resources
+
+Download WordNet explicitly during setup. Runtime imports only use local resources and fail immediately with this command if either corpus is missing; they do not silently contact `raw.githubusercontent.com`.
+
+```bash
+python -m nltk.downloader -d "$NLTK_DATA" wordnet wordnet2022
+
+python - <<'PY'
+import nltk
+
+resources = {
+    "wordnet": ("corpora/wordnet", "corpora/wordnet.zip"),
+    "wordnet2022": ("corpora/wordnet2022", "corpora/wordnet2022.zip"),
+}
+for name, candidates in resources.items():
+    for candidate in candidates:
+        try:
+            path = nltk.data.find(candidate)
+            print(f"NLTK_RESOURCE_OK: {name} -> {path}")
+            break
+        except LookupError:
+            continue
+    else:
+        raise RuntimeError(f"NLTK_RESOURCE_MISSING: {name}")
+PY
+```
+
+Do not continue until both resources print `NLTK_RESOURCE_OK`. If the downloader cannot reach GitHub, configure a working network route for this setup step and retry. Later datagen runs do not perform this network check.
+
+### 6. Preflight and cache the OpenCLIP weights
+
+Pick-and-Place task sampling uses `laion/CLIP-ViT-L-14-laion2B-s32B-b82K`. Download its approximately 1.71 GB weight before starting a rollout so a network failure is detected before scene initialization. Start with no proxy and the official endpoint:
+
+```bash
+unset HTTP_PROXY HTTPS_PROXY ALL_PROXY
+unset http_proxy https_proxy all_proxy
+unset HF_ENDPOINT
+
+python - <<'PY'
+from huggingface_hub import get_hf_file_metadata, hf_hub_download, hf_hub_url
+
+repo_id = "laion/CLIP-ViT-L-14-laion2B-s32B-b82K"
+filename = "open_clip_pytorch_model.bin"
+
+try:
+    metadata = get_hf_file_metadata(hf_hub_url(repo_id, filename), timeout=30)
+    print("commit:", metadata.commit_hash)
+    print("etag:", metadata.etag)
+    print("size:", metadata.size)
+    if not metadata.commit_hash or not metadata.etag or not metadata.size:
+        print("CLIP_METADATA_INVALID: try the mirror or another network route")
+    else:
+        path = hf_hub_download(repo_id=repo_id, filename=filename)
+        print("CLIP_WEIGHT:", path)
+        print("CLIP_DOWNLOAD_OK")
+except Exception as exc:
+    print("CLIP_DOWNLOAD_FAILED:", type(exc).__name__, exc)
+PY
+```
+
+Do not proceed to datagen until the last line is `CLIP_DOWNLOAD_OK`. An HTTP `200` alone is insufficient: `commit`, `etag`, and `size` must all be non-empty. At the time this route was validated, the official response was commit `1627032197142fbe2a7cfec626f4ced3ae60d07a` and size `1710631365`; a future upstream revision may legitimately change them.
+
+If direct access fails, retry the same block after selecting the mirror endpoint:
+
+```bash
+export HF_ENDPOINT=https://hf-mirror.com
+```
+
+The mirror is a fallback, not a guarantee: large files may still redirect to Hugging Face Xet/CDN hosts. If both direct and mirror routes fail, configure your own network proxy and rerun the metadata check. Never copy a server-specific proxy port from another machine. If a proxy returns `commit: None`, `etag: None`, or `size: None`, disable it or change nodes because it is altering or losing required Hugging Face response headers.
+
+After the download, verify that OpenCLIP can load without any network access. This catches an incomplete snapshot before scene initialization and prevents Hugging Face from probing an uncached `.safetensors` alternative at rollout time.
+
+```bash
+HF_HUB_OFFLINE=1 python - <<'PY'
+import open_clip
+
+open_clip.create_model_and_transforms(
+    "ViT-L-14",
+    pretrained="laion2b_s32b_b82k",
+    device="cpu",
+)
+print("CLIP_OFFLINE_LOAD_OK")
+PY
+```
+
+Do not continue until the final line is `CLIP_OFFLINE_LOAD_OK`.
+
+### 7. List the fixed Franka PnP pools
 
 ```bash
 python scripts/datagen/run_pipeline.py --list_pools
@@ -139,7 +228,7 @@ python scripts/datagen/run_pipeline.py --list_pools
 
 Each pool fixes the scene dataset, split, house, pickup object, and receptacle. A pool remains a research candidate until it passes the full behavior and artifact gates on the target machine.
 
-### 6. Franka datagen option reference
+### 8. Franka datagen option reference
 
 | Option | Meaning and constraints |
 |---|---|
@@ -154,15 +243,17 @@ Each pool fixes the scene dataset, split, house, pickup object, and receptacle. 
 | `--filter_for_successful_trajectories` | Saves successful trajectories instead of retaining failures as source candidates. |
 | `--disable_action_noise` | Disables per-step robot action noise for controlled source collection. |
 | `--require_clean_success` | Sets planner retries to zero and rejects a trajectory if any retry occurs. It requires a supported object-manipulation planner. |
+| `--require_success_count N` | Exits nonzero unless the run produces at least `N` successful trajectories. Use this for bounded smoke tests so zero-output runs cannot look successful from the process exit code. |
 
 Keep each pool in a separate output/source dataset. Do not combine identities from different pools and call the result a homogeneous source pool. Outputs are written to `ASSETS_DIR/datagen/<task_type>_<policy>_v1/<prefix>_<timestamp>`; the command below therefore writes under `datagen/pick_and_place_planner_v1/`.
 
-### 7. Run a bounded Franka PnP datagen smoke
+### 9. Run a bounded Franka PnP datagen smoke
 
 On native Linux with an NVIDIA GPU, select a GPU for Warp parallel IK. MuJoCo physics remains on CPU:
 
 ```bash
 export CUDA_VISIBLE_DEVICES=0
+export HF_HUB_OFFLINE=1
 
 python scripts/datagen/run_pipeline.py \
   --robot droid --policy planner --task_type pick_and_place \
@@ -170,13 +261,14 @@ python scripts/datagen/run_pipeline.py \
   --samples_per_house 1 --randomize_fixed_pickup_pose \
   --filter_for_successful_trajectories \
   --disable_action_noise --require_clean_success \
+  --require_success_count 1 \
   --device gpu --num_workers 1 \
   --seed 111 --run_name_prefix fresh_clone_smoke
 ```
 
 Here `--robot droid` means `FrankaRobotConfig` with `FrankaDroidCameraSystem`. Use `--device cpu` only as a slower diagnostic fallback. WSL2 does not expose the NVIDIA EGL device extension required by MolmoSpaces headless rendering, so complete GPU-rendered datagen acceptance requires native Linux with the NVIDIA EGL vendor configuration.
 
-`samples_per_house=1` requests one saved trajectory; it does not prove that a valid demonstration was produced. Accept a datagen run only when the process exits successfully, a non-empty HDF5 trajectory and expected videos are present, arrays are finite, the task identity matches the pool, planner phases cover full Pick-and-Place behavior, replay/video shows approach through stable release, and `--require_clean_success` observed no planner retry.
+`samples_per_house=1` requests one saved trajectory; it does not prove that a valid demonstration was produced. Accept a datagen run only when the process exits successfully, a non-empty HDF5 trajectory and expected videos are present, control/state arrays are finite, padded arrays are valid under their length or mask fields, the task identity matches the pool, planner phases cover full Pick-and-Place behavior, replay/video shows approach through stable release, and `--require_clean_success` observed no planner retry. `--require_success_count 1` makes a zero-success smoke return a nonzero exit code, but artifact and behavior checks are still required.
 
 Generated files are written under the MolmoSpaces resource datagen directory printed by the run. Config construction, scene loading, or an HDF5 file alone is not datagen success.
 
@@ -441,7 +533,7 @@ $MOLMOSPACES_PYTHON src/bimanual_yam/browser_keyboard_teleop.py \
   --initialization-report runtime/bimanual_yam_initialization_report.json
 ```
 
-If the CLIP model is cached elsewhere, set `HF_HOME` to that directory. If you see a SOCKS proxy error on first run, install `httpx[socks]` first (see step 3 above).
+If the CLIP model is cached elsewhere, set `HF_HOME` to that directory. The MuJoCo extra in step 3 installs HTTPX SOCKS transport; a `socksio` error indicates that this checkout was installed without the current extra and should be reinstalled.
 
 Open `http://127.0.0.1:8765` after the terminal prints the local teleoperation URL.
 

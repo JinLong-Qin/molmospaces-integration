@@ -93,26 +93,28 @@ uv pip install --upgrade pip setuptools wheel
 
 ### 3. 安装 Franka datagen 依赖
 
-安装 MolmoSpaces 的 MuJoCo extra。Franka datagen 不需要 CuRobo，也不需要 RB-Y1 planner server。
+安装 MolmoSpaces 的 MuJoCo extra。该 extra 已包含 HTTPX SOCKS transport；即使不使用代理也没有副作用，使用 SOCKS proxy 时则可避免首次下载 OpenCLIP 因缺少 `socksio` 而失败。Franka datagen 不需要 CuRobo，也不需要 RB-Y1 planner server。
 
 ```bash
-pip install -e ".[mujoco]"
+python -m pip install -e ".[mujoco]"
 export PYTHONPATH=$PWD:${PYTHONPATH:-}
 ```
 
-如果机器使用 SOCKS proxy 且 `httpx` 报缺少 `socksio`，安装：
+`pip` 或 `pip check` 可能报告 upstream research stack 引入的可选包告警，例如缺少 `rich`、`numba`、`scikit-learn`、`accelerate`、`transformers`、`ninja`、`py-cpuinfo`，以及 `decord` 的平台告警。不能仅凭这些告警判断安装成功或失败。Franka 主线的支持 gate 是下面的 import check、固定 pool 加载，以及带完整产物验收的真实 rollout。如果某个 gate 导入了对应包或失败，再调查相关告警。
+
+首次运行前设置持久 cache 路径。`MLSPACES_ASSETS_DIR` 保存当前 checkout 的解压/链接目录、LMDB 索引和 datagen 输出；`MLSPACES_CACHE_DIR` 保存下载的 MolmoSpaces archives，可供多个 checkout 共享；`HF_HOME` 保存模型权重；NLTK 变量保存 WordNet 数据。
 
 ```bash
-pip install httpx[socks]
-```
-
-首次运行会下载模型和仿真资源，先设置持久 cache 路径：
-
-```bash
+export MLSPACES_ASSETS_DIR=${MLSPACES_ASSETS_DIR:-$HOME/.cache/molmospaces/assets/current}
+export MLSPACES_CACHE_DIR=${MLSPACES_CACHE_DIR:-$HOME/.cache/molmo-spaces-resources}
 export HF_HOME=${HF_HOME:-$HOME/.cache/huggingface}
 export NLTK_DATA=${NLTK_DATA:-$HOME/nltk_data}
 export MOLMOSPACES_NLTK_DATA=$NLTK_DATA
 ```
+
+第一次执行 pool 或 rollout 命令时，程序可能下载/解压 scenes、objects 和 grasps，随后打印 `LMDB: 100%` 来建立本地查询索引。LMDB 进度是本地建索引，不是模型下载。checkout 独立的 asset 目录如果链接到已有共享资源 cache，只能证明 fresh code/environment setup，不能证明 cache-empty 新机器下载已通过。
+
+本交互式 Quick Start 的命令有意不使用 `set -euo pipefail`；检查失败时应报告错误，不应关闭 VS Code terminal。
 
 ### 4. 验证基础安装
 
@@ -131,7 +133,94 @@ print("Warp CUDA:", warp.is_cuda_available())
 PY
 ```
 
-### 5. 查看固定 Franka PnP pools
+### 5. 下载并验证 NLTK 资源
+
+在 setup 阶段显式下载 WordNet。运行期 import 只使用本地资源；任一 corpus 缺失时会立即给出下面的准备命令，不会静默访问 `raw.githubusercontent.com`。
+
+```bash
+python -m nltk.downloader -d "$NLTK_DATA" wordnet wordnet2022
+
+python - <<'PY'
+import nltk
+
+resources = {
+    "wordnet": ("corpora/wordnet", "corpora/wordnet.zip"),
+    "wordnet2022": ("corpora/wordnet2022", "corpora/wordnet2022.zip"),
+}
+for name, candidates in resources.items():
+    for candidate in candidates:
+        try:
+            path = nltk.data.find(candidate)
+            print(f"NLTK_RESOURCE_OK: {name} -> {path}")
+            break
+        except LookupError:
+            continue
+    else:
+        raise RuntimeError(f"NLTK_RESOURCE_MISSING: {name}")
+PY
+```
+
+只有两个资源都打印 `NLTK_RESOURCE_OK` 才能继续。如果 downloader 无法连接 GitHub，应为该 setup 步骤配置可用网络路径后重试；后续 datagen 不会再做这次联网检查。
+
+### 6. 预检并缓存 OpenCLIP 权重
+
+Pick-and-Place task sampling 使用 `laion/CLIP-ViT-L-14-laion2B-s32B-b82K`。在启动 rollout 前先下载约 1.71 GB 权重，避免场景初始化后才暴露网络失败。默认先关闭代理并使用官方 endpoint 直连：
+
+```bash
+unset HTTP_PROXY HTTPS_PROXY ALL_PROXY
+unset http_proxy https_proxy all_proxy
+unset HF_ENDPOINT
+
+python - <<'PY'
+from huggingface_hub import get_hf_file_metadata, hf_hub_download, hf_hub_url
+
+repo_id = "laion/CLIP-ViT-L-14-laion2B-s32B-b82K"
+filename = "open_clip_pytorch_model.bin"
+
+try:
+    metadata = get_hf_file_metadata(hf_hub_url(repo_id, filename), timeout=30)
+    print("commit:", metadata.commit_hash)
+    print("etag:", metadata.etag)
+    print("size:", metadata.size)
+    if not metadata.commit_hash or not metadata.etag or not metadata.size:
+        print("CLIP_METADATA_INVALID: 请尝试镜像或其他网络路径")
+    else:
+        path = hf_hub_download(repo_id=repo_id, filename=filename)
+        print("CLIP_WEIGHT:", path)
+        print("CLIP_DOWNLOAD_OK")
+except Exception as exc:
+    print("CLIP_DOWNLOAD_FAILED:", type(exc).__name__, exc)
+PY
+```
+
+只有最后一行出现 `CLIP_DOWNLOAD_OK` 才能继续 datagen。仅看到 HTTP `200` 不够，`commit`、`etag` 和 `size` 必须都非空。本路线验收时官方响应的 commit 为 `1627032197142fbe2a7cfec626f4ced3ae60d07a`、size 为 `1710631365`；未来 upstream revision 可能合理变化。
+
+如果直连失败，设置镜像 endpoint 后重新执行同一 Python block：
+
+```bash
+export HF_ENDPOINT=https://hf-mirror.com
+```
+
+镜像只是 fallback，不保证一定成功：大文件仍可能跳转到 Hugging Face Xet/CDN hosts。如果直连和镜像都失败，再配置用户自己的网络代理并重新执行 metadata check。不要照抄其他服务器的专用代理端口。如果代理下出现 `commit: None`、`etag: None` 或 `size: None`，说明代理丢失或改写了 Hugging Face 必需的响应头，应关闭代理或更换节点。
+
+下载完成后验证 OpenCLIP 能在完全离线时加载。这个 gate 可以在 scene 初始化前发现不完整 snapshot，并避免 rollout 时 Hugging Face 再探测未缓存的 `.safetensors` 候选。
+
+```bash
+HF_HUB_OFFLINE=1 python - <<'PY'
+import open_clip
+
+open_clip.create_model_and_transforms(
+    "ViT-L-14",
+    pretrained="laion2b_s32b_b82k",
+    device="cpu",
+)
+print("CLIP_OFFLINE_LOAD_OK")
+PY
+```
+
+只有最后一行出现 `CLIP_OFFLINE_LOAD_OK` 才能继续。
+
+### 7. 查看固定 Franka PnP pools
 
 ```bash
 python scripts/datagen/run_pipeline.py --list_pools
@@ -139,7 +228,7 @@ python scripts/datagen/run_pipeline.py --list_pools
 
 每个 pool 固定 scene dataset、split、house、pickup object 和 receptacle。在目标机器通过完整行为与产物 gate 之前，这些 pool 仍是研究候选。
 
-### 6. Franka datagen 参数参考
+### 8. Franka datagen 参数参考
 
 | 参数 | 含义与约束 |
 |---|---|
@@ -154,15 +243,17 @@ python scripts/datagen/run_pipeline.py --list_pools
 | `--filter_for_successful_trajectories` | 只把成功轨迹保存为 source candidate，不保留失败轨迹。 |
 | `--disable_action_noise` | 关闭逐步 robot action noise，用于受控 source collection。 |
 | `--require_clean_success` | 将 planner retry 设为零，并拒绝发生任何 retry 的轨迹；要求支持该字段的 object-manipulation planner。 |
+| `--require_success_count N` | 如果成功轨迹少于 `N`，进程以非零状态退出。Bounded smoke 应使用该参数，避免零产物运行仅凭退出码看起来成功。 |
 
 每个 pool 应使用独立的 output/source dataset。不要混合不同 pool 的 identity 后把结果称为 homogeneous source pool。输出目录是 `ASSETS_DIR/datagen/<task_type>_<policy>_v1/<prefix>_<timestamp>`；所以下面的命令输出到 `datagen/pick_and_place_planner_v1/` 下。
 
-### 7. 运行有界 Franka PnP datagen smoke
+### 9. 运行有界 Franka PnP datagen smoke
 
 在原生 Linux NVIDIA 机器上，为 Warp parallel IK 选择 GPU；MuJoCo physics 仍在 CPU：
 
 ```bash
 export CUDA_VISIBLE_DEVICES=0
+export HF_HUB_OFFLINE=1
 
 python scripts/datagen/run_pipeline.py \
   --robot droid --policy planner --task_type pick_and_place \
@@ -170,13 +261,14 @@ python scripts/datagen/run_pipeline.py \
   --samples_per_house 1 --randomize_fixed_pickup_pose \
   --filter_for_successful_trajectories \
   --disable_action_noise --require_clean_success \
+  --require_success_count 1 \
   --device gpu --num_workers 1 \
   --seed 111 --run_name_prefix fresh_clone_smoke
 ```
 
 这里 `--robot droid` 实际使用 `FrankaRobotConfig` 和 `FrankaDroidCameraSystem`。`--device cpu` 只建议作为较慢的诊断 fallback。WSL2 不提供 MolmoSpaces headless rendering 所需的 NVIDIA EGL device extension，因此完整 GPU 渲染 datagen 验收需要带 NVIDIA EGL vendor 配置的原生 Linux。
 
-`samples_per_house=1` 只是请求保存一条轨迹，不证明已经生成有效 demo。只有进程正常退出、输出目录包含非空 HDF5 和预期视频、数组 finite、task identity 与 pool 一致、planner phases 覆盖完整行为、视频/replay 显示 approach 到稳定 release，并且没有 planner retry，才能验收 datagen。
+`samples_per_house=1` 只是请求保存一条轨迹，不证明已经生成有效 demo。只有进程正常退出、输出目录包含非空 HDF5 和预期视频、控制/状态数组 finite、padding 数组符合其有效长度或 mask 语义、task identity 与 pool 一致、planner phases 覆盖完整行为、视频/replay 显示 approach 到稳定 release，并且没有 planner retry，才能验收 datagen。`--require_success_count 1` 会让零成功 smoke 返回非零退出码，但仍不能替代产物与行为检查。
 
 生成文件位于运行日志打印的 MolmoSpaces resource datagen 目录。仅有 config 构造、scene load 或 HDF5 文件不能证明 datagen 成功。
 

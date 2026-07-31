@@ -61,6 +61,7 @@ from molmo_spaces.data_generation.config.object_manipulation_datagen_configs imp
 )
 from molmo_spaces.data_generation.config_registry import get_config_class
 from molmo_spaces.data_generation.pipeline import ParallelRolloutRunner
+from molmo_spaces.data_generation.run_validation import require_success_count
 from molmo_spaces.tasks.task import BaseMujocoTask
 from molmo_spaces.utils.profiler_utils import Profiler
 
@@ -221,12 +222,8 @@ def setup_config(args: argparse.ArgumentParser) -> MlSpacesExpConfig:
         )
     if args.fixed_place_receptacle_uid:
         if task_type != "pick_and_place":
-            raise ValueError(
-                "--fixed_place_receptacle_uid is only valid for pick_and_place"
-            )
-        datagen_cfg.task_sampler_config.fixed_place_receptacle_uid = (
-            args.fixed_place_receptacle_uid
-        )
+            raise ValueError("--fixed_place_receptacle_uid is only valid for pick_and_place")
+        datagen_cfg.task_sampler_config.fixed_place_receptacle_uid = args.fixed_place_receptacle_uid
         datagen_cfg.task_sampler_config.num_place_receptacles = 1
         datagen_cfg.task_sampler_config.episodes_per_receptacle = 0
     datagen_cfg.task_sampler_config.samples_per_house = args.samples_per_house
@@ -330,7 +327,7 @@ def get_output_dir(args, exp_config):
     return output_dir
 
 
-def main(args: argparse.ArgumentParser) -> None:
+def main(args: argparse.Namespace) -> None:
     if args.pool and (args.eval or args.config):
         raise ValueError("--pool cannot be combined with --eval or --config")
 
@@ -349,6 +346,8 @@ def main(args: argparse.ArgumentParser) -> None:
     # overload some config values
     if args.num_workers < 1:
         raise ValueError("--num_workers must be at least 1")
+    if args.require_success_count is not None and args.require_success_count < 1:
+        raise ValueError("--require_success_count must be at least 1")
     if args.compute_device == "gpu" and not wp.is_cuda_available():
         raise RuntimeError("--compute_device gpu requested, but Warp CUDA is unavailable")
     exp_config.num_workers = args.num_workers
@@ -396,7 +395,8 @@ def main(args: argparse.ArgumentParser) -> None:
     exp_config.output_dir = get_output_dir(args, exp_config)
     exp_config.save_config()
     runner = MyRolloutRunner(exp_config)
-    runner.run(preloaded_policy=policy)
+    success_count, total_count = runner.run(preloaded_policy=policy)
+    require_success_count(success_count, total_count, args.require_success_count)
 
 
 if __name__ == "__main__":
@@ -490,6 +490,12 @@ if __name__ == "__main__":
         "--require_clean_success",
         action="store_true",
         help="reject planner trajectories that require any retry",
+    )
+    args.add_argument(
+        "--require_success_count",
+        type=int,
+        default=None,
+        help="exit nonzero unless at least this many successful trajectories are produced",
     )
     args.add_argument(
         "--pool",

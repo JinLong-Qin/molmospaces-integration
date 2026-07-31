@@ -98,6 +98,7 @@ curobo = [
     "nvidia-curobo @ git+https://github.com/allenai/curobo.git@87e857d46fa5398f268c7f31d26566351be8671d",
 ]
 mujoco = [
+    "httpx[socks]>=0.27.0",
     "mujoco~=3.5.0",
 ]
 mujoco-filament = [

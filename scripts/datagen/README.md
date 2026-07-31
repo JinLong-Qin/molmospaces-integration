@@ -149,6 +149,7 @@ python scripts/datagen/run_pipeline.py \
   --samples_per_house 10 --randomize_fixed_pickup_pose \
   --filter_for_successful_trajectories \
   --disable_action_noise --require_clean_success \
+  --require_success_count 10 \
   --device gpu --num_workers 1 \
   --seed 111 --run_name_prefix potato_bowl_1716_seed111
 ```
@@ -160,7 +161,8 @@ pool across workers. Use distinct seeds and output prefixes for separate runs.
 
 `samples_per_house=10` is the target number of saved trajectories, not proof that
 ten valid demonstrations were produced. IK or task-sampling failures can stop a
-run early. Accept a run only after checking the final `Success count`, HDF5
+run early. `--require_success_count 10` makes that shortfall return a nonzero exit
+code. Accept a run only after checking the final `Success count`, HDF5
 trajectory count and identities, monotonic planner phases, retry count, and both
 wrist and exocentric videos. These are synthetic scripted-IK planner expert
 demonstrations, not human demonstrations.

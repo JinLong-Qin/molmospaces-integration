@@ -2,15 +2,10 @@ from collections import Counter, defaultdict
 from collections.abc import Iterable, Sequence
 from functools import cache, lru_cache
 
-
-def _ensure_nltk():
-    import nltk
-
-    for corpus in ["wordnet", "wordnet2022"]:
-        nltk.download(corpus)
+from molmo_spaces.utils.nltk_resources import require_nltk_resources
 
 
-_ensure_nltk()
+require_nltk_resources()
 
 from nltk.corpus import wordnet2022 as wn
 

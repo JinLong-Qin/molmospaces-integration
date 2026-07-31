@@ -41,7 +41,10 @@ def _warp_float_dtype_to_numpy(dtype) -> np.dtype:
 
 def _as_warp_array_like(array: np.ndarray, like: wp.array):
     """Create a contiguous Warp array with the same scalar dtype as ``like``."""
-    return wp.from_numpy(np.ascontiguousarray(array, dtype=_warp_float_dtype_to_numpy(like.dtype)))
+    return wp.from_numpy(
+        np.ascontiguousarray(array, dtype=_warp_float_dtype_to_numpy(like.dtype)),
+        dtype=like.dtype,
+    )
 
 
 @dataclass
@@ -626,7 +629,10 @@ class SimpleWarpKinematics(ParallelKinematics):
             ik_args.dt.fill_(dt)
             wp.copy(
                 ik_args.jacobian_mask,
-                wp.from_numpy(self._create_jacobian_mask(batch_size, unlocked_move_group_ids)),
+                wp.from_numpy(
+                    self._create_jacobian_mask(batch_size, unlocked_move_group_ids),
+                    dtype=wp.int32,
+                ),
             )
 
             q0_arr = self._dicts_to_qpos_arr(q0_dicts, _warp_float_dtype_to_numpy(data.qpos.dtype))
