@@ -62,7 +62,14 @@ def first_index_where(arr, pred):
     return -1
 
 
-def build_demo(seed_index: int, demo_name: str, out_data, manifest, replay_root: Path):
+def build_demo(
+    seed_index: int,
+    demo_name: str,
+    out_data,
+    manifest,
+    replay_root: Path,
+    manual_review_exceptions: set[int],
+):
     seed = manifest["seeds"][seed_index]
     raw_dir = seed.get("raw_h5_dir", "raw")
     raw_dir = Path(raw_dir)
@@ -75,7 +82,13 @@ def build_demo(seed_index: int, demo_name: str, out_data, manifest, replay_root:
     if not result_path.exists():
         raise RuntimeError(f"seed_{seed_index:02d}: missing datagen result {result_path}")
     replay_result = json.loads(result_path.read_text())
-    if not (replay_result.get("final_success") and replay_result.get("success_persistent_to_end")):
+    automatic_hard_pass = bool(
+        replay_result.get("final_success") and replay_result.get("success_persistent_to_end")
+    )
+    manually_approved = bool(
+        seed_index in manual_review_exceptions and replay_result.get("final_success")
+    )
+    if not (automatic_hard_pass or manually_approved):
         raise RuntimeError(f"seed_{seed_index:02d} is not hard-pass: {replay_result}")
     pickup_rel_obs = np.load(replay_dir / "pickup_obj_pose_rel_observations.npy")
     place_rel_obs = np.load(replay_dir / "place_receptacle_pose_rel_observations.npy")
@@ -185,11 +198,15 @@ def build_demo(seed_index: int, demo_name: str, out_data, manifest, replay_root:
     demo.attrs["batch_id"] = int(seed["batch_id"])
     demo.attrs["traj_index"] = int(seed["traj_index"])
     demo.attrs["source_h5"] = seed["raw_h5"]
+    demo.attrs["source_h5_file"] = seed.get("source_h5_file", str(raw_h5))
+    demo.attrs["source_run_root"] = seed.get("source_run_root", "")
     demo.attrs["num_samples"] = n
     demo.attrs["source_observations"] = int(seed["length"])
     demo.attrs["alignment"] = (
         "real commanded_action rows only; final success marker row excluded; pre_obs=row-1, post_obs=row"
     )
+    demo.attrs["automatic_hard_pass"] = automatic_hard_pass
+    demo.attrs["manual_review_exception"] = manually_approved and not automatic_hard_pass
     demo.attrs["seed_kind"] = "synthetic_planner_expert"
     demo.attrs["task_type"] = "pick_and_place"
     demo.attrs["task_description"] = obs_scene.get("task_description", "")
@@ -209,14 +226,17 @@ def build_demo(seed_index: int, demo_name: str, out_data, manifest, replay_root:
 
 
 def parse_indices(s: str):
-    if s.strip().lower() == "all":
-        return list(range(50))
     return [int(x) for x in s.split(",") if x.strip()]
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--accepted", default="all")
+    ap.add_argument(
+        "--manual-review-exceptions",
+        default="",
+        help="Comma-separated final-success seed indices approved by manual video review.",
+    )
     ap.add_argument(
         "--manifest",
         type=Path,
@@ -230,11 +250,24 @@ def main():
     )
     args = ap.parse_args()
     manifest = json.loads(args.manifest.read_text())
-    accepted = parse_indices(args.accepted)
-    if max(accepted) >= len(manifest["seeds"]):
+    accepted = (
+        list(range(len(manifest["seeds"])))
+        if args.accepted.strip().lower() == "all"
+        else parse_indices(args.accepted)
+    )
+    if not accepted:
+        raise RuntimeError("--accepted resolved to no source trajectories")
+    if min(accepted) < 0 or max(accepted) >= len(manifest["seeds"]):
         raise RuntimeError(
             f"accepted index out of manifest range: max={max(accepted)} n={len(manifest['seeds'])}"
         )
+    manual_review_exceptions = (
+        set()
+        if not args.manual_review_exceptions.strip()
+        else set(parse_indices(args.manual_review_exceptions))
+    )
+    if not manual_review_exceptions.issubset(accepted):
+        raise RuntimeError("--manual-review-exceptions must be included in --accepted")
     args.out.parent.mkdir(parents=True, exist_ok=True)
     if args.out.exists():
         args.out.unlink()
@@ -255,7 +288,14 @@ def main():
             }
         )
         for demo_i, seed_index in enumerate(accepted):
-            s = build_demo(seed_index, f"demo_{demo_i}", data, manifest, args.replay_root)
+            s = build_demo(
+                seed_index,
+                f"demo_{demo_i}",
+                data,
+                manifest,
+                args.replay_root,
+                manual_review_exceptions,
+            )
             summaries.append(s)
             total += s["n"]
         data.attrs["total"] = int(total)
@@ -267,6 +307,12 @@ def main():
         )
         out.attrs["n_demos"] = len(accepted)
         out.attrs["accepted_seed_indices"] = json.dumps(accepted)
+        out.attrs["manual_review_exception_seed_indices"] = json.dumps(
+            sorted(manual_review_exceptions)
+        )
+        out.attrs["source_run_roots"] = json.dumps(
+            sorted({str(manifest["seeds"][i].get("source_run_root", "")) for i in accepted})
+        )
         out.attrs["generation_intent"] = (
             "source pool for MimicGen cross-source/subtask recombination; not single-source whole-trajectory baseline"
         )
@@ -278,6 +324,7 @@ def main():
                 "manifest": str(args.manifest),
                 "replay_root": str(args.replay_root),
                 "accepted": accepted,
+                "manual_review_exceptions": sorted(manual_review_exceptions),
                 "n_demos": len(accepted),
                 "total": total,
                 "demos": summaries,

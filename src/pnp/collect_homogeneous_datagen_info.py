@@ -6,7 +6,9 @@ signal.signal(signal.SIGALRM, lambda *_: (_ for _ in ()).throw(TimeoutError("har
 signal.alarm(1800)
 ROOT = Path(os.environ.get("MOLMOSPACES_ROOT", "."))
 sys.path.insert(0, str(ROOT))
-WORK = ROOT / "runtime/mimicgen_pick_and_place"
+WORK = Path(
+    os.environ.get("MOLMOSPACES_PNP_WORKDIR", str(ROOT / "runtime/mimicgen_pick_and_place"))
+)
 ap = argparse.ArgumentParser()
 ap.add_argument("--seed-index", type=int, required=True)
 ap.add_argument(

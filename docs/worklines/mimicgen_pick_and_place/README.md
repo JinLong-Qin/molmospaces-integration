@@ -18,6 +18,7 @@ Key scripts:
 - `parse_source_dataset.py` — parse the source HDF5 with MimicGen compatibility checks.
 - `generate_pick_place_rollout.py` — run a generated trajectory back in MolmoSpaces.
 - `collect_uniform_successes.sh` and `collect_unique_highyield_successes.sh` — collector entrypoints used for larger sweeps.
+- `run_fixedpool_source_hdf5.sh` — reproducible fixed-pool source-demo build: strict selection and deduplication, deterministic replay, robomimic HDF5 conversion, and schema validation.
 
 ## Minimal run sequence
 
@@ -58,3 +59,25 @@ PNP_SELECT_N=50 python src/pnp/select_pnp_50_source_pool.py \
 ```
 
 Franka mode recursively reads `house_*/trajectories_batch_*.h5`, requires complete phases `0..9`, terminal/persistent task success and the replay fields used downstream, and rejects duplicate initial-state/action fingerprints. Its manifest remains compatible with the existing replay, datagen-info, robomimic conversion, and MimicGen generation path. Treat `samples_per_house` only as a requested workload and verify actual HDF5 success counts. The source provenance is synthetic scripted-IK planner expert, not human or RB-Y1 planner-server data.
+
+## Fixed-pool source-demo HDF5
+
+For a completed fixed pool, use the public one-command source conversion entrypoint rather than treating the raw `trajectories_batch_*.h5` files as a MimicGen input:
+
+```bash
+export MOLMOSPACES_PNP_WORKDIR="$PWD/runtime/fixedpool_source"
+bash src/pnp/run_fixedpool_source_hdf5.sh /path/to/pick_and_place_planner_v1 43
+```
+
+The entrypoint defaults to `PNP_FIXEDPOOL_HOUSE_ID=1716` and `PNP_FIXEDPOOL_RUN_NAME_PREFIX=potato_bowl_1716_seed`, preventing other houses or historical smoke runs in a shared datagen root from entering the source set. It writes an independent source manifest, replay records, a robomimic HDF5 with `data/demo_*`, and schema-validation output below `MOLMOSPACES_PNP_WORKDIR`. It never overwrites the raw datagen HDF5 or its videos. A completed conversion proves source-format availability only; generated MimicGen rollouts still require their own task-success and video gates.
+
+## Fixed-pool source build record (2026-08-01)
+
+The completed formal source set is restricted to the seven `potato_bowl_1716_seed*` run roots in house `1716`, excluding historical smoke and gate runs. It contains 43 trajectories after exact initial-state/action fingerprint deduplication. Deterministic replay and robomimic conversion produced the runtime-only artifact below; generated data is intentionally ignored by Git.
+
+```text
+runtime/fixedpool_potato_bowl_1716_source/artifacts/seeds/
+  robomimic_pnp_fixedpool_manual_review43.hdf5
+```
+
+Validation passed for 43 `data/demo_*` groups, 7,582 total action samples, finite numeric arrays, action/observation alignment, and source provenance spanning all seven formal run roots. Automatic replay persistence accepted 40 trajectories. Three final-success trajectories (manifest source indices `6`, `19`, and `29`) had transient persistence-flag drops; Kunyu reviewed the corresponding `exo_camera_1` videos and accepted them on 2026-08-01. The converted HDF5 explicitly records those three per-demo manual-review exceptions and the root-level exception list. This evidence establishes a usable robomimic/MimicGen source dataset, not generated MimicGen rollout success.

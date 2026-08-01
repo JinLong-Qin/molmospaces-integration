@@ -43,24 +43,31 @@ def decode_json_blob(value):
 
 def action_fingerprint(dataset) -> str:
     digest = hashlib.sha256()
-    for row in dataset:
-        digest.update(bytes(row).rstrip(b"\0"))
-        digest.update(b"\n")
+    values = np.asarray(dataset)
+    digest.update(str(values.dtype).encode("ascii"))
+    digest.update(np.asarray(values.shape, dtype=np.int64).tobytes())
+    digest.update(values.tobytes())
     return digest.hexdigest()
 
 
 def initial_state_fingerprint(group, obs_scene: dict) -> str:
     digest = hashlib.sha256()
-    for path in ("obs/extra/obj_start", "obs/extra/robot_base_pose"):
+    digest.update(json.dumps(obs_scene, sort_keys=True, separators=(",", ":")).encode("utf-8"))
+    for path in (
+        "obs/extra/obj_start",
+        "obs/extra/robot_base_pose",
+        "env_states/articulations/panda",
+    ):
         if path in group:
-            digest.update(np.asarray(group[path][0]).tobytes())
-    for key in ("object_name", "pickup_obj_name", "place_receptacle_name", "task_description"):
-        digest.update(str(obs_scene.get(key)).encode("utf-8"))
-        digest.update(b"\0")
+            values = np.asarray(group[path][0])
+            digest.update(path.encode("utf-8"))
+            digest.update(str(values.dtype).encode("ascii"))
+            digest.update(np.asarray(values.shape, dtype=np.int64).tobytes())
+            digest.update(values.tobytes())
     return digest.hexdigest()
 
 
-def scan_h5(h5, *, strict_franka: bool):
+def scan_h5(h5, *, strict_franka: bool, require_persistent_success: bool = True):
     out = []
     mask = np.asarray(h5.get("valid_traj_mask", []), dtype=bool)
     keys = sorted(
@@ -79,7 +86,7 @@ def scan_h5(h5, *, strict_franka: bool):
             continue
         first_success = int(np.argmax(success)) if success.any() else -1
         persistent = first_success >= 0 and bool(success[first_success:].all())
-        if strict_franka and not persistent:
+        if strict_franka and require_persistent_success and not persistent:
             continue
 
         obs_scene = decode_json_blob(group["obs_scene"][()]) if "obs_scene" in group else {}
@@ -220,7 +227,13 @@ def infer_run_root(h5_path: Path, supplied_root: Path) -> Path:
     return supplied_root
 
 
-def select_from_franka_datagen(root: Path, count: int):
+def select_from_franka_datagen(
+    root: Path,
+    count: int,
+    house_id_filter: int | None = None,
+    run_name_prefix: str | None = None,
+    require_persistent_success: bool = True,
+):
     h5_paths = sorted(root.rglob("trajectories_batch_*.h5"))
     if not h5_paths:
         raise SystemExit(f"no trajectories_batch_*.h5 files found under {root}")
@@ -235,8 +248,17 @@ def select_from_franka_datagen(root: Path, count: int):
         batch_match = re.search(r"trajectories_batch_(\d+)_", h5_path.name)
         house_id = int(house_match.group(1)) if house_match else -1
         batch_id = int(batch_match.group(1)) if batch_match else -1
+        if house_id_filter is not None and house_id != house_id_filter:
+            continue
+        run_root = infer_run_root(h5_path, root)
+        if run_name_prefix is not None and not run_root.name.startswith(run_name_prefix):
+            continue
         with h5py.File(h5_path, "r") as h5:
-            candidates = scan_h5(h5, strict_franka=True)
+            candidates = scan_h5(
+                h5,
+                strict_franka=True,
+                require_persistent_success=require_persistent_success,
+            )
         for candidate in candidates:
             if len(rows) >= count:
                 break
@@ -245,7 +267,6 @@ def select_from_franka_datagen(root: Path, count: int):
                 duplicate_count += 1
                 continue
             seen_fingerprints.add(fingerprint)
-            run_root = infer_run_root(h5_path, root)
             candidate.update(
                 {
                     "seed_index": len(rows),
@@ -278,13 +299,18 @@ def select_from_franka_datagen(root: Path, count: int):
         "split": None,
         "input_kind": "franka_datagen_hdf5",
         "franka_datagen_root": str(root.resolve()),
+        "house_id_filter": house_id_filter,
+        "run_name_prefix": run_name_prefix,
+        "raw_success_requirement": "terminal_and_persistent"
+        if require_persistent_success
+        else "terminal_only; replay hard-pass required before conversion",
         "selection_note": (
             f"{count} unique strict-success Franka Pick-and-Place trajectories selected from "
             "locally generated MolmoSpaces HDF5; synthetic scripted-IK planner expert demos, "
             "not human demonstrations and not RB-Y1 planner-server trajectories"
         ),
         "deduplication": (
-            "sha256 over initial object/robot/task state plus actions/commanded_action rows"
+            "sha256 over complete scene metadata, initial object/robot state, and raw actions/commanded_action bytes"
         ),
         "skipped_duplicate_trajectories": duplicate_count,
         "seeds": rows,
@@ -300,26 +326,58 @@ def main():
         type=Path,
         help="Read house_*/trajectories_batch_*.h5 from this Franka datagen run/collection instead of the MolmoBot shard.",
     )
+    parser.add_argument(
+        "--count",
+        type=int,
+        default=int(os.environ.get("PNP_SELECT_N", "50")),
+        help="Number of unique strict-success source trajectories to select.",
+    )
+    parser.add_argument(
+        "--out",
+        type=Path,
+        default=OUT / "pnp_seed_manifest_50demo_crossmix.json",
+        help="Destination manifest path.",
+    )
+    parser.add_argument(
+        "--house-id",
+        type=int,
+        help="Restrict Franka datagen selection to one house ID.",
+    )
+    parser.add_argument(
+        "--run-name-prefix",
+        help="Restrict Franka datagen selection to run directory names with this prefix.",
+    )
+    parser.add_argument(
+        "--allow-nonpersistent-candidates",
+        action="store_true",
+        help="Include terminal-only candidates for replay audit; conversion still requires replay hard-pass.",
+    )
     args = parser.parse_args()
-    count = int(os.environ.get("PNP_SELECT_N", "50"))
-    OUT.mkdir(parents=True, exist_ok=True)
+    if args.count < 1:
+        raise SystemExit(f"--count must be positive, got {args.count}")
+    args.out.parent.mkdir(parents=True, exist_ok=True)
 
     if args.franka_datagen_root is None:
-        manifest = select_from_molmobot_shard(DEFAULT_TAR, count)
+        manifest = select_from_molmobot_shard(DEFAULT_TAR, args.count)
     else:
         root = args.franka_datagen_root.expanduser().resolve()
         if not root.is_dir():
             raise SystemExit(f"Franka datagen root is not a directory: {root}")
-        manifest = select_from_franka_datagen(root, count)
+        manifest = select_from_franka_datagen(
+            root,
+            args.count,
+            args.house_id,
+            args.run_name_prefix,
+            not args.allow_nonpersistent_candidates,
+        )
 
-    if len(manifest["seeds"]) < count:
-        raise SystemExit(f"only found {len(manifest['seeds'])}/{count}")
-    output = OUT / "pnp_seed_manifest_50demo_crossmix.json"
-    output.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
+    if len(manifest["seeds"]) < args.count:
+        raise SystemExit(f"only found {len(manifest['seeds'])}/{args.count}")
+    args.out.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
     print(
         json.dumps(
             {
-                "manifest": str(output),
+                "manifest": str(args.out),
                 "n": len(manifest["seeds"]),
                 "input_kind": manifest["input_kind"],
             },
