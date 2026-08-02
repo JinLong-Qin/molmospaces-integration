@@ -127,3 +127,39 @@ python src/pnp/validate_robomimic_source_hdf5.py \
   --input runtime/fixedpool_potato_bowl_1716_source/artifacts/seeds/robomimic_pnp_fixedpool_manual_review43.hdf5 \
   --expected-demos 43
 ```
+
+## Fixed-pool MimicGen expansion
+
+`run_fixedpool_mimicgen43_to100.sh` expands the approved 43-demo HDF5 into an
+audited generated-rollout pool. It invokes MimicGen's per-subtask source
+selection across all 43 source demonstrations for each of the 43 recorded
+target initial states, records every attempt in
+`runtime/fixedpool_potato_bowl_1716_source/logs/`, and accepts an output only
+when it has final simulator success, persistence through a 30-step hold, two
+non-empty camera videos, and a unique SHA-256 over `generated_actions.npy`.
+Failed and exact-duplicate attempts remain recorded but are excluded from
+`accepted.jsonl`. Generated HDF5/video runtime artifacts are not committed.
+
+```bash
+export MOLMOSPACES_ROOT="$PWD"
+export MOLMOSPACES_PNP_WORKDIR="$PWD/runtime/fixedpool_potato_bowl_1716_source"
+export MOLMOSPACES_PYTHON=/path/to/molmospaces-python
+export MIMICGEN_ROOT=/path/to/mimicgen
+export ROBOMIMIC_ROOT=/path/to/robomimic
+export PYTHONPATH="$PWD:$MIMICGEN_ROOT:$ROBOMIMIC_ROOT"
+export MUJOCO_GL=egl
+
+TARGET_SUCCESS=100 MAX_ATTEMPTS=240 \
+  bash src/pnp/run_fixedpool_mimicgen43_to100.sh
+```
+
+The launcher uses MimicGen's `select_src_per_subtask` behavior, so a source
+segment is selected at each subtask boundary; an attempt may by chance select
+the same source demo more than once. This is recorded through `src_demo_inds`,
+but is not artificially rejected because MimicGen does not impose a
+multi-source-per-episode requirement. The launcher is resume-safe: set
+`RUN_DIR` to an existing run directory to skip named attempts already recorded
+there. `summary.json` reports the current attempt, strict-success, duplicate,
+and accepted-unique counts. The source HDF5 SHA-256 is recorded with every
+attempt to preserve the approved 43-demo provenance in downstream generated
+demonstrations.

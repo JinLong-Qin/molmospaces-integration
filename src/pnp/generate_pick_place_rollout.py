@@ -54,6 +54,12 @@ ap.add_argument(
     help="allow MimicGen to choose a different source demo per subtask",
 )
 ap.add_argument(
+    "--mimicgen-rng-seed",
+    type=int,
+    default=None,
+    help="seed NumPy before MimicGen source-subtask selection",
+)
+ap.add_argument(
     "--omit-final-residual",
     action="store_true",
     help="end task spec at place_success instead of executing post-place residual retreat",
@@ -75,6 +81,9 @@ ap.add_argument(
     help="include first robot pose for every subtask, not only the first one",
 )
 args = ap.parse_args()
+
+if args.mimicgen_rng_seed is not None:
+    np.random.seed(args.mimicgen_rng_seed)
 
 manifest = json.loads(Path(args.target_manifest).read_text())
 seed_meta = manifest["seeds"][args.seed_index]
@@ -629,6 +638,7 @@ try:
         "is_mimicgen_generate_call": True,
         "same_initial_state_smoke": bool(args.seed_index == 0),
         "select_src_per_subtask": bool(args.select_src_per_subtask),
+        "mimicgen_rng_seed": args.mimicgen_rng_seed,
         "interpolate_from_last_target_pose": (not bool(args.interpolate_from_current_pose)),
         "transform_first_robot_pose": bool(args.transform_first_robot_pose),
         "stop_on_success": bool(args.stop_on_success),
@@ -640,6 +650,7 @@ try:
         "success_persistent_to_end": bool(persistent),
         "num_actions_executed": int(len(results["actions"])),
         "src_demo_inds": [int(x) for x in results["src_demo_inds"]],
+        "distinct_src_demo_count": len({int(x) for x in results["src_demo_inds"]}),
         "task_spec": json.loads(task_spec.serialize()),
         "notes": "Full-rollout PnP generation from the configured source dataset; stop_on_success must be false for acceptance.",
     }
