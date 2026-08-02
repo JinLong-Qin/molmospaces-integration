@@ -1032,6 +1032,29 @@ class PickTaskSampler(BaseMujocoTaskSampler):
                 self._datagen_profiler.end("robot_randomize_pickup_obj")
 
         robot_view = env.current_robot.robot_view
+        fixed_robot_base_pose = self.config.task_sampler_config.fixed_robot_base_pose
+        if fixed_robot_base_pose is not None:
+            if len(fixed_robot_base_pose) != 7:
+                raise ValueError(
+                    "fixed_robot_base_pose must contain x y z qw qx qy qz"
+                )
+            fixed_robot_pose = pos_quat_to_pose_mat(
+                np.asarray(fixed_robot_base_pose[:3]),
+                np.asarray(fixed_robot_base_pose[3:]),
+            )
+            if env.check_if_robot_collision_at_base_pose(robot_view, fixed_robot_pose):
+                raise RobotPlacementError(
+                    f"Fixed robot base pose is in collision: {fixed_robot_base_pose}"
+                )
+            robot_view.base.pose = fixed_robot_pose
+            mujoco.mj_forward(env.current_model, env.current_data)
+            task_cfg.robot_base_pose = list(fixed_robot_base_pose)
+            pickup_obj_goal_pose = pose_mat_to_7d(pickup_obj.pose)
+            pickup_obj_goal_pose[2] += 0.05
+            task_cfg.pickup_obj_goal_pose = pickup_obj_goal_pose.tolist()
+            log.info(f"Using fixed robot base pose: {fixed_robot_base_pose}")
+            return
+
         if isinstance(pickup_obj, MlSpacesObject):
             target_pos = pickup_obj.position
         else:

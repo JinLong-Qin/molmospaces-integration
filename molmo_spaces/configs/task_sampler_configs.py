@@ -111,6 +111,7 @@ class PickTaskSamplerConfig(ObjectCentricTaskSamplerConfig):
     fixed_pickup_obj_name: str | None = None
     randomize_fixed_pickup_pose: bool = False
     fixed_pickup_placement_radius_range: tuple[float, float] = (0.02, 0.12)
+    fixed_robot_base_pose: list[float] | None = None
 
     # Receptacle retry parameters
     max_receptacle_attempts: int = 10  # Maximum number of different receptacles to try

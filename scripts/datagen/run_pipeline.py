@@ -226,6 +226,8 @@ def setup_config(args: argparse.ArgumentParser) -> MlSpacesExpConfig:
         datagen_cfg.task_sampler_config.fixed_place_receptacle_uid = args.fixed_place_receptacle_uid
         datagen_cfg.task_sampler_config.num_place_receptacles = 1
         datagen_cfg.task_sampler_config.episodes_per_receptacle = 0
+    if args.fixed_robot_base_pose is not None:
+        datagen_cfg.task_sampler_config.fixed_robot_base_pose = args.fixed_robot_base_pose
     datagen_cfg.task_sampler_config.samples_per_house = args.samples_per_house
 
     # randomize scene
@@ -469,6 +471,13 @@ if __name__ == "__main__":
     )
     args.add_argument("--fixed_pickup_min_dist", type=float, default=0.02)
     args.add_argument("--fixed_pickup_max_dist", type=float, default=0.12)
+    args.add_argument(
+        "--fixed_robot_base_pose",
+        type=float,
+        nargs=7,
+        metavar=("X", "Y", "Z", "QW", "QX", "QY", "QZ"),
+        help="reuse one fixed robot base pose for every sampled task",
+    )
     args.add_argument(
         "--samples_per_house", type=int, default=4, help="number of samples per house"
     )
