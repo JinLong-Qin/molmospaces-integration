@@ -13,10 +13,10 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--seed-index", type=int, required=True)
 ap.add_argument(
     "--manifest",
-    default=str(WORK / "artifacts/seeds/pnp_seed_manifest_homogeneous_potato_tomato_bowl.json"),
+    default=str(WORK / "artifacts/seeds/pnp_source_manifest.json"),
 )
 ap.add_argument(
-    "--out-root", default=str(WORK / "artifacts/replay_pnp_exact_homogeneous_potato_tomato_bowl")
+    "--out-root", default=str(WORK / "artifacts/replay_source_candidates")
 )
 args = ap.parse_args()
 T0 = time.monotonic()

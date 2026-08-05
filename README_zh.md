@@ -35,7 +35,7 @@
 | 工作线 | 详细 README | 代码入口 | 证据 / inventory | 状态 |
 |---|---|---|---|---|
 | MimicGen Pick-and-Place | [`docs/worklines/mimicgen_pick_and_place/README.md`](docs/worklines/mimicgen_pick_and_place/README.md) | [`src/pnp/`](src/pnp/) | [`results/workline_index/mimicgen_pick_and_place.md`](results/workline_index/mimicgen_pick_and_place.md) | Active / primary |
-| 50-demo MimicGen cross-subtask route | [`docs/worklines/mimicgen_50cross/README.md`](docs/worklines/mimicgen_50cross/README.md) | [`src/pnp/*50cross*`](src/pnp/) | [`results/50cross_selectsrc_pilot_20260727_182533/`](results/50cross_selectsrc_pilot_20260727_182533/) | Diagnostic |
+| 50-demo MimicGen cross-subtask route | [`archive/docs/worklines/mimicgen_50cross/README.md`](archive/docs/worklines/mimicgen_50cross/README.md) | [`archive/pnp/legacy_50cross/`](archive/pnp/legacy_50cross/) | [`results/50cross_selectsrc_pilot_20260727_182533/`](results/50cross_selectsrc_pilot_20260727_182533/) | Archived diagnostic |
 | Bimanual YAM browser teleop | [`docs/worklines/bimanual_yam_browser_teleop/README.md`](docs/worklines/bimanual_yam_browser_teleop/README.md) | [`src/bimanual_yam/`](src/bimanual_yam/) | [`results/workline_index/ithor_bimanual_yam.md`](results/workline_index/ithor_bimanual_yam.md) | Infrastructure |
 | iTHOR bimanual YAM | [`docs/worklines/ithor_bimanual_yam/README.md`](docs/worklines/ithor_bimanual_yam/README.md) | [`src/bimanual_yam/`](src/bimanual_yam/) | [`results/workline_index/ithor_bimanual_yam.md`](results/workline_index/ithor_bimanual_yam.md) | In progress |
 | Custom-scene bimanual YAM baseline | [`docs/worklines/bimanual_yam_source_baseline/README.md`](docs/worklines/bimanual_yam_source_baseline/README.md) | Inventory / regeneration entrypoints | [`results/workline_index/bimanual_yam_source_baseline.md`](results/workline_index/bimanual_yam_source_baseline.md) | Completed |
@@ -321,189 +321,19 @@ mkdir -p "$MOLMOSPACES_PNP_WORKDIR"/{artifacts/seeds,artifacts/mimicgen_pnp,data
 
 `HF_HOME` 会被 robomimic 的 CLIP language embedding 工具使用。`NLTK_DATA` / `MOLMOSPACES_NLTK_DATA` 用于 MolmoSpaces 需要本地 WordNet cache 的情况。
 
-### 3. 从两种 MimicGen source 选项中选择一种
+### 3. 当前 Pick-and-Place pipeline
 
-两种选项都会生成同一份 `pnp_seed_manifest_50demo_crossmix.json` contract，之后共用下面的 replay、datagen-info collection、robomimic conversion 和 MimicGen generation 命令。一个 dataset 选择一种 source 路线，不要隐式混合 provenance。
-
-#### 选项 A：官方预采集 MolmoData / MolmoBot-Data source shard
-
-当前 integration 文件把这类 source 称为 `MolmoBot-Data`，固定 pool 的 provenance label 使用 `MolmoData`。下载官方 Franka Pick-and-Place validation shard 并放到：
-
-```text
-runtime/mimicgen_pick_and_place/data/molmobot_data/FrankaPickAndPlaceOmniCamConfig/val_shards/00000.tar
-```
-
-使用 selector 的默认 shard 模式生成 source manifest：
+当前 source 构建和生成路径均为参数化 CLI；source 数量、source HDF5、target manifest、target 范围和输出标签均通过运行参数提供，不再编码在脚本名中。当前受控 pilot 使用 17 条唯一、回放验证通过的 source demos。
 
 ```bash
-PNP_SELECT_N=50 $MOLMOSPACES_PYTHON src/pnp/select_pnp_50_source_pool.py
+$MOLMOSPACES_PYTHON src/pnp/run_source_hdf5_pipeline.py --help
+$MOLMOSPACES_PYTHON src/pnp/sample_fixedbase_target_manifest.py --help
+$MOLMOSPACES_PYTHON src/pnp/run_generation.py --help
 ```
 
-#### 选项 B：本地采集的 Franka datagen HDF5
+先构建或选择 source HDF5，再创建并验证独立 target manifest，之后以 `run_generation.py --mode per-subtask` 执行官方 MimicGen source-selection 路线。`generate_pick_place_rollout.py` 是单条真实 simulator rollout 的执行原语。完整用法和证据 gate 见 [`src/pnp/README.md`](src/pnp/README.md)。
 
-将同一个 selector 指向一个已验收的 Franka run 目录，或多个已验收 run 的共同父目录：
-
-```bash
-PNP_SELECT_N=50 $MOLMOSPACES_PYTHON src/pnp/select_pnp_50_source_pool.py \
-  --franka-datagen-root /path/to/datagen/pick_and_place_planner_v1
-```
-
-Franka 模式递归读取 `house_*/trajectories_batch_*.h5`，要求 terminal/persistent success、完整 `0..9` planner phases、末帧 `task_info.success=true`、下游 replay 所需字段和唯一初始状态/动作指纹。
-
-本仓库包含轻量 manifest 和摘要，不包含官方 shards、本地生成的 HDF5、视频或其他 runtime artifacts。
-
-### 4. 首次运行资源 cache 说明
-
-MolmoSpaces 首次运行时可能下载/解压 iTHOR assets。如果中途被打断，可能出现类似错误：
-
-```text
-Directory path exists on disk but is not recorded in the cache manifest
-```
-
-不要手改 manifest。把报错中提到的未注册资源目录移动到 backup，再重跑，让资源管理器重新解压并登记。例如：
-
-```bash
-mkdir -p "$HOME/.cache/molmo-spaces-resources_broken_backup"
-mv "$HOME/.cache/molmo-spaces-resources/objects/thor/20251117" \
-  "$HOME/.cache/molmo-spaces-resources_broken_backup/thor_20251117_$(date +%Y%m%d_%H%M%S)"
-```
-
-如果网络需要代理，请在首次下载 asset/model 前设置代理环境变量。
-
-### 5. 运行 MolmoBot source replay smoke check
-
-把 manifest 复制到运行目录：
-
-```bash
-cp results/pnp_seed_manifest_homogeneous_foodlike_bowl_10candidate_v3.json \
-  "$MOLMOSPACES_PNP_WORKDIR/artifacts/seeds/"
-```
-
-检查源轨迹候选，查看哪些 MolmoBot-Data 轨迹可以用作 source：
-
-```bash
-$MOLMOSPACES_PYTHON src/pnp/inspect_source_candidates.py
-```
-
-回放一条源轨迹，验证回放管线正常工作：
-
-```bash
-$MOLMOSPACES_PYTHON src/pnp/replay_source_episode.py --seed-index 0 --save-videos
-```
-
-## MolmoSpaces 工作线合集
-
-上方的工作线表格同步维护在 [`docs/worklines/README.md`](docs/worklines/README.md) 中。每条 workline 有独立的 README 详细文档，即使其原始 HDF5/视频不在 Git 中。
-
-MolmoAct2 官方 `sim_eval` 成功、MolmoSpaces adapter 诊断、bimanual 浏览器遥操作、custom-scene YAM baseline、iTHOR source-demo 基础设施和 Pick-and-Place MimicGen rollout 是独立的证据层级，不应混为一谈。
-
-## Pick-and-Place 集成流程
-
-Pick-and-Place pipeline 接受通过验收的 Franka datagen HDF5 或 MolmoBot-Data 源轨迹，然后生成 MimicGen rollout：
-
-1. 检查或准备 source candidate 元数据；
-2. 回放 source trajectory 并收集 MimicGen datagen 信息；
-3. 把选中 source 转成 robomimic/MimicGen source HDF5；
-4. 用 MimicGen 解析 source HDF5；
-5. 在 MolmoSpaces 中生成 rollout 并保存视频；
-6. 可选：用 action-hash 去重收集 accepted rollouts。
-
-### 收集 MimicGen datagen 信息
-
-回放源轨迹，提取 MimicGen 空间变换所需的观测和动作数据：
-
-```bash
-$MOLMOSPACES_PYTHON src/pnp/collect_homogeneous_datagen_info.py \
-  --seed-index 0 \
-  --manifest "$MOLMOSPACES_PNP_WORKDIR/artifacts/seeds/pnp_seed_manifest_homogeneous_foodlike_bowl_10candidate_v3.json" \
-  --out-root "$MOLMOSPACES_PNP_WORKDIR/artifacts/replay_pnp_exact_homogeneous_foodlike_bowl_10candidate_v3"
-```
-
-### 转换为 robomimic/MimicGen source HDF5
-
-把选中的源轨迹打包成一个 robomimic 兼容的 HDF5 文件：
-
-```bash
-$MOLMOSPACES_PYTHON src/pnp/convert_seed_set_to_robomimic.py \
-  --manifest "$MOLMOSPACES_PNP_WORKDIR/artifacts/seeds/pnp_seed_manifest_homogeneous_foodlike_bowl_10candidate_v3.json" \
-  --out "$MOLMOSPACES_PNP_WORKDIR/artifacts/seeds/robomimic_pnp_foodlike_bowl_10demo_aligned.hdf5"
-```
-
-### 用 MimicGen 解析 source HDF5
-
-将 source HDF5 加载到 MimicGen 的 dataset 格式并查看属性：
-
-```bash
-PNP_SOURCE_HDF5="$MOLMOSPACES_PNP_WORKDIR/artifacts/seeds/robomimic_pnp_foodlike_bowl_10demo_aligned.hdf5" \
-$MOLMOSPACES_PYTHON src/pnp/parse_source_dataset.py
-```
-
-### 生成 MolmoSpaces rollout
-
-用 MimicGen 的 object-centric 空间变换，将源轨迹迁移到新场景布局：
-
-```bash
-$MOLMOSPACES_PYTHON src/pnp/generate_pick_place_rollout.py \
-  --source-hdf5 "$MOLMOSPACES_PNP_WORKDIR/artifacts/seeds/robomimic_pnp_foodlike_bowl_10demo_aligned.hdf5" \
-  --target-manifest "$MOLMOSPACES_PNP_WORKDIR/artifacts/seeds/pnp_seed_manifest_homogeneous_foodlike_bowl_10candidate_v3.json" \
-  --demo-keys demo_2 \
-  --seed-index 2 \
-  --out-name example_target02_src02 \
-  --interp 1 --fixed 0 --noise 0.0 \
-  --transform-first-robot-pose \
-  --post-hold-steps 30 \
-  --save-videos
-```
-
-### 50-demo cross-subtask MimicGen 路线
-
-以上流程每个 rollout 使用一条源 demo。cross-subtask 路线使用更大的 50-demo 源池，调用 MimicGen `select_src_per_subtask=True`，允许同一 rollout 的不同子任务从不同源 demo 采样：
-
-```bash
-# 严格选择一种路线来选取 50 条 sources。
-# 选项 A：官方 MolmoData / MolmoBot-Data shard（默认模式）。
-$MOLMOSPACES_PYTHON src/pnp/select_pnp_50_source_pool.py
-
-# 选项 B：本地采集的 Franka HDF5（与选项 A 二选一）。
-PNP_SELECT_N=50 $MOLMOSPACES_PYTHON src/pnp/select_pnp_50_source_pool.py \
-  --franka-datagen-root /path/to/datagen/pick_and_place_planner_v1
-
-# 收集候选的严格回放 + datagen_info。
-bash src/pnp/run_collect_50cross_datagen_parallel.sh
-# 或单个候选：
-$MOLMOSPACES_PYTHON src/pnp/collect_datagen_info_50cross.py \
-  --seed-index 0 \
-  --manifest "$MOLMOSPACES_PNP_WORKDIR/artifacts/seeds/pnp_seed_manifest_50demo_crossmix.json" \
-  --out-root "$MOLMOSPACES_PNP_WORKDIR/artifacts/replay_pnp_exact_50cross"
-
-# 从 hard-pass 源构建 50-demo MimicGen source HDF5。
-$MOLMOSPACES_PYTHON src/pnp/convert_seed_set_to_robomimic_50cross.py \
-  --accepted all \
-  --manifest "$MOLMOSPACES_PNP_WORKDIR/artifacts/seeds/pnp_seed_manifest_50demo_crossmix.json" \
-  --replay-root "$MOLMOSPACES_PNP_WORKDIR/artifacts/replay_pnp_exact_50cross" \
-  --out "$MOLMOSPACES_PNP_WORKDIR/artifacts/seeds/robomimic_pnp_50demo_crossmix_aligned.hdf5"
-
-# 运行 select-src-per-subtask pilot。
-bash src/pnp/run_50cross_selectsrc_pilot.sh
-```
-
-跨 house、物体和容器的随机混合会暴露 geometry、contact、IK 和子任务拼接兼容性问题。此路线目前为诊断性质，下一步是 compatibility-filtered cross-subtask 路线。
-
-### 批量收集
-
-非去重 baseline collector（收集所有满足成功条件的 rollout，可能包含重复）：
-
-```bash
-TARGET_SUCCESS=100 MAX_ATTEMPTS=800 bash src/pnp/collect_uniform_successes.sh
-```
-
-带 action-hash 去重的 high-yield collector（跳过动作序列与已收集轨迹相同的 rollout）：
-
-```bash
-PREVIOUS_COLLECTOR_RUN=logs/collect_uniform_successes_YYYYMMDD_HHMMSS \
-TARGET_SUCCESS=100 MAX_ATTEMPTS=500 \
-bash src/pnp/collect_unique_highyield_successes.sh
-```
+历史 50-demo cross-subtask 脚本与旧 collector 已移入 [`archive/pnp/`](archive/pnp/)，对应的 `results/` 结果目录保持原路径不变。
 
 ## Bimanual YAM 浏览器遥操作
 

@@ -3,7 +3,7 @@
 | Workline | README | Code | Results | Status |
 |---|---|---|---|---|
 | MimicGen Pick-and-Place | [`mimicgen_pick_and_place/README.md`](mimicgen_pick_and_place/README.md) | [`src/pnp/`](../../src/pnp/) | [`results/workline_index/mimicgen_pick_and_place.md`](../../results/workline_index/mimicgen_pick_and_place.md) | Active |
-| 50-demo MimicGen cross-subtask | [`mimicgen_50cross/README.md`](mimicgen_50cross/README.md) | [`src/pnp/*50cross*`](../../src/pnp/) | [`results/50cross_selectsrc_pilot_20260727_182533/`](../../results/50cross_selectsrc_pilot_20260727_182533/) | Diagnostic |
+| 50-demo MimicGen cross-subtask | [archive README](../../archive/docs/worklines/mimicgen_50cross/README.md) | [archive code](../../archive/pnp/legacy_50cross/) | [results/50cross_selectsrc_pilot_20260727_182533/](../../results/50cross_selectsrc_pilot_20260727_182533/) | Archived diagnostic |
 | Bimanual YAM browser teleop | [`bimanual_yam_browser_teleop/README.md`](bimanual_yam_browser_teleop/README.md) | [`src/bimanual_yam/`](../../src/bimanual_yam/) | [`results/workline_index/ithor_bimanual_yam.md`](../../results/workline_index/ithor_bimanual_yam.md) | Infrastructure |
 | iTHOR bimanual YAM | [`ithor_bimanual_yam/README.md`](ithor_bimanual_yam/README.md) | [`src/bimanual_yam/`](../../src/bimanual_yam/) | [`results/workline_index/ithor_bimanual_yam.md`](../../results/workline_index/ithor_bimanual_yam.md) | In progress |
 | Custom-scene bimanual YAM baseline | [`bimanual_yam_source_baseline/README.md`](bimanual_yam_source_baseline/README.md) | — | [`results/workline_index/bimanual_yam_source_baseline.md`](../../results/workline_index/bimanual_yam_source_baseline.md) | Completed |

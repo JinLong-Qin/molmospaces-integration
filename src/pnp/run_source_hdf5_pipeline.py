@@ -51,9 +51,9 @@ def main() -> int:
     replay_root.mkdir(parents=True, exist_ok=True)
     output_hdf5.parent.mkdir(parents=True, exist_ok=True)
     py = str(Path(args.python).resolve())
-    selector = root / "src/pnp/select_pnp_50_source_pool.py"
-    replay = root / "src/pnp/collect_homogeneous_datagen_info.py"
-    converter = root / "src/pnp/convert_seed_set_to_robomimic_50cross.py"
+    selector = root / "src/pnp/select_source_pool.py"
+    replay = root / "src/pnp/replay_source_candidate.py"
+    converter = root / "src/pnp/convert_source_hdf5.py"
     validator = root / "src/pnp/validate_robomimic_source_hdf5.py"
     env = os.environ.copy()
     env["PYTHONPATH"] = ":".join(filter(None, [str(root), str(root / "vendor/mimicgen"), str(root / "vendor/robomimic"), env.get("PYTHONPATH", "")]))

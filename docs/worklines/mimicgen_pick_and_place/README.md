@@ -1,83 +1,35 @@
 # MimicGen Pick-and-Place Workline
 
-## Purpose
+## Scope
 
-This is the primary active public workline. It connects MolmoSpaces Pick-and-Place rollouts to the MimicGen / robomimic data format, then executes generated trajectories back in the MolmoSpaces simulator.
+This is the active Franka Droid / Pick-and-Place / in-process scripted-IK MimicGen workline. It uses replay-verified source trajectories, an independently sampled target-layout manifest, and real MolmoSpaces rollouts for acceptance. It is separate from RB-Y1 CuRobo planner datagen and from the archived broad 50-demo diagnostic.
 
-## Public code
+## Active Entry Points
 
-Main code directory: [`src/pnp/`](../../../src/pnp/)
+The active code is intentionally limited to [`src/pnp/`](../../../src/pnp/):
 
-Key scripts:
+- `run_source_hdf5_pipeline.py`: parameterized source candidate selection, replay, conversion, and validation.
+- `run_generation.py`: parameterized MimicGen generation runner; official runs use `--mode per-subtask`.
+- `generate_pick_place_rollout.py`: one simulator rollout primitive.
+- `select_source_pool.py`, `replay_source_candidate.py`, `convert_source_hdf5.py`, and `validate_robomimic_source_hdf5.py`: the source-HDF5 pipeline stages.
+- `sample_fixedbase_target_manifest.py` and `validate_fixedbase_target_manifest.py`: target-layout stages.
 
-- `inspect_source_candidates.py` — inspect candidate source demonstrations from the official MolmoBot shard.
-- `select_pick_place_seeds.py` — select a source set.
-- `replay_source_episode.py` — replay a source episode in MolmoSpaces.
-- `collect_datagen_info.py` and `collect_homogeneous_datagen_info.py` — collect MimicGen datagen information.
-- `convert_seed_set_to_robomimic.py` and `convert_single_seed_to_robomimic.py` — convert source trajectories to robomimic-style HDF5.
-- `parse_source_dataset.py` — parse the source HDF5 with MimicGen compatibility checks.
-- `generate_pick_place_rollout.py` — run a generated trajectory back in MolmoSpaces.
-- `collect_uniform_successes.sh` and `collect_unique_highyield_successes.sh` — collector entrypoints used for larger sweeps.
-- `run_fixedpool_source_hdf5.sh` — reproducible fixed-pool source-demo build: strict selection and deduplication, deterministic replay, robomimic HDF5 conversion, and schema validation.
+The active controlled pilot uses 17 unique replay-verified source demos. The count is an input to `run_generation.py`, not a module or directory name.
 
-## Minimal run sequence
-
-After the standard clone setup in [`../README.md`](../README.md), place the official MolmoBot Pick-and-Place shard under `runtime/`. Then use the top-level README workflow or run the scripts in this order:
-
-This workline is the public `src/pnp/` integration path. It is not the same entrypoint as the official RB-Y1 scripted/planner data-generation configs under `python -m molmo_spaces.data_generation.main ...`. If you need `RBY1PickDataGenConfig` or `RBY1PickAndPlaceDataGenConfig`, follow the dedicated CuRobo installation notes in the top-level [`README.md`](../../../README.md) instead of assuming the `src/pnp/` setup is sufficient.
+## Minimal Commands
 
 ```bash
-python src/pnp/inspect_source_candidates.py --help
-python src/pnp/select_pick_place_seeds.py --help
-python src/pnp/replay_source_episode.py --help
-python src/pnp/collect_datagen_info.py --help
-python src/pnp/convert_seed_set_to_robomimic.py --help
-python src/pnp/parse_source_dataset.py --help
+python src/pnp/run_source_hdf5_pipeline.py --help
+python src/pnp/sample_fixedbase_target_manifest.py --help
+python src/pnp/validate_fixedbase_target_manifest.py --help
+python src/pnp/run_generation.py --help
 python src/pnp/generate_pick_place_rollout.py --help
 ```
 
-The exact data paths depend on where the official shard is placed. The scripts use environment variables such as `MOLMOSPACES_ROOT`, `MOLMOSPACES_PNP_WORKDIR`, `MIMICGEN_ROOT`, and `ROBOMIMIC_ROOT` instead of private machine paths.
+Use an explicit source HDF5 and target manifest for every run. New experiments must not add fixed-count shell launchers or embed Python in shell scripts.
 
-## Public evidence
+## Evidence Boundary
 
-Lightweight committed evidence includes source manifests, HDF5 summaries, parser summaries, and generated rollout traces under `results/`. The full runtime inventory is indexed at [`results/workline_index/mimicgen_pick_and_place.md`](../../../results/workline_index/mimicgen_pick_and_place.md).
+Source HDF5 validation and a simulator process exit are prerequisite checks, not task-success evidence. Accepted generated demonstrations require a real simulator rollout, final success, persistent post-hold success, non-empty videos, matching target layout, and no duplicate action or layout fingerprint.
 
-## Evidence boundary
-
-Valid claim: this repository contains a reproducible MolmoSpaces Pick-and-Place integration path for source replay, MimicGen-format conversion, datagen-info extraction, and generated rollout execution.
-
-Invalid claim: do not treat a summary file or HDF5 conversion alone as task success. Accepted generated demonstrations require full simulator rollout, final success, success persistence to the end, a post-hold stability window, and non-empty video/trace evidence.
-
-
-## Newly generated Franka HDF5 input
-
-The source selector can now consume locally generated Franka Pick-and-Place HDF5 while retaining the original MolmoBot shard input:
-
-```bash
-PNP_SELECT_N=50 python src/pnp/select_pnp_50_source_pool.py \
-  --franka-datagen-root /path/to/datagen/pick_and_place_planner_v1
-```
-
-Franka mode recursively reads `house_*/trajectories_batch_*.h5`, requires complete phases `0..9`, terminal/persistent task success and the replay fields used downstream, and rejects duplicate initial-state/action fingerprints. Its manifest remains compatible with the existing replay, datagen-info, robomimic conversion, and MimicGen generation path. Treat `samples_per_house` only as a requested workload and verify actual HDF5 success counts. The source provenance is synthetic scripted-IK planner expert, not human or RB-Y1 planner-server data.
-
-## Fixed-pool source-demo HDF5
-
-For a completed fixed pool, use the public one-command source conversion entrypoint rather than treating the raw `trajectories_batch_*.h5` files as a MimicGen input:
-
-```bash
-export MOLMOSPACES_PNP_WORKDIR="$PWD/runtime/fixedpool_source"
-bash src/pnp/run_fixedpool_source_hdf5.sh /path/to/pick_and_place_planner_v1 43
-```
-
-The entrypoint defaults to `PNP_FIXEDPOOL_HOUSE_ID=1716` and `PNP_FIXEDPOOL_RUN_NAME_PREFIX=potato_bowl_1716_seed`, preventing other houses or historical smoke runs in a shared datagen root from entering the source set. It writes an independent source manifest, replay records, a robomimic HDF5 with `data/demo_*`, and schema-validation output below `MOLMOSPACES_PNP_WORKDIR`. It never overwrites the raw datagen HDF5 or its videos. A completed conversion proves source-format availability only; generated MimicGen rollouts still require their own task-success and video gates.
-
-## Fixed-pool source build record (2026-08-01)
-
-The completed formal source set is restricted to the seven `potato_bowl_1716_seed*` run roots in house `1716`, excluding historical smoke and gate runs. It contains 43 trajectories after exact initial-state/action fingerprint deduplication. Deterministic replay and robomimic conversion produced the runtime-only artifact below; generated data is intentionally ignored by Git.
-
-```text
-runtime/fixedpool_potato_bowl_1716_source/artifacts/seeds/
-  robomimic_pnp_fixedpool_manual_review43.hdf5
-```
-
-Validation passed for 43 `data/demo_*` groups, 7,582 total action samples, finite numeric arrays, action/observation alignment, and source provenance spanning all seven formal run roots. Automatic replay persistence accepted 40 trajectories. Three final-success trajectories (manifest source indices `6`, `19`, and `29`) had transient persistence-flag drops; Kunyu reviewed the corresponding `exo_camera_1` videos and accepted them on 2026-08-01. The converted HDF5 explicitly records those three per-demo manual-review exceptions and the root-level exception list. This evidence establishes a usable robomimic/MimicGen source dataset, not generated MimicGen rollout success.
+`runtime/`, `results/`, and `artifacts/` retain prior evidence at their original paths. Historical scripts and snapshots live under [`archive/pnp/`](../../../archive/pnp/) and are not active entrypoints.

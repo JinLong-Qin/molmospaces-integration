@@ -17,7 +17,7 @@ import zstandard as zstd
 WORK = Path(os.environ.get("MOLMOSPACES_PNP_WORKDIR", "runtime/mimicgen_pick_and_place"))
 DEFAULT_TAR = WORK / "data/molmobot_data/FrankaPickAndPlaceOmniCamConfig/val_shards/00000.tar"
 OUT = WORK / "artifacts/seeds"
-RAW = OUT / "raw_50demo_crossmix"
+RAW = OUT / "raw_source_pool"
 
 REQUIRED_FRANKA_PATHS = (
     "actions/commanded_action",
@@ -184,7 +184,7 @@ def select_from_molmobot_shard(tar_path: Path, count: int):
                             continue
                         batch_match = re.search(r"trajectories_batch_(\d+)_", h5_member.name)
                         batch_id = int(batch_match.group(1)) if batch_match else -1
-                        raw_name = f"pool50_house{house_id}__batch{batch_id}.h5"
+                        raw_name = f"source_pool_house{house_id}__batch{batch_id}.h5"
                         if raw_name not in seen_raw:
                             (RAW / raw_name).write_bytes(data)
                             seen_raw.add(raw_name)
@@ -198,7 +198,7 @@ def select_from_molmobot_shard(tar_path: Path, count: int):
                                     "batch_id": batch_id,
                                     "source_outer_member": member.name,
                                     "source_inner_h5": h5_member.name,
-                                    "raw_h5_dir": "raw_50demo_crossmix",
+                                    "raw_h5_dir": "raw_source_pool",
                                     "raw_h5": raw_name,
                                 }
                             )
@@ -329,13 +329,13 @@ def main():
     parser.add_argument(
         "--count",
         type=int,
-        default=int(os.environ.get("PNP_SELECT_N", "50")),
+        default=int(os.environ.get("PNP_SOURCE_COUNT", "17")),
         help="Number of unique strict-success source trajectories to select.",
     )
     parser.add_argument(
         "--out",
         type=Path,
-        default=OUT / "pnp_seed_manifest_50demo_crossmix.json",
+        default=OUT / "pnp_source_manifest.json",
         help="Destination manifest path.",
     )
     parser.add_argument(

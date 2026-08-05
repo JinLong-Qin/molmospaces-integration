@@ -170,7 +170,7 @@ demonstrations, not human demonstrations.
 To feed collected HDF5 files into the existing MimicGen workline:
 
 ```bash
-PNP_SELECT_N=50 python src/pnp/select_pnp_50_source_pool.py \
+PNP_SOURCE_COUNT=17 python src/pnp/select_source_pool.py \
   --franka-datagen-root /path/to/datagen/pick_and_place_planner_v1
 ```
 

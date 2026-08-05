@@ -35,7 +35,7 @@ This repository is a MolmoSpaces integration workline portfolio. The top-level R
 | Workline | Canonical README | Code entrypoint | Evidence / inventory | Status |
 |---|---|---|---|---|
 | MimicGen Pick-and-Place | [`docs/worklines/mimicgen_pick_and_place/README.md`](docs/worklines/mimicgen_pick_and_place/README.md) | [`src/pnp/`](src/pnp/) | [`results/workline_index/mimicgen_pick_and_place.md`](results/workline_index/mimicgen_pick_and_place.md) | Active / primary |
-| 50-demo MimicGen cross-subtask route | [`docs/worklines/mimicgen_50cross/README.md`](docs/worklines/mimicgen_50cross/README.md) | [`src/pnp/*50cross*`](src/pnp/) | [`results/50cross_selectsrc_pilot_20260727_182533/`](results/50cross_selectsrc_pilot_20260727_182533/) | Diagnostic |
+| 50-demo MimicGen cross-subtask route | [`archive/docs/worklines/mimicgen_50cross/README.md`](archive/docs/worklines/mimicgen_50cross/README.md) | [`archive/pnp/legacy_50cross/`](archive/pnp/legacy_50cross/) | [`results/50cross_selectsrc_pilot_20260727_182533/`](results/50cross_selectsrc_pilot_20260727_182533/) | Archived diagnostic |
 | Bimanual YAM browser teleoperation | [`docs/worklines/bimanual_yam_browser_teleop/README.md`](docs/worklines/bimanual_yam_browser_teleop/README.md) | [`src/bimanual_yam/`](src/bimanual_yam/) | [`results/workline_index/ithor_bimanual_yam.md`](results/workline_index/ithor_bimanual_yam.md) | Infrastructure |
 | iTHOR bimanual YAM | [`docs/worklines/ithor_bimanual_yam/README.md`](docs/worklines/ithor_bimanual_yam/README.md) | [`src/bimanual_yam/`](src/bimanual_yam/) | [`results/workline_index/ithor_bimanual_yam.md`](results/workline_index/ithor_bimanual_yam.md) | In progress |
 | Completed custom-scene bimanual YAM baseline | [`docs/worklines/bimanual_yam_source_baseline/README.md`](docs/worklines/bimanual_yam_source_baseline/README.md) | Inventory / regeneration entrypoints | [`results/workline_index/bimanual_yam_source_baseline.md`](results/workline_index/bimanual_yam_source_baseline.md) | Completed evidence package |
@@ -321,189 +321,19 @@ mkdir -p "$MOLMOSPACES_PNP_WORKDIR"/{artifacts/seeds,artifacts/mimicgen_pnp,data
 
 `HF_HOME` is used by robomimic's CLIP language embedding utility. `NLTK_DATA` / `MOLMOSPACES_NLTK_DATA` are useful when MolmoSpaces needs a local WordNet cache.
 
-### 3. Choose one of two MimicGen source options
+### 3. Active Pick-and-Place pipeline
 
-Both options produce the same `pnp_seed_manifest_50demo_crossmix.json` contract and then use the same replay, datagen-info collection, robomimic conversion, and MimicGen generation commands below. Choose one source route for a dataset; do not silently mix provenance.
-
-#### Option A: official pre-collected MolmoData / MolmoBot-Data source shard
-
-The current integration files call this source `MolmoBot-Data`; the fixed-pool provenance labels use `MolmoData`. Download the official Franka Pick-and-Place validation shard and place it here:
-
-```text
-runtime/mimicgen_pick_and_place/data/molmobot_data/FrankaPickAndPlaceOmniCamConfig/val_shards/00000.tar
-```
-
-Build the source manifest with the selector's default shard mode:
+The active source build and generation path is parameterized; source count, source HDF5, target manifest, target range, and output label are run arguments rather than script names. The current controlled pilot uses 17 unique replay-verified source demonstrations.
 
 ```bash
-PNP_SELECT_N=50 $MOLMOSPACES_PYTHON src/pnp/select_pnp_50_source_pool.py
+$MOLMOSPACES_PYTHON src/pnp/run_source_hdf5_pipeline.py --help
+$MOLMOSPACES_PYTHON src/pnp/sample_fixedbase_target_manifest.py --help
+$MOLMOSPACES_PYTHON src/pnp/run_generation.py --help
 ```
 
-#### Option B: locally collected Franka datagen HDF5
+Build or select a source HDF5, create and validate an independent target manifest, then use `run_generation.py --mode per-subtask` for the official MimicGen selection route. `generate_pick_place_rollout.py` is the single-rollout execution primitive. Full usage and evidence gates are in [`src/pnp/README.md`](src/pnp/README.md).
 
-Point the same selector at one accepted Franka run directory or a parent containing several accepted runs:
-
-```bash
-PNP_SELECT_N=50 $MOLMOSPACES_PYTHON src/pnp/select_pnp_50_source_pool.py \
-  --franka-datagen-root /path/to/datagen/pick_and_place_planner_v1
-```
-
-Franka mode recursively reads `house_*/trajectories_batch_*.h5`. It requires terminal and persistent success, planner phases `0..9`, terminal `task_info.success=true`, required replay fields, and unique initial-state/action fingerprints.
-
-The repository includes lightweight manifests and summaries but not official shards, locally generated HDF5, videos, or other runtime artifacts.
-
-### 4. First-run resource cache notes
-
-MolmoSpaces may download/extract iTHOR assets on first use. If a run is interrupted during extraction, you may see an error like:
-
-```text
-Directory path exists on disk but is not recorded in the cache manifest
-```
-
-Do not hand-edit the manifest. Move the reported unregistered resource directory aside, then rerun so the resource manager can extract and register it cleanly. For example:
-
-```bash
-mkdir -p "$HOME/.cache/molmo-spaces-resources_broken_backup"
-mv "$HOME/.cache/molmo-spaces-resources/objects/thor/20251117" \
-  "$HOME/.cache/molmo-spaces-resources_broken_backup/thor_20251117_$(date +%Y%m%d_%H%M%S)"
-```
-
-If your network requires a proxy, export it before the first asset/model download.
-
-### 5. Run a MolmoBot-source replay smoke check
-
-Copy a manifest into the runtime work directory:
-
-```bash
-cp results/pnp_seed_manifest_homogeneous_foodlike_bowl_10candidate_v3.json \
-  "$MOLMOSPACES_PNP_WORKDIR/artifacts/seeds/"
-```
-
-Inspect source candidates:
-
-```bash
-$MOLMOSPACES_PYTHON src/pnp/inspect_source_candidates.py
-```
-
-Replay one source trajectory to verify the replay pipeline works:
-
-```bash
-$MOLMOSPACES_PYTHON src/pnp/replay_source_episode.py --seed-index 0 --save-videos
-```
-
-## MolmoSpaces Workline Portfolio
-
-The workline table above is mirrored in [`docs/worklines/README.md`](docs/worklines/README.md). Each workline has a canonical README with details, even when its raw HDF5/videos are excluded from Git.
-
-MolmoAct2 official `sim_eval` success, MolmoSpaces adapter diagnostics, bimanual browser teleoperation, custom-scene YAM baseline, iTHOR source-demo infrastructure, and Pick-and-Place MimicGen rollouts are separate evidence layers and should not be conflated.
-
-## Pick-and-Place Integration Workflow
-
-The Pick-and-Place pipeline accepts either validated Franka datagen HDF5 or MolmoBot-Data source trajectories, then generates MimicGen rollouts in a reproducible sequence:
-
-1. inspect or prepare source-candidate metadata;
-2. replay source trajectories and collect MimicGen datagen information;
-3. convert selected sources into a robomimic/MimicGen source HDF5;
-4. parse the source HDF5 with MimicGen;
-5. generate MolmoSpaces rollouts and save videos;
-6. optionally collect accepted rollouts with action-hash deduplication.
-
-### Collect MimicGen datagen information
-
-Replay source trajectories to extract the observations and actions MimicGen needs for spatial transform:
-
-```bash
-$MOLMOSPACES_PYTHON src/pnp/collect_homogeneous_datagen_info.py \
-  --seed-index 0 \
-  --manifest "$MOLMOSPACES_PNP_WORKDIR/artifacts/seeds/pnp_seed_manifest_homogeneous_foodlike_bowl_10candidate_v3.json" \
-  --out-root "$MOLMOSPACES_PNP_WORKDIR/artifacts/replay_pnp_exact_homogeneous_foodlike_bowl_10candidate_v3"
-```
-
-### Convert sources to a robomimic/MimicGen source HDF5
-
-Bundle selected source trajectories into a single robomimic-compatible HDF5:
-
-```bash
-$MOLMOSPACES_PYTHON src/pnp/convert_seed_set_to_robomimic.py \
-  --manifest "$MOLMOSPACES_PNP_WORKDIR/artifacts/seeds/pnp_seed_manifest_homogeneous_foodlike_bowl_10candidate_v3.json" \
-  --out "$MOLMOSPACES_PNP_WORKDIR/artifacts/seeds/robomimic_pnp_foodlike_bowl_10demo_aligned.hdf5"
-```
-
-### Parse the source HDF5 with MimicGen
-
-Load the source HDF5 into MimicGen's dataset format and inspect properties:
-
-```bash
-PNP_SOURCE_HDF5="$MOLMOSPACES_PNP_WORKDIR/artifacts/seeds/robomimic_pnp_foodlike_bowl_10demo_aligned.hdf5" \
-$MOLMOSPACES_PYTHON src/pnp/parse_source_dataset.py
-```
-
-### Generate a MolmoSpaces rollout
-
-Transform a source trajectory into a new scene layout using MimicGen's object-centric spatial transform:
-
-```bash
-$MOLMOSPACES_PYTHON src/pnp/generate_pick_place_rollout.py \
-  --source-hdf5 "$MOLMOSPACES_PNP_WORKDIR/artifacts/seeds/robomimic_pnp_foodlike_bowl_10demo_aligned.hdf5" \
-  --target-manifest "$MOLMOSPACES_PNP_WORKDIR/artifacts/seeds/pnp_seed_manifest_homogeneous_foodlike_bowl_10candidate_v3.json" \
-  --demo-keys demo_2 \
-  --seed-index 2 \
-  --out-name example_target02_src02 \
-  --interp 1 --fixed 0 --noise 0.0 \
-  --transform-first-robot-pose \
-  --post-hold-steps 30 \
-  --save-videos
-```
-
-### 50-demo cross-subtask MimicGen route
-
-The workflow above uses one source demo per rollout. The cross-subtask route uses a broader 50-demo source pool and calls MimicGen with `select_src_per_subtask=True`, allowing different subtasks in a single rollout to be sampled from different source demos:
-
-```bash
-# Select 50 sources using exactly one route.
-# Option A: official MolmoData / MolmoBot-Data shard (default mode).
-$MOLMOSPACES_PYTHON src/pnp/select_pnp_50_source_pool.py
-
-# Option B: locally collected Franka HDF5 (use instead of Option A).
-PNP_SELECT_N=50 $MOLMOSPACES_PYTHON src/pnp/select_pnp_50_source_pool.py \
-  --franka-datagen-root /path/to/datagen/pick_and_place_planner_v1
-
-# Collect strict replay + datagen_info for candidate sources.
-bash src/pnp/run_collect_50cross_datagen_parallel.sh
-# or for one candidate:
-$MOLMOSPACES_PYTHON src/pnp/collect_datagen_info_50cross.py \
-  --seed-index 0 \
-  --manifest "$MOLMOSPACES_PNP_WORKDIR/artifacts/seeds/pnp_seed_manifest_50demo_crossmix.json" \
-  --out-root "$MOLMOSPACES_PNP_WORKDIR/artifacts/replay_pnp_exact_50cross"
-
-# Build the 50-demo MimicGen source HDF5 from hard-pass sources.
-$MOLMOSPACES_PYTHON src/pnp/convert_seed_set_to_robomimic_50cross.py \
-  --accepted all \
-  --manifest "$MOLMOSPACES_PNP_WORKDIR/artifacts/seeds/pnp_seed_manifest_50demo_crossmix.json" \
-  --replay-root "$MOLMOSPACES_PNP_WORKDIR/artifacts/replay_pnp_exact_50cross" \
-  --out "$MOLMOSPACES_PNP_WORKDIR/artifacts/seeds/robomimic_pnp_50demo_crossmix_aligned.hdf5"
-
-# Run a select-src-per-subtask pilot.
-bash src/pnp/run_50cross_selectsrc_pilot.sh
-```
-
-Broad random mixing across many houses, objects, and receptacles can expose geometry, contact, IK, and subtask-stitching compatibility problems. This route is diagnostic; a compatibility-filtered cross-subtask route is the next step toward a scalable success-rate experiment.
-
-### Batch collection
-
-Collect successes with the non-deduplicated baseline collector (collects any rollout that meets the success criteria, may include duplicates):
-
-```bash
-TARGET_SUCCESS=100 MAX_ATTEMPTS=800 bash src/pnp/collect_uniform_successes.sh
-```
-
-Collect successes with action-hash deduplication (skips rollouts whose action sequence matches a previously collected trajectory):
-
-```bash
-PREVIOUS_COLLECTOR_RUN=logs/collect_uniform_successes_YYYYMMDD_HHMMSS \
-TARGET_SUCCESS=100 MAX_ATTEMPTS=500 \
-bash src/pnp/collect_unique_highyield_successes.sh
-```
+Historical 50-demo cross-subtask scripts and collectors are archived under [`archive/pnp/`](archive/pnp/); the corresponding result directories remain unchanged under `results/`.
 
 ## Bimanual YAM Browser Teleoperation
 

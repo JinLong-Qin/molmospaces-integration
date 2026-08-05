@@ -277,13 +277,13 @@ def main():
     ap.add_argument(
         "--manifest",
         type=Path,
-        default=WORK / "artifacts/seeds/pnp_seed_manifest_50demo_crossmix.json",
+        default=WORK / "artifacts/seeds/pnp_source_manifest.json",
     )
-    ap.add_argument("--replay-root", type=Path, default=WORK / "artifacts/replay_pnp_exact_50cross")
+    ap.add_argument("--replay-root", type=Path, default=WORK / "artifacts/replay_source_candidates")
     ap.add_argument(
         "--out",
         type=Path,
-        default=WORK / "artifacts/seeds/robomimic_pnp_50demo_crossmix_aligned.hdf5",
+        default=WORK / "artifacts/seeds/robomimic_pnp_source.hdf5",
     )
     args = ap.parse_args()
     manifest = json.loads(args.manifest.read_text())
