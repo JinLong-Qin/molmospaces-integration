@@ -11,10 +11,6 @@ import numpy as np
 REQUIRED_DATASETS = ("actions", "states", "dones", "rewards")
 REQUIRED_OBS = ("robot0_eef_pos", "robot0_eef_quat", "robot0_gripper_qpos")
 REQUIRED_DATAGEN = ("eef_pose", "target_pose", "gripper_action")
-ACTION_AUDIT_DATASETS = {
-    "joint_position": ("source_joint_position_actions", 8),
-    "tcp_delta": ("source_tcp_delta_actions", 7),
-}
 
 
 def require_finite(name: str, array: np.ndarray) -> None:
@@ -36,9 +32,6 @@ def main() -> None:
     with h5py.File(args.input, "r") as h5:
         if "data" not in h5:
             raise RuntimeError("missing root data group")
-        action_type = str(h5.attrs.get("action_type", "joint_position"))
-        if action_type not in ACTION_AUDIT_DATASETS:
-            raise RuntimeError(f"unsupported action_type={action_type!r}")
         data = h5["data"]
         demos = sorted(k for k in data if k.startswith("demo_"))
         if args.expected_demos is not None and len(demos) != args.expected_demos:
@@ -52,25 +45,6 @@ def main() -> None:
                 if key not in demo or len(demo[key]) != n:
                     raise RuntimeError(f"{demo_name}: missing/misaligned {key}")
                 require_finite(f"{demo_name}/{key}", np.asarray(demo[key]))
-            for key, width in ACTION_AUDIT_DATASETS.values():
-                if key not in demo or demo[key].shape != (n, width):
-                    raise RuntimeError(
-                        f"{demo_name}: expected {key} shape {(n, width)}, "
-                        f"found {demo[key].shape if key in demo else None}"
-                    )
-                require_finite(f"{demo_name}/{key}", np.asarray(demo[key]))
-            selected_key, selected_width = ACTION_AUDIT_DATASETS[action_type]
-            if demo["actions"].shape != (n, selected_width):
-                raise RuntimeError(
-                    f"{demo_name}: action_type={action_type} requires actions shape "
-                    f"{(n, selected_width)}, found {demo['actions'].shape}"
-                )
-            if not np.array_equal(demo["actions"][:], demo[selected_key][:]):
-                raise RuntimeError(
-                    f"{demo_name}: actions do not equal selected audit dataset {selected_key}"
-                )
-            if str(demo.attrs.get("action_type", "")) != action_type:
-                raise RuntimeError(f"{demo_name}: action_type attribute mismatch")
             for key in REQUIRED_OBS:
                 if key not in demo["obs"] or len(demo["obs"][key]) != n:
                     raise RuntimeError(f"{demo_name}: missing/misaligned obs/{key}")
@@ -92,7 +66,6 @@ def main() -> None:
             summary["total"] += n
         if int(data.attrs.get("total", -1)) != summary["total"]:
             raise RuntimeError(f"data.total={data.attrs.get('total')} != {summary['total']}")
-        summary["action_type"] = action_type
     print(json.dumps(summary, indent=2))
 
 

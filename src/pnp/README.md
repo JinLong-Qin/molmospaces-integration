@@ -22,7 +22,30 @@ export NLTK_DATA="${NLTK_DATA:-$HOME/nltk_data}"
 export MOLMOSPACES_NLTK_DATA="$NLTK_DATA"
 ```
 
-## Main script groups
+## Execution architecture
+
+New experiments must use the two parameterized Python orchestrators:
+
+- `run_generation.py` is the single rollout runner. It owns target iteration, source selection, result inspection, action/layout deduplication, JSONL provenance, and summary generation. Use `--mode per-subtask` for official MimicGen source selection or `--mode whole-source --diagnostic` for the quarantined whole-source control.
+- `run_source_hdf5_pipeline.py` is the single source-build orchestrator. It parameterizes candidate selection, deterministic replay, acceptance recording, robomimic conversion, and validation.
+
+The remaining `run_*.sh` generation files are compatibility wrappers with experiment-specific defaults only. They must not contain Python heredocs or new acceptance logic. Runtime artifacts remain under the selected `runtime/` work root; source pools, target manifests, and diagnostic runs must use separate paths and labels.
+
+Example parameterized generation commands:
+
+```bash
+python src/pnp/run_generation.py --root "$MOLMOSPACES_ROOT" \
+  --python "$MOLMOSPACES_PYTHON" --work "$MOLMOSPACES_PNP_WORKDIR" \
+  --mode per-subtask --source-hdf5 /path/source.hdf5 \
+  --target-manifest /path/targets.json --target-success 10 \
+  --target-start 0 --target-end 9 --run-label foodlike_bowl_pilot
+
+python src/pnp/run_generation.py --root "$MOLMOSPACES_ROOT" \
+  --python "$MOLMOSPACES_PYTHON" --work "$MOLMOSPACES_PNP_WORKDIR" \
+  --mode whole-source --diagnostic --source-count 17 \
+  --source-hdf5 /path/source.hdf5 --target-manifest /path/targets.json \
+  --target-success 10 --run-label fixedbase_wholesource_control
+```
 
 ### Source inspection and replay
 
@@ -42,9 +65,9 @@ export MOLMOSPACES_NLTK_DATA="$NLTK_DATA"
 
 ### Generated rollout execution
 
-- `generate_pick_place_rollout.py`
-- `collect_uniform_successes.sh`
-- `collect_unique_highyield_successes.sh`
+- `generate_pick_place_rollout.py` - one simulator rollout; this is the execution primitive, not a batch orchestrator.
+- `run_generation.py` - canonical parameterized batch/pilot orchestrator.
+- `collect_uniform_successes.sh` and `collect_unique_highyield_successes.sh` - legacy collectors retained for historical provenance; do not use them as templates for new work.
 
 ### 50-demo cross-subtask diagnostics
 
@@ -58,8 +81,13 @@ export MOLMOSPACES_NLTK_DATA="$NLTK_DATA"
 
 ### Fixed-pool source-HDF5 build
 
-- `run_fixedpool_source_hdf5.sh` - selects, deduplicates, replays, converts, and validates a fixed-pool source set.
+- `run_source_hdf5_pipeline.py` - canonical parameterized selector -> replay -> conversion -> validation orchestrator.
+- `run_fixedpool_source_hdf5.sh` - thin compatibility wrapper around the canonical source pipeline.
 - `validate_robomimic_source_hdf5.py` - verifies the generated `data/demo_*` HDF5 structure, alignment, finite numeric arrays, and source provenance.
+
+### Historical/legacy diagnostics
+
+The 50-cross pilot launchers and old collector scripts remain only to reproduce dated evidence. Their outputs are diagnostic unless the corresponding project gate explicitly accepts them. New work should express differences through CLI arguments such as source HDF5, target manifest, target range, source count, RNG base, run label, and diagnostic mode.
 
 ## Quick checks
 
