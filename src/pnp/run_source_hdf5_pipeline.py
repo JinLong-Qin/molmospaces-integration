@@ -27,10 +27,12 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", default=".")
     parser.add_argument("--python", default=sys.executable)
-    parser.add_argument("--datagen-root", required=True)
+    source_group = parser.add_mutually_exclusive_group(required=True)
+    source_group.add_argument("--datagen-root")
+    source_group.add_argument("--source-shard")
     parser.add_argument("--work", required=True)
-    parser.add_argument("--house-id", required=True)
-    parser.add_argument("--run-name-prefix", required=True)
+    parser.add_argument("--house-id")
+    parser.add_argument("--run-name-prefix")
     parser.add_argument("--candidate-count", type=int, required=True)
     parser.add_argument("--allow-nonpersistent-candidates", action="store_true")
     parser.add_argument("--manifest", required=True)
@@ -58,7 +60,13 @@ def main() -> int:
     env = os.environ.copy()
     env["PYTHONPATH"] = ":".join(filter(None, [str(root), str(root / "vendor/mimicgen"), str(root / "vendor/robomimic"), env.get("PYTHONPATH", "")]))
 
-    command = [py, str(selector), "--franka-datagen-root", args.datagen_root, "--house-id", str(args.house_id), "--run-name-prefix", args.run_name_prefix, "--count", str(args.candidate_count), "--out", str(manifest)]
+    command = [py, str(selector), "--count", str(args.candidate_count), "--out", str(manifest)]
+    if args.source_shard:
+        command.extend(["--source-shard", args.source_shard])
+    else:
+        if args.house_id is None or args.run_name_prefix is None:
+            raise SystemExit("--house-id and --run-name-prefix are required with --datagen-root")
+        command.extend(["--franka-datagen-root", args.datagen_root, "--house-id", str(args.house_id), "--run-name-prefix", args.run_name_prefix])
     if args.allow_nonpersistent_candidates:
         command.append("--allow-nonpersistent-candidates")
     code = run(command, run_dir / "select.log", env)

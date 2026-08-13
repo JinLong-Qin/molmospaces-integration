@@ -55,6 +55,16 @@ The primary workflow in this repository is:
 
 The command-line value `--robot droid` selects a **Franka robot with DROID-style cameras**. It does not select an RB-Y1 robot. The RB-Y1 CuRobo/planner-server pipeline is a separate optional upstream workline and is not required for the Franka workflow below. See [`docs/worklines/molmospaces_official_reproduction/README.md`](docs/worklines/molmospaces_official_reproduction/README.md) only if that separate workline is your goal.
 
+### Configuration-Driven MimicGen Augmentation
+
+For the reusable source-HDF5, target-manifest, and rollout-generation workflow, use the dedicated engineering guide: [`docs/pnp-data-augmentation.md`](docs/pnp-data-augmentation.md). The supported public boundary is:
+
+```text
+configs/pnp/*.json -> scripts/pnp/run_generation.sh -> src/pnp/run_experiment.py -> src/pnp/run_generation.py
+```
+
+The configuration records scenario-independent run controls and explicit input artifacts. Shell launchers contain no Python heredocs or experiment-specific paths; historical fixed-layout utilities remain under `archive/pnp/` for provenance only. Start with `configs/pnp/generation.example.json`, run its `--dry-run` validation, then replace its placeholder source HDF5 and target manifest with validated artifacts.
+
 ## Franka Datagen Quick Start
 
 ### 1. Clone
@@ -257,13 +267,13 @@ export HF_HUB_OFFLINE=1
 
 python scripts/datagen/run_pipeline.py \
   --robot droid --policy planner --task_type pick_and_place \
-  --pool molmodata_potato_bowl_1716 \
+  --pool <pool-name> \
   --samples_per_house 1 --randomize_fixed_pickup_pose \
   --filter_for_successful_trajectories \
   --disable_action_noise --require_clean_success \
   --require_success_count 1 \
   --device gpu --num_workers 1 \
-  --seed 111 --run_name_prefix fresh_clone_smoke
+  --seed <seed> --run_name_prefix <run-label>
 ```
 
 Here `--robot droid` means `FrankaRobotConfig` with `FrankaDroidCameraSystem`. Use `--device cpu` only as a slower diagnostic fallback. WSL2 does not expose the NVIDIA EGL device extension required by MolmoSpaces headless rendering, so complete GPU-rendered datagen acceptance requires native Linux with the NVIDIA EGL vendor configuration.
@@ -350,7 +360,7 @@ Browser-based keyboard teleoperation for bimanual YAM scenes. The supported publ
 Run the teleoperation bridge:
 
 ```bash
-HF_HOME=/mnt/vqa/.cache/huggingface \
+HF_HOME="${HF_HOME:-$HOME/.cache/huggingface}" \
 $MOLMOSPACES_PYTHON src/bimanual_yam/browser_keyboard_teleop.py \
   --host 127.0.0.1 \
   --port 8765 \

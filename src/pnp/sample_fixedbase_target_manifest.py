@@ -26,19 +26,24 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--count", type=int, default=100)
     parser.add_argument("--seed", type=int, default=20260802)
-    parser.add_argument("--house-id", type=int, default=1716)
+    parser.add_argument("--house-id", type=int, required=True)
     parser.add_argument(
         "--pickup-object",
-        default="Irishpotato_4ccdc5ebde4d6fee07ff9eefb0b60cfb_1_0_2",
+        required=True,
+        help="Scene-specific pickup object identifier.",
     )
     parser.add_argument(
-        "--place-receptacle-uid", default="5c5c3b9ae7874b709c10ac57dad33195"
+        "--place-receptacle-uid",
+        required=True,
+        help="Scene-specific placement receptacle identifier.",
     )
     parser.add_argument(
         "--robot-base-pose",
         type=float,
         nargs=7,
-        default=[0.813989, 14.103546, 0.329206, -0.631043, 0.0, 0.0, 0.775748],
+        required=True,
+        metavar=("X", "Y", "Z", "QX", "QY", "QZ", "QW"),
+        help="Fixed robot base position and quaternion for this scenario.",
     )
     parser.add_argument("--pickup-min-dist", type=float, default=0.02)
     parser.add_argument("--pickup-max-dist", type=float, default=0.12)

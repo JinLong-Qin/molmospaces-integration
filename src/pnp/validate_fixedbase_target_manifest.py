@@ -17,12 +17,14 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Audit reset-only fixed-base PnP targets.")
     parser.add_argument("--input", type=Path, required=True)
     parser.add_argument("--expected-count", type=int, required=True)
-    parser.add_argument("--house-id", type=int, default=1716)
+    parser.add_argument("--house-id", type=int, required=True)
     parser.add_argument(
         "--robot-base-pose",
         type=float,
         nargs=7,
-        default=[0.813989, 14.103546, 0.329206, -0.631043, 0.0, 0.0, 0.775748],
+        required=True,
+        metavar=("X", "Y", "Z", "QX", "QY", "QZ", "QW"),
+        help="Fixed robot base position and quaternion for this scenario.",
     )
     args = parser.parse_args()
 

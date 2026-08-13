@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "kind": "mimicgen_generation",
+  "description": "Example configuration for a reusable MolmoSpaces × MimicGen generation run.",
+  "run": {
+    "repository_root": "../..",
+    "python": "python3",
+    "work_dir": "../../runtime/pnp_example",
+    "label": "pnp_smoke"
+  },
+  "inputs": {
+    "source_hdf5": "/absolute/path/to/validated_source.hdf5",
+    "target_manifest": "/absolute/path/to/validated_target_manifest.json",
+    "source_count": 8
+  },
+  "generation": {
+    "mode": "per-subtask",
+    "target_success": 1,
+    "max_attempts": 3,
+    "target_start": 0,
+    "target_end": 0,
+    "rng_seed_base": 10000,
+    "diagnostic": false,
+    "extra_rollout_args": []
+  }
+}

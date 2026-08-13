@@ -25,6 +25,12 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--seed-index", type=int, default=0)
 ap.add_argument("--out-name", default="gen_000_same_init")
 ap.add_argument("--save-videos", action="store_true")
+ap.add_argument(
+    "--direct-hdf5",
+    type=Path,
+    default=None,
+    help="Append an accepted simulator rollout directly to a robomimic-style HDF5.",
+)
 ap.add_argument("--interp", type=int, default=0, help="MimicGen interpolation steps per subtask")
 ap.add_argument(
     "--custom-transition-steps",
@@ -347,6 +353,22 @@ def _unused_gdown_download(*args, **kwargs):
 
 _gdown.download = _unused_gdown_download
 sys.modules.setdefault("gdown", _gdown)
+# Avoid optional CLIP download for this local-only, non-language-conditioned adapter.
+_lang_utils = _types.ModuleType("robomimic.utils.lang_utils")
+_lang_utils.LANG_EMB_OBS_KEY = "lang_emb"
+def _unsupported_lang_embedding(*_args, **_kwargs):
+    raise RuntimeError("language embeddings are unsupported by this local-only PnP rollout adapter")
+_lang_utils.get_lang_emb = _unsupported_lang_embedding
+_lang_utils.get_lang_emb_shape = _unsupported_lang_embedding
+sys.modules.setdefault("robomimic.utils.lang_utils", _lang_utils)
+# robomimic file utilities import policy factories eagerly, although MimicGen
+# source parsing here never loads a policy. Keep that unsupported path explicit.
+_algo = _types.ModuleType("robomimic.algo")
+def _unsupported_policy_loading(*_args, **_kwargs):
+    raise RuntimeError("policy loading is unsupported by this local-only PnP rollout adapter")
+_algo.algo_factory = _unsupported_policy_loading
+_algo.RolloutPolicy = _unsupported_policy_loading
+sys.modules.setdefault("robomimic.algo", _algo)
 from mimicgen.env_interfaces.base import MG_EnvInterface
 from mimicgen.configs.task_spec import MG_TaskSpec
 from mimicgen.datagen.data_generator import DataGenerator
@@ -473,6 +495,16 @@ def _molmospaces_joint_execute(
                         candidate = env_interface.target_pose_to_action(target_pose=reference_waypoint.pose)
                         raise RuntimeError(f"grasp gate rejected close after {args.osc_grasp_max_approach_steps} ticks (pos={np.linalg.norm(candidate[:3]):.6f}m rot={np.linalg.norm(candidate[3:6]):.6f}rad)")
                     for _ in range(int(args.osc_gripper_settle_steps)):
+                        if execute_tick(reference_waypoint, subtask_index, desired_gripper): return finished()
+                elif args.rollout_action_type == "tcp_delta":
+                    for waypoint_step in range(int(args.tcp_waypoint_max_steps)):
+                        if waypoint_step > 0:
+                            residual = env_interface.target_pose_to_action(target_pose=reference_waypoint.pose)
+                            if (
+                                float(np.linalg.norm(residual[:3])) <= args.tcp_waypoint_pos_tolerance
+                                and float(np.linalg.norm(residual[3:6])) <= args.tcp_waypoint_rot_tolerance
+                            ):
+                                break
                         if execute_tick(reference_waypoint, subtask_index, desired_gripper): return finished()
                 else:
                     if execute_tick(reference_waypoint, subtask_index, desired_gripper): return finished()
@@ -757,19 +789,16 @@ class MG_MolmoSpacesPickAndPlace(MG_EnvInterface):
     INTERFACE_TYPE = "molmospaces"
 
     def get_robot_eef_pose(self):
-        return self.env.interface_current_eef_pose()
+        # MimicGen transforms EEF and object poses together, so both use the robot-base frame.
+        return np.linalg.inv(np.asarray(self.env.robot.robot_view.base.pose, dtype=float)) @ self.env.interface_current_eef_pose()
 
     def target_pose_to_action(self, target_pose, relative=True):
         if args.rollout_action_type in ("tcp_delta", "osc_pose"):
             from molmo_spaces.utils.linalg_utils import transform_to_twist
 
             current_pose = self.get_robot_eef_pose()
-            target_pose_world = (
-                np.asarray(self.env.robot.robot_view.base.pose, dtype=float)
-                @ np.asarray(target_pose, dtype=float)
-            )
             linear, angular = transform_to_twist(
-                np.linalg.inv(current_pose) @ target_pose_world
+                np.linalg.inv(current_pose) @ np.asarray(target_pose, dtype=float)
             )
             return np.concatenate([linear, angular]).astype(np.float32)
         robot_view = self.env.robot.robot_view
@@ -880,6 +909,107 @@ env = MolmoSpacesPnpEnv()
 iface = MG_MolmoSpacesPickAndPlace(env)
 out = WORK / "artifacts/mimicgen_pnp" / args.out_name
 out.mkdir(parents=True, exist_ok=True)
+
+
+def append_direct_demo(
+    output_hdf5: Path,
+    name: str,
+    generated_actions: np.ndarray,
+    pre_action_states: np.ndarray,
+    pre_action_observations: list[dict],
+    datagen_infos: list[dict],
+    actual_joints: np.ndarray,
+    actual_eef: np.ndarray,
+    joint_commands: np.ndarray,
+    waypoint_poses: np.ndarray,
+    waypoint_subtasks: np.ndarray,
+    source_labels: np.ndarray,
+    trace: list[dict],
+) -> str:
+    """Persist an accepted simulator rollout without a replay/conversion pass."""
+    if len(generated_actions) == 0:
+        raise RuntimeError("refusing to persist an empty direct rollout")
+    if not (
+        len(pre_action_states) == len(pre_action_observations) == len(datagen_infos)
+        == len(actual_joints) == len(generated_actions)
+    ):
+        raise RuntimeError("direct HDF5 persistence inputs are not action-aligned")
+    output_hdf5.parent.mkdir(parents=True, exist_ok=True)
+    with h5py.File(output_hdf5, "a") as handle:
+        data = handle.require_group("data")
+        index = 0
+        while f"demo_{index}" in data:
+            index += 1
+        demo_name = f"demo_{index}"
+        staging_name = f"__pending_{demo_name}"
+        if staging_name in data:
+            del data[staging_name]
+        demo = data.create_group(staging_name)
+        demo.create_dataset("actions", data=generated_actions, compression="gzip")
+        demo.create_dataset("states", data=pre_action_states, compression="gzip")
+        demo.create_dataset("executed_joint_commands", data=joint_commands, compression="gzip")
+        demo.create_dataset("actual_joint_states", data=actual_joints, compression="gzip")
+        demo.create_dataset("actual_eef_states", data=actual_eef, compression="gzip")
+        demo.create_dataset("executed_waypoint_poses", data=waypoint_poses, compression="gzip")
+        demo.create_dataset("executed_waypoint_subtasks", data=waypoint_subtasks, compression="gzip")
+        demo.create_dataset("source_demo_labels", data=source_labels, compression="gzip")
+        demo.create_dataset(
+            "rewards", data=np.asarray([row["success"] for row in trace], dtype=np.float32)
+        )
+        dones = np.zeros(len(generated_actions), dtype=np.int32)
+        dones[-1] = 1
+        demo.create_dataset("dones", data=dones)
+        obs = demo.create_group("obs")
+        obs.create_dataset(
+            "robot0_joint_pos",
+            data=np.stack([row["joint_pos"] for row in pre_action_observations]),
+            compression="gzip",
+        )
+        obs.create_dataset(
+            "robot0_gripper_qpos",
+            data=np.stack([row["gripper_qpos"] for row in pre_action_observations]),
+            compression="gzip",
+        )
+        pre_eef = np.stack([row["eef_pose"] for row in pre_action_observations])
+        obs.create_dataset("robot0_eef_pos", data=pre_eef[:, :3, 3], compression="gzip")
+        obs.create_dataset("robot0_eef_rotmat", data=pre_eef[:, :3, :3], compression="gzip")
+        dgi = demo.create_group("datagen_info")
+        dgi.create_dataset(
+            "eef_pose", data=np.stack([row.eef_pose for row in datagen_infos]), compression="gzip"
+        )
+        object_poses = dgi.create_group("object_poses")
+        for object_name in ("pickup_obj", "place_receptacle"):
+            object_poses.create_dataset(
+                object_name,
+                data=np.stack([row.object_poses[object_name] for row in datagen_infos]),
+                compression="gzip",
+            )
+        signals = dgi.create_group("subtask_term_signals")
+        for signal_name in datagen_infos[0].subtask_term_signals:
+            signals.create_dataset(
+                signal_name,
+                data=np.asarray(
+                    [row.subtask_term_signals[signal_name] for row in datagen_infos],
+                    dtype=np.uint8,
+                ),
+            )
+        demo.attrs["num_samples"] = int(len(generated_actions))
+        demo.attrs["candidate_name"] = name
+        demo.attrs["rollout_action_type"] = args.rollout_action_type
+        demo.attrs["target_manifest"] = str(Path(args.target_manifest))
+        demo.attrs["target_seed_index"] = int(args.seed_index)
+        demo.attrs["source_hdf5"] = str(SRC)
+        demo.attrs["provenance"] = "direct simulator rollout; no post-collection replay"
+        data.move(staging_name, demo_name)
+        data.attrs["total"] = int(
+            sum(group.attrs["num_samples"] for name, group in data.items() if name.startswith("demo_"))
+        )
+        data.attrs["env_args"] = json.dumps(
+            {"env_name": "MolmoSpacesPickAndPlaceEnv", "type": 2}
+        )
+    return demo_name
+
+
 try:
     log("running DataGenerator.generate")
     results = gen.generate(
@@ -910,6 +1040,11 @@ try:
             else np.r_[arm, hold_grip]
         ).astype(np.float32)
         for _ in range(int(args.post_hold_steps)):
+            # Keep every direct-HDF5 time series action-aligned through the
+            # stability window, including its pre-action state and datagen info.
+            results["states"].append(env.get_state()["states"])
+            results["observations"].append(env.get_observation())
+            results["datagen_infos"].append(iface.get_datagen_info(action=hold_action))
             env.step(hold_action)
             post_hold_actions.append(hold_action.copy())
             env.executed_waypoint_poses.append(env.interface_current_eef_pose().astype(np.float32))
@@ -1035,6 +1170,25 @@ try:
         demo.attrs["target_seed_index"] = int(args.seed_index)
         demo.attrs["source_hdf5"] = str(SRC)
         data.attrs["total"] = len(generated_actions)
+    tail30 = len(env.success_trace) >= 30 and all(row["success"] for row in env.success_trace[-30:])
+    if args.direct_hdf5 is not None and final_success and persistent and tail30:
+        summary["direct_hdf5"] = str(args.direct_hdf5)
+        summary["direct_hdf5_demo"] = append_direct_demo(
+            args.direct_hdf5,
+            args.out_name,
+            generated_actions,
+            np.asarray(results["states"], dtype=np.float32),
+            results["observations"],
+            results["datagen_infos"],
+            actual_joints,
+            actual_eef,
+            joint_commands,
+            waypoint_poses,
+            waypoint_subtasks,
+            src_labels,
+            env.success_trace,
+        )
+        (out / "generate_result.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False))
     if args.save_videos:
         from molmo_spaces.utils.save_utils import save_videos_from_raw_observations
 

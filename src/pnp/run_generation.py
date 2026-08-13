@@ -65,6 +65,7 @@ def inspect_attempt(
         result_file = artifact / "result.json"
     trace_file = artifact / "success_trace.json"
     action_file = artifact / "generated_actions.npy"
+    replay_hdf5 = artifact / "generated_replay_package.hdf5"
     videos = sorted(artifact.glob("*.mp4"))
     row = {
         "name": name,
@@ -92,7 +93,15 @@ def inspect_attempt(
     action_sha = digest(action_file) if action_file.exists() else None
     videos_ok = len(videos) >= 2 and all(video.stat().st_size > 0 for video in videos)
     target_matches = result.get("generation_env_seed_index") == target
-    strict = bool(code == 0 and (whole_source or per_subtask) and result.get("final_success") and result.get("success_persistent_to_end") and result.get("post_hold_steps") == 30 and tail30 and videos_ok and action_sha and target_matches)
+    direct_hdf5 = Path(result["direct_hdf5"]).resolve() if result.get("direct_hdf5") else None
+    generated_hdf5_persisted = bool(
+        replay_hdf5.is_file()
+        and replay_hdf5.stat().st_size > 0
+        and direct_hdf5 is not None
+        and direct_hdf5.is_file()
+        and direct_hdf5.stat().st_size > 0
+    )
+    strict = bool(code == 0 and (whole_source or per_subtask) and result.get("final_success") and result.get("success_persistent_to_end") and result.get("post_hold_steps") == 30 and tail30 and videos_ok and action_sha and target_matches and generated_hdf5_persisted)
     duplicate_action = bool(strict and action_sha in seen_actions)
     duplicate_layout = bool(strict and layout_sha in seen_layouts)
     row.update({
@@ -107,6 +116,10 @@ def inspect_attempt(
         "tail30_success": tail30,
         "videos_ok": videos_ok,
         "video_count": len(videos),
+        "replay_hdf5": str(replay_hdf5),
+        "direct_hdf5": str(direct_hdf5) if direct_hdf5 else None,
+        "generated_hdf5_persisted": generated_hdf5_persisted,
+        "eligible_for_training_hdf5": generated_hdf5_persisted,
         "num_actions": result.get("num_actions_executed"),
         "action_sha256": action_sha,
         "target_matches": target_matches,
@@ -173,6 +186,7 @@ def main() -> int:
     seen_layouts = set(layout_hashes.read_text().split())
     max_attempts = args.max_attempts or (len(targets) if args.mode == "whole-source" else max(len(targets), args.target_success * 3))
     log(f"START mode={args.mode} targets={targets.start}-{targets.stop - 1} source_demos={len(keys)} diagnostic={args.diagnostic}")
+    generated_hdf5 = work / "artifacts/mimicgen_pnp" / f"{args.run_label}_generated.hdf5"
     for attempt in range(max_attempts):
         accepted = read_jsonl(accepted_file)
         if len(accepted) >= args.target_success:
@@ -183,12 +197,19 @@ def main() -> int:
         name = f"{args.run_label}_target{target:03d}_rng{rng_seed:05d}"
         if any(row.get("name") == name for row in read_jsonl(attempts_file)):
             continue
-        command = [args.python, str(root / "src/pnp/generate_pick_place_rollout.py"), "--seed-index", str(target), "--out-name", name, "--source-hdf5", str(source), "--target-manifest", str(manifest_path), "--demo-keys", source_key or ",".join(keys), "--mimicgen-rng-seed", str(rng_seed), "--transform-first-robot-pose", "--post-hold-steps", "30", "--save-videos", *args.extra_rollout_arg]
+        command = [args.python, str(root / "src/pnp/generate_pick_place_rollout.py"), "--seed-index", str(target), "--out-name", name, "--source-hdf5", str(source), "--target-manifest", str(manifest_path), "--demo-keys", source_key or ",".join(keys), "--mimicgen-rng-seed", str(rng_seed), "--transform-first-robot-pose", "--post-hold-steps", "30", "--save-videos", "--direct-hdf5", str(generated_hdf5), *args.extra_rollout_arg]
         if args.mode == "per-subtask":
             command.append("--select-src-per-subtask")
         log(f"START name={name} target={target} source={source_key or 'pool'}")
         with (run_dir / f"{name}.log").open("w") as output:
-            completed = subprocess.run(command, cwd=root, stdout=output, stderr=subprocess.STDOUT, check=False)
+            completed = subprocess.run(
+                command,
+                cwd=root,
+                env={**os.environ, "MOLMOSPACES_PNP_WORKDIR": str(work)},
+                stdout=output,
+                stderr=subprocess.STDOUT,
+                check=False,
+            )
         row = inspect_attempt(work, name, target, args.mode, source_key, completed.returncode, source_sha, manifest_sha, manifest["seeds"][target]["layout_sha256"], seen_actions, seen_layouts)
         with attempts_file.open("a") as output:
             output.write(json.dumps(row, ensure_ascii=False) + "\n")
@@ -212,8 +233,11 @@ def main() -> int:
         "source_demo_count": len(keys), "target_range": [targets.start, targets.stop - 1],
         "target_success": args.target_success, "max_attempts": max_attempts,
         "attempts": len(attempts), "strict_successes": sum(bool(row.get("strict_success")) for row in attempts),
-        "accepted_unique": len(accepted), "generated_hdf5_persisted": False,
-        "eligible_for_training_hdf5": False, "complete": len(accepted) >= args.target_success,
+        "accepted_unique": len(accepted),
+        "generated_hdf5": str(generated_hdf5),
+        "generated_hdf5_persisted": generated_hdf5.is_file() and generated_hdf5.stat().st_size > 0,
+        "eligible_for_training_hdf5": len(accepted) >= args.target_success and generated_hdf5.is_file() and generated_hdf5.stat().st_size > 0,
+        "complete": len(accepted) >= args.target_success,
     }
     (run_dir / "summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n")
     log("FINISH " + json.dumps(summary, ensure_ascii=False))

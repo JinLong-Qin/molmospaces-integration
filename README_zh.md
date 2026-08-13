@@ -257,13 +257,13 @@ export HF_HUB_OFFLINE=1
 
 python scripts/datagen/run_pipeline.py \
   --robot droid --policy planner --task_type pick_and_place \
-  --pool molmodata_potato_bowl_1716 \
+  --pool <pool-name> \
   --samples_per_house 1 --randomize_fixed_pickup_pose \
   --filter_for_successful_trajectories \
   --disable_action_noise --require_clean_success \
   --require_success_count 1 \
   --device gpu --num_workers 1 \
-  --seed 111 --run_name_prefix fresh_clone_smoke
+  --seed <seed> --run_name_prefix <run-label>
 ```
 
 这里 `--robot droid` 实际使用 `FrankaRobotConfig` 和 `FrankaDroidCameraSystem`。`--device cpu` 只建议作为较慢的诊断 fallback。WSL2 不提供 MolmoSpaces headless rendering 所需的 NVIDIA EGL device extension，因此完整 GPU 渲染 datagen 验收需要带 NVIDIA EGL vendor 配置的原生 Linux。

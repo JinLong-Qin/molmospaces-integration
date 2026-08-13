@@ -1,76 +1,73 @@
-# Active Franka Pick-and-Place Pipeline
+# Pick-and-Place Augmentation Pipeline
 
-This directory contains only the current Franka Droid / Pick-and-Place / in-process scripted-IK MimicGen pipeline. Historical 50-cross experiments, fixed-pool wrappers, single-seed collectors, and superseded code snapshots are under [`archive/pnp/`](../../archive/pnp/).
+This directory is the supported Python implementation of the reusable
+MolmoSpaces × MimicGen Pick-and-Place data-augmentation workflow. Public
+experiments are configuration-driven and scenario parameters must be supplied
+explicitly; active source files do not encode a private machine path, a fixed
+scene, or a particular object pair.
 
-## Active Modules
+**Start here:** [`docs/pnp-data-augmentation.md`](../../docs/pnp-data-augmentation.md).
+
+## Architecture
 
 ```text
-select_source_pool.py
-  -> replay_source_candidate.py
-  -> convert_source_hdf5.py
-  -> validate_robomimic_source_hdf5.py
-  -> source HDF5
-
-sample_fixedbase_target_manifest.py
-  -> validate_fixedbase_target_manifest.py
-  -> target manifest
-
-source HDF5 + target manifest
-  -> run_generation.py --mode per-subtask
-  -> generate_pick_place_rollout.py
-  -> accepted.jsonl and runtime artifacts
+validated source HDF5 ─┐
+                       ├─ run_experiment.py + JSON configuration
+validated target manifest ┘            │
+                                       ▼
+                              run_generation.py
+                                       ▼
+                     generate_pick_place_rollout.py
+                                       ▼
+       per-attempt artifacts + JSONL provenance + HDF5 + summary
 ```
 
-- `select_source_pool.py`: selects strict-success source candidates from an official shard or locally generated Franka datagen HDF5.
-- `replay_source_candidate.py`: replays one selected source and records the MimicGen datagen fields.
-- `convert_source_hdf5.py`: creates a robomimic/MimicGen source HDF5 from replay-accepted sources.
-- `validate_robomimic_source_hdf5.py`: validates source HDF5 structure, alignment, finite arrays, and provenance.
-- `sample_fixedbase_target_manifest.py` and `validate_fixedbase_target_manifest.py`: create and check target reset layouts.
-- `run_source_hdf5_pipeline.py`: parameterized source selection, replay, conversion, and validation orchestrator.
-- `run_generation.py`: parameterized rollout orchestrator. Use `--mode per-subtask` for the official MimicGen source-selection path. `--mode whole-source --diagnostic` is control-only.
-- `generate_pick_place_rollout.py`: one real MolmoSpaces rollout; it is the execution primitive used by the generation orchestrator.
+| Module | Responsibility |
+| --- | --- |
+| `select_source_pool.py` | Select source candidates from supported source data. |
+| `replay_source_candidate.py` | Replay a source candidate and record MimicGen datagen fields. |
+| `convert_source_hdf5.py` | Convert replay-accepted sources into a MimicGen/robomimic HDF5. |
+| `validate_robomimic_source_hdf5.py` | Validate source schema, finite values, alignment, and provenance. |
+| `sample_fixedbase_target_manifest.py` | Sample reset-only target `EpisodeSpec` records from explicit scenario arguments. |
+| `validate_fixedbase_target_manifest.py` | Verify target-manifest schema, uniqueness, and scenario consistency. |
+| `run_source_hdf5_pipeline.py` | Orchestrate source selection, replay, conversion, and validation. |
+| `run_experiment.py` | Validate a portable JSON generation configuration and invoke the batch runner. |
+| `run_generation.py` | Batch orchestration, input hashes, deduplication, JSONL records, and summary. |
+| `generate_pick_place_rollout.py` | Single real simulator rollout primitive. |
 
-## Environment
+## Boundaries
 
-Run from the repository root after `bash tools/setup_mimicgen_dependency.sh`:
+- Python contains data, simulator, validation, and orchestration logic.
+- `scripts/pnp/` is the shell boundary: it only locates the repository and
+  interpreter, then invokes Python. It contains no Python heredoc or dataset
+  policy.
+- `configs/pnp/` stores portable example configurations. Copy an example for a
+  run; never encode a local path or scenario in a tracked launcher.
+- `archive/pnp/` contains historical one-off experiments and debug snapshots.
+  They are preserved for provenance and are not supported APIs.
+
+## Public entrypoints
 
 ```bash
-export MOLMOSPACES_ROOT="$PWD"
-export MOLMOSPACES_PYTHON=/path/to/molmospaces-python
-export MOLMOSPACES_PNP_WORKDIR="$PWD/runtime/mimicgen_pick_and_place"
-export MIMICGEN_ROOT="$PWD/vendor/mimicgen"
-export ROBOMIMIC_ROOT="$PWD/vendor/robomimic"
-export PYTHONPATH="$PWD:$MIMICGEN_ROOT:$ROBOMIMIC_ROOT:${PYTHONPATH:-}"
-export HF_HOME="${HF_HOME:-$HOME/.cache/huggingface}"
-export NLTK_DATA="${NLTK_DATA:-$HOME/nltk_data}"
-export MOLMOSPACES_NLTK_DATA="$NLTK_DATA"
+# Inspect all CLI contracts first.
+"$MOLMOSPACES_PYTHON" src/pnp/run_source_hdf5_pipeline.py --help
+"$MOLMOSPACES_PYTHON" src/pnp/sample_fixedbase_target_manifest.py --help
+"$MOLMOSPACES_PYTHON" src/pnp/validate_fixedbase_target_manifest.py --help
+"$MOLMOSPACES_PYTHON" src/pnp/run_experiment.py --help
+
+# Validate a copied configuration without starting a rollout.
+scripts/pnp/run_generation.sh configs/pnp/generation.example.json --dry-run
 ```
 
-## Current 17-Source Pilot
+The example intentionally references placeholder input artifacts. It is a
+configuration/schema smoke test, not a runnable dataset collection command.
+Use a validated source HDF5 and target manifest to run a real smoke.
 
-The active controlled pilot uses the replay-verified 17-unique-source HDF5 and an independent target manifest. Paths, source count, target range, RNG base, and output label are explicit parameters; they are not encoded in new script names.
+## Evidence contract
 
-```bash
-"$MOLMOSPACES_PYTHON" src/pnp/run_generation.py \
-  --root "$MOLMOSPACES_ROOT" \
-  --python "$MOLMOSPACES_PYTHON" \
-  --work "$MOLMOSPACES_PNP_WORKDIR" \
-  --mode per-subtask \
-  --source-count 17 \
-  --source-hdf5 /path/to/robomimic_pnp_fixedbase_17unique_replayed.hdf5 \
-  --target-manifest /path/to/pnp_target_manifest.json \
-  --target-success 10 \
-  --target-start 0 --target-end 9 \
-  --run-label fixed_bowl_control_pilot
-```
-
-The generated data are not accepted merely because a process exits successfully. Each accepted rollout requires real simulator execution, final success, success persistence through the post-hold window, non-empty videos, matching target layout, and action/layout deduplication. The current formal expansion count remains zero until these gates pass.
-
-## Historical Material
-
-- `archive/pnp/legacy_50cross/`: dated 50-demo cross-subtask diagnostic scripts.
-- `archive/pnp/legacy_collectors/`: dated wrappers and collectors superseded by the parameterized orchestrators.
-- `archive/pnp/code_snapshots/`: code snapshots retained for provenance only.
-- `archive/docs/worklines/mimicgen_50cross/`: historical workline README.
-
-Existing `runtime/`, `results/`, and `artifacts/` paths are historical evidence and are intentionally unchanged by this reorganization.
+Successful process completion is insufficient. `run_generation.py` records an
+attempt only as accepted when task behavior, requested target, selection mode,
+post-hold persistence, nonempty media, HDF5 persistence, and action/layout
+uniqueness all pass. Dataset-level eligibility additionally requires the target
+acceptance count and generated aggregate HDF5. See the full artifact contract
+and reproducibility requirements in the workflow guide.

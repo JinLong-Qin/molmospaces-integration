@@ -15,7 +15,7 @@ import numpy as np
 import zstandard as zstd
 
 WORK = Path(os.environ.get("MOLMOSPACES_PNP_WORKDIR", "runtime/mimicgen_pick_and_place"))
-DEFAULT_TAR = WORK / "data/molmobot_data/FrankaPickAndPlaceOmniCamConfig/val_shards/00000.tar"
+DEFAULT_TAR = None
 OUT = WORK / "artifacts/seeds"
 RAW = OUT / "raw_source_pool"
 
@@ -322,6 +322,11 @@ def main():
         description="Select a MimicGen PnP source pool from the original MolmoBot shard or Franka datagen HDF5 files."
     )
     parser.add_argument(
+        "--source-shard",
+        type=Path,
+        help="Explicit official MolmoBot .tar shard to scan.",
+    )
+    parser.add_argument(
         "--franka-datagen-root",
         type=Path,
         help="Read house_*/trajectories_batch_*.h5 from this Franka datagen run/collection instead of the MolmoBot shard.",
@@ -357,8 +362,15 @@ def main():
         raise SystemExit(f"--count must be positive, got {args.count}")
     args.out.parent.mkdir(parents=True, exist_ok=True)
 
-    if args.franka_datagen_root is None:
-        manifest = select_from_molmobot_shard(DEFAULT_TAR, args.count)
+    if args.source_shard is not None and args.franka_datagen_root is not None:
+        raise SystemExit("choose exactly one of --source-shard or --franka-datagen-root")
+    if args.source_shard is not None:
+        shard = args.source_shard.expanduser().resolve()
+        if not shard.is_file():
+            raise SystemExit(f"source shard is not a file: {shard}")
+        manifest = select_from_molmobot_shard(shard, args.count)
+    elif args.franka_datagen_root is None:
+        raise SystemExit("one of --source-shard or --franka-datagen-root is required")
     else:
         root = args.franka_datagen_root.expanduser().resolve()
         if not root.is_dir():
