@@ -35,7 +35,10 @@ def main() -> None:
     static_hashes: set[str] = set()
     camera_hashes: set[str] = set()
 
-    if manifest.get("purpose") != "MimicGen target resets; no planner policy or task actions executed":
+    if (
+        manifest.get("purpose")
+        != "MimicGen target resets; no planner policy or task actions executed"
+    ):
         errors.append("manifest purpose does not identify reset-only sampling")
     if len(rows) != args.expected_count or manifest.get("n_targets") != args.expected_count:
         errors.append(
@@ -69,9 +72,7 @@ def main() -> None:
             continue
         if not np.isfinite(np.asarray(pickup_pose + place_pose, dtype=float)).all():
             errors.append(f"row {i}: non-finite object pose")
-        layout_hash = digest(
-            {"pickup_pose": pickup_pose, "place_receptacle_pose": place_pose}
-        )
+        layout_hash = digest({"pickup_pose": pickup_pose, "place_receptacle_pose": place_pose})
         if layout_hash != row.get("layout_sha256"):
             errors.append(f"row {i}: layout hash mismatch")
         layout_hashes.add(layout_hash)
@@ -92,7 +93,9 @@ def main() -> None:
                     "robot_name": spec.get("robot", {}).get("robot_name"),
                     "img_resolution": spec.get("img_resolution"),
                     "added_objects": spec.get("scene_modifications", {}).get("added_objects", {}),
-                    "removed_objects": spec.get("scene_modifications", {}).get("removed_objects", []),
+                    "removed_objects": spec.get("scene_modifications", {}).get(
+                        "removed_objects", []
+                    ),
                     "non_target_object_poses": non_target_object_poses,
                     "pickup_obj_name": task.get("pickup_obj_name"),
                     "place_receptacle_name": task.get("place_receptacle_name"),

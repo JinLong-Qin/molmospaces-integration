@@ -4,6 +4,7 @@
 The domain operations remain in the existing selector, replay collector,
 converter, and validator. This CLI owns orchestration and provenance only.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -19,7 +20,9 @@ from pathlib import Path
 def run(command: list[str], log: Path, env: dict[str, str]) -> int:
     log.parent.mkdir(parents=True, exist_ok=True)
     with log.open("w") as output:
-        completed = subprocess.run(command, stdout=output, stderr=subprocess.STDOUT, check=False, env=env)
+        completed = subprocess.run(
+            command, stdout=output, stderr=subprocess.STDOUT, check=False, env=env
+        )
     return completed.returncode
 
 
@@ -47,7 +50,11 @@ def main() -> int:
     manifest = Path(args.manifest).resolve()
     replay_root = Path(args.replay_root).resolve()
     output_hdf5 = Path(args.output_hdf5).resolve()
-    run_dir = Path(args.run_dir).resolve() if args.run_dir else work / "logs" / f"source_hdf5_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+    run_dir = (
+        Path(args.run_dir).resolve()
+        if args.run_dir
+        else work / "logs" / f"source_hdf5_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+    )
     run_dir.mkdir(parents=True, exist_ok=True)
     manifest.parent.mkdir(parents=True, exist_ok=True)
     replay_root.mkdir(parents=True, exist_ok=True)
@@ -58,7 +65,17 @@ def main() -> int:
     converter = root / "src/pnp/convert_source_hdf5.py"
     validator = root / "src/pnp/validate_robomimic_source_hdf5.py"
     env = os.environ.copy()
-    env["PYTHONPATH"] = ":".join(filter(None, [str(root), str(root / "vendor/mimicgen"), str(root / "vendor/robomimic"), env.get("PYTHONPATH", "")]))
+    env["PYTHONPATH"] = ":".join(
+        filter(
+            None,
+            [
+                str(root),
+                str(root / "vendor/mimicgen"),
+                str(root / "vendor/robomimic"),
+                env.get("PYTHONPATH", ""),
+            ],
+        )
+    )
 
     command = [py, str(selector), "--count", str(args.candidate_count), "--out", str(manifest)]
     if args.source_shard:
@@ -66,41 +83,120 @@ def main() -> int:
     else:
         if args.house_id is None or args.run_name_prefix is None:
             raise SystemExit("--house-id and --run-name-prefix are required with --datagen-root")
-        command.extend(["--franka-datagen-root", args.datagen_root, "--house-id", str(args.house_id), "--run-name-prefix", args.run_name_prefix])
+        command.extend(
+            [
+                "--franka-datagen-root",
+                args.datagen_root,
+                "--house-id",
+                str(args.house_id),
+                "--run-name-prefix",
+                args.run_name_prefix,
+            ]
+        )
     if args.allow_nonpersistent_candidates:
         command.append("--allow-nonpersistent-candidates")
     code = run(command, run_dir / "select.log", env)
     if code:
-        raise SystemExit(f"source selection failed with exit code {code}; see {run_dir / 'select.log'}")
+        raise SystemExit(
+            f"source selection failed with exit code {code}; see {run_dir / 'select.log'}"
+        )
 
     failed = 0
     for index in range(args.candidate_count):
         log = run_dir / f"replay_seed_{index:02d}.log"
-        code = run([py, str(replay), "--seed-index", str(index), "--manifest", str(manifest), "--out-root", str(replay_root)], log, env)
+        code = run(
+            [
+                py,
+                str(replay),
+                "--seed-index",
+                str(index),
+                "--manifest",
+                str(manifest),
+                "--out-root",
+                str(replay_root),
+            ],
+            log,
+            env,
+        )
         failed += code != 0
 
     rows = []
     accepted: list[int] = []
     for index in range(args.candidate_count):
         result_path = replay_root / f"seed_{index:02d}" / "datagen_info_collection_result.json"
-        result = json.loads(result_path.read_text()) if result_path.exists() else {"error": "missing replay result"}
+        result = (
+            json.loads(result_path.read_text())
+            if result_path.exists()
+            else {"error": "missing replay result"}
+        )
         hard_pass = bool(result.get("final_success") and result.get("success_persistent_to_end"))
         accepted += [index] if hard_pass else []
-        rows.append({"seed_index": index, "hard_pass": hard_pass, "result_path": str(result_path), "result": result})
-    acceptance = {"candidate_count": len(rows), "replay_failed_process_count": failed, "hard_pass_count": len(accepted), "accepted_indices": accepted, "rows": rows}
-    (run_dir / "replay_acceptance.json").write_text(json.dumps(acceptance, indent=2, ensure_ascii=False) + "\n")
+        rows.append(
+            {
+                "seed_index": index,
+                "hard_pass": hard_pass,
+                "result_path": str(result_path),
+                "result": result,
+            }
+        )
+    acceptance = {
+        "candidate_count": len(rows),
+        "replay_failed_process_count": failed,
+        "hard_pass_count": len(accepted),
+        "accepted_indices": accepted,
+        "rows": rows,
+    }
+    (run_dir / "replay_acceptance.json").write_text(
+        json.dumps(acceptance, indent=2, ensure_ascii=False) + "\n"
+    )
     if not accepted:
-        raise SystemExit(f"no replay hard-pass source trajectories; see {run_dir / 'replay_acceptance.json'}")
+        raise SystemExit(
+            f"no replay hard-pass source trajectories; see {run_dir / 'replay_acceptance.json'}"
+        )
 
     accepted_csv = ",".join(map(str, accepted))
-    code = run([py, str(converter), "--accepted", accepted_csv, "--action-type", args.action_type, "--manifest", str(manifest), "--replay-root", str(replay_root), "--out", str(output_hdf5)], run_dir / "convert.log", env)
+    code = run(
+        [
+            py,
+            str(converter),
+            "--accepted",
+            accepted_csv,
+            "--action-type",
+            args.action_type,
+            "--manifest",
+            str(manifest),
+            "--replay-root",
+            str(replay_root),
+            "--out",
+            str(output_hdf5),
+        ],
+        run_dir / "convert.log",
+        env,
+    )
     if code:
-        raise SystemExit(f"source conversion failed with exit code {code}; see {run_dir / 'convert.log'}")
-    code = run([py, str(validator), "--input", str(output_hdf5), "--expected-demos", str(len(accepted))], run_dir / "validate.log", env)
+        raise SystemExit(
+            f"source conversion failed with exit code {code}; see {run_dir / 'convert.log'}"
+        )
+    code = run(
+        [py, str(validator), "--input", str(output_hdf5), "--expected-demos", str(len(accepted))],
+        run_dir / "validate.log",
+        env,
+    )
     if code:
-        raise SystemExit(f"source validation failed with exit code {code}; see {run_dir / 'validate.log'}")
-    artifacts = {"manifest": str(manifest), "replay_root": str(replay_root), "output_hdf5": str(output_hdf5), "accepted_indices": accepted, "hdf5_sha256": hashlib.sha256(output_hdf5.read_bytes()).hexdigest(), "action_type": args.action_type}
-    (run_dir / "artifacts.json").write_text(json.dumps(artifacts, indent=2, ensure_ascii=False) + "\n")
+        raise SystemExit(
+            f"source validation failed with exit code {code}; see {run_dir / 'validate.log'}"
+        )
+    artifacts = {
+        "manifest": str(manifest),
+        "replay_root": str(replay_root),
+        "output_hdf5": str(output_hdf5),
+        "accepted_indices": accepted,
+        "hdf5_sha256": hashlib.sha256(output_hdf5.read_bytes()).hexdigest(),
+        "action_type": args.action_type,
+    }
+    (run_dir / "artifacts.json").write_text(
+        json.dumps(artifacts, indent=2, ensure_ascii=False) + "\n"
+    )
     print(json.dumps(artifacts, ensure_ascii=False))
     return 0
 

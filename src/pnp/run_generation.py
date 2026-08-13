@@ -87,7 +87,12 @@ def inspect_attempt(
     result = json.loads(result_file.read_text())
     trace = json.loads(trace_file.read_text()) if trace_file.exists() else []
     selected = [int(value) for value in result.get("src_demo_inds", [])]
-    whole_source = mode == "whole-source" and not result.get("select_src_per_subtask") and selected and len(set(selected)) == 1
+    whole_source = (
+        mode == "whole-source"
+        and not result.get("select_src_per_subtask")
+        and selected
+        and len(set(selected)) == 1
+    )
     per_subtask = mode == "per-subtask" and bool(result.get("select_src_per_subtask"))
     tail30 = len(trace) >= 30 and all(bool(value.get("success")) for value in trace[-30:])
     action_sha = digest(action_file) if action_file.exists() else None
@@ -101,33 +106,46 @@ def inspect_attempt(
         and direct_hdf5.is_file()
         and direct_hdf5.stat().st_size > 0
     )
-    strict = bool(code == 0 and (whole_source or per_subtask) and result.get("final_success") and result.get("success_persistent_to_end") and result.get("post_hold_steps") == 30 and tail30 and videos_ok and action_sha and target_matches and generated_hdf5_persisted)
+    strict = bool(
+        code == 0
+        and (whole_source or per_subtask)
+        and result.get("final_success")
+        and result.get("success_persistent_to_end")
+        and result.get("post_hold_steps") == 30
+        and tail30
+        and videos_ok
+        and action_sha
+        and target_matches
+        and generated_hdf5_persisted
+    )
     duplicate_action = bool(strict and action_sha in seen_actions)
     duplicate_layout = bool(strict and layout_sha in seen_layouts)
-    row.update({
-        "target_seed_index": result.get("generation_env_seed_index"),
-        "house_id": result.get("generation_env_house_id"),
-        "src_demo_inds": selected,
-        "distinct_src_demo_count": len(set(selected)),
-        "whole_source_verified": bool(whole_source),
-        "selection_mode_verified": bool(per_subtask),
-        "final_success": bool(result.get("final_success")),
-        "success_persistent_to_end": bool(result.get("success_persistent_to_end")),
-        "tail30_success": tail30,
-        "videos_ok": videos_ok,
-        "video_count": len(videos),
-        "replay_hdf5": str(replay_hdf5),
-        "direct_hdf5": str(direct_hdf5) if direct_hdf5 else None,
-        "generated_hdf5_persisted": generated_hdf5_persisted,
-        "eligible_for_training_hdf5": generated_hdf5_persisted,
-        "num_actions": result.get("num_actions_executed"),
-        "action_sha256": action_sha,
-        "target_matches": target_matches,
-        "strict_success": strict,
-        "duplicate_action": duplicate_action,
-        "duplicate_layout": duplicate_layout,
-        "accepted_unique": bool(strict and not duplicate_action and not duplicate_layout),
-    })
+    row.update(
+        {
+            "target_seed_index": result.get("generation_env_seed_index"),
+            "house_id": result.get("generation_env_house_id"),
+            "src_demo_inds": selected,
+            "distinct_src_demo_count": len(set(selected)),
+            "whole_source_verified": bool(whole_source),
+            "selection_mode_verified": bool(per_subtask),
+            "final_success": bool(result.get("final_success")),
+            "success_persistent_to_end": bool(result.get("success_persistent_to_end")),
+            "tail30_success": tail30,
+            "videos_ok": videos_ok,
+            "video_count": len(videos),
+            "replay_hdf5": str(replay_hdf5),
+            "direct_hdf5": str(direct_hdf5) if direct_hdf5 else None,
+            "generated_hdf5_persisted": generated_hdf5_persisted,
+            "eligible_for_training_hdf5": generated_hdf5_persisted,
+            "num_actions": result.get("num_actions_executed"),
+            "action_sha256": action_sha,
+            "target_matches": target_matches,
+            "strict_success": strict,
+            "duplicate_action": duplicate_action,
+            "duplicate_layout": duplicate_layout,
+            "accepted_unique": bool(strict and not duplicate_action and not duplicate_layout),
+        }
+    )
     return row
 
 
@@ -164,7 +182,11 @@ def main() -> int:
     keys = source_keys(source, args.source_count)
     targets = target_range(manifest_path, args.target_start, args.target_end)
     manifest = json.loads(manifest_path.read_text())
-    run_dir = Path(args.run_dir).resolve() if args.run_dir else work / "logs" / f"{args.run_label}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+    run_dir = (
+        Path(args.run_dir).resolve()
+        if args.run_dir
+        else work / "logs" / f"{args.run_label}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+    )
     run_dir.mkdir(parents=True, exist_ok=True)
     attempts_file = run_dir / "attempts.jsonl"
     accepted_file = run_dir / "accepted.jsonl"
@@ -184,8 +206,12 @@ def main() -> int:
 
     seen_actions = set(action_hashes.read_text().split())
     seen_layouts = set(layout_hashes.read_text().split())
-    max_attempts = args.max_attempts or (len(targets) if args.mode == "whole-source" else max(len(targets), args.target_success * 3))
-    log(f"START mode={args.mode} targets={targets.start}-{targets.stop - 1} source_demos={len(keys)} diagnostic={args.diagnostic}")
+    max_attempts = args.max_attempts or (
+        len(targets) if args.mode == "whole-source" else max(len(targets), args.target_success * 3)
+    )
+    log(
+        f"START mode={args.mode} targets={targets.start}-{targets.stop - 1} source_demos={len(keys)} diagnostic={args.diagnostic}"
+    )
     generated_hdf5 = work / "artifacts/mimicgen_pnp" / f"{args.run_label}_generated.hdf5"
     for attempt in range(max_attempts):
         accepted = read_jsonl(accepted_file)
@@ -197,7 +223,29 @@ def main() -> int:
         name = f"{args.run_label}_target{target:03d}_rng{rng_seed:05d}"
         if any(row.get("name") == name for row in read_jsonl(attempts_file)):
             continue
-        command = [args.python, str(root / "src/pnp/generate_pick_place_rollout.py"), "--seed-index", str(target), "--out-name", name, "--source-hdf5", str(source), "--target-manifest", str(manifest_path), "--demo-keys", source_key or ",".join(keys), "--mimicgen-rng-seed", str(rng_seed), "--transform-first-robot-pose", "--post-hold-steps", "30", "--save-videos", "--direct-hdf5", str(generated_hdf5), *args.extra_rollout_arg]
+        command = [
+            args.python,
+            str(root / "src/pnp/generate_pick_place_rollout.py"),
+            "--seed-index",
+            str(target),
+            "--out-name",
+            name,
+            "--source-hdf5",
+            str(source),
+            "--target-manifest",
+            str(manifest_path),
+            "--demo-keys",
+            source_key or ",".join(keys),
+            "--mimicgen-rng-seed",
+            str(rng_seed),
+            "--transform-first-robot-pose",
+            "--post-hold-steps",
+            "30",
+            "--save-videos",
+            "--direct-hdf5",
+            str(generated_hdf5),
+            *args.extra_rollout_arg,
+        ]
         if args.mode == "per-subtask":
             command.append("--select-src-per-subtask")
         log(f"START name={name} target={target} source={source_key or 'pool'}")
@@ -210,7 +258,19 @@ def main() -> int:
                 stderr=subprocess.STDOUT,
                 check=False,
             )
-        row = inspect_attempt(work, name, target, args.mode, source_key, completed.returncode, source_sha, manifest_sha, manifest["seeds"][target]["layout_sha256"], seen_actions, seen_layouts)
+        row = inspect_attempt(
+            work,
+            name,
+            target,
+            args.mode,
+            source_key,
+            completed.returncode,
+            source_sha,
+            manifest_sha,
+            manifest["seeds"][target]["layout_sha256"],
+            seen_actions,
+            seen_layouts,
+        )
         with attempts_file.open("a") as output:
             output.write(json.dumps(row, ensure_ascii=False) + "\n")
         if row.get("accepted_unique"):
@@ -227,16 +287,25 @@ def main() -> int:
     attempts = read_jsonl(attempts_file)
     accepted = read_jsonl(accepted_file)
     summary = {
-        "mode": args.mode, "diagnostic": args.diagnostic, "run_dir": str(run_dir),
-        "source_hdf5": str(source), "source_hdf5_sha256": source_sha,
-        "target_manifest": str(manifest_path), "target_manifest_sha256": manifest_sha,
-        "source_demo_count": len(keys), "target_range": [targets.start, targets.stop - 1],
-        "target_success": args.target_success, "max_attempts": max_attempts,
-        "attempts": len(attempts), "strict_successes": sum(bool(row.get("strict_success")) for row in attempts),
+        "mode": args.mode,
+        "diagnostic": args.diagnostic,
+        "run_dir": str(run_dir),
+        "source_hdf5": str(source),
+        "source_hdf5_sha256": source_sha,
+        "target_manifest": str(manifest_path),
+        "target_manifest_sha256": manifest_sha,
+        "source_demo_count": len(keys),
+        "target_range": [targets.start, targets.stop - 1],
+        "target_success": args.target_success,
+        "max_attempts": max_attempts,
+        "attempts": len(attempts),
+        "strict_successes": sum(bool(row.get("strict_success")) for row in attempts),
         "accepted_unique": len(accepted),
         "generated_hdf5": str(generated_hdf5),
         "generated_hdf5_persisted": generated_hdf5.is_file() and generated_hdf5.stat().st_size > 0,
-        "eligible_for_training_hdf5": len(accepted) >= args.target_success and generated_hdf5.is_file() and generated_hdf5.stat().st_size > 0,
+        "eligible_for_training_hdf5": len(accepted) >= args.target_success
+        and generated_hdf5.is_file()
+        and generated_hdf5.stat().st_size > 0,
         "complete": len(accepted) >= args.target_success,
     }
     (run_dir / "summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n")

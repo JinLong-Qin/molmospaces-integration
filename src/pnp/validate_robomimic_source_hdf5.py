@@ -78,17 +78,21 @@ def main() -> None:
             for key in REQUIRED_DATAGEN:
                 if key not in demo["datagen_info"] or len(demo["datagen_info"][key]) != n:
                     raise RuntimeError(f"{demo_name}: missing/misaligned datagen_info/{key}")
-                require_finite(f"{demo_name}/datagen_info/{key}", np.asarray(demo["datagen_info"][key]))
+                require_finite(
+                    f"{demo_name}/datagen_info/{key}", np.asarray(demo["datagen_info"][key])
+                )
             if not str(demo.attrs.get("seed_kind", "")).startswith("synthetic_"):
                 raise RuntimeError(f"{demo_name}: missing synthetic source provenance")
-            summary["demos"].append({
-                "demo": demo_name,
-                "num_samples": n,
-                "house_id": int(demo.attrs["house_id"]),
+            summary["demos"].append(
+                {
+                    "demo": demo_name,
+                    "num_samples": n,
+                    "house_id": int(demo.attrs["house_id"]),
                     "source_h5": str(demo.attrs["source_h5"]),
                     "source_run_root": str(demo.attrs.get("source_run_root", "")),
                     "traj_index": int(demo.attrs["traj_index"]),
-            })
+                }
+            )
             summary["total"] += n
         if int(data.attrs.get("total", -1)) != summary["total"]:
             raise RuntimeError(f"data.total={data.attrs.get('total')} != {summary['total']}")

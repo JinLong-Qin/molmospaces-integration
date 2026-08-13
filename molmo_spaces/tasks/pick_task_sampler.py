@@ -1035,9 +1035,7 @@ class PickTaskSampler(BaseMujocoTaskSampler):
         fixed_robot_base_pose = self.config.task_sampler_config.fixed_robot_base_pose
         if fixed_robot_base_pose is not None:
             if len(fixed_robot_base_pose) != 7:
-                raise ValueError(
-                    "fixed_robot_base_pose must contain x y z qw qx qy qz"
-                )
+                raise ValueError("fixed_robot_base_pose must contain x y z qw qx qy qz")
             fixed_robot_pose = pos_quat_to_pose_mat(
                 np.asarray(fixed_robot_base_pose[:3]),
                 np.asarray(fixed_robot_base_pose[3:]),

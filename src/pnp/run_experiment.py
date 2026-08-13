@@ -5,6 +5,7 @@ The configuration is JSON to avoid an additional parser dependency. This module
 contains experiment orchestration only; simulator/data semantics remain in the
 specialized Python CLIs it invokes.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -60,7 +61,9 @@ def build_generation_command(config_path: Path, config: dict[str, Any]) -> list[
     root = resolve(config_path, require_string(run, "repository_root"))
     runner = root / "src/pnp/run_generation.py"
     if not runner.is_file():
-        raise ConfigurationError(f"repository_root does not contain {runner.relative_to(root)}: {root}")
+        raise ConfigurationError(
+            f"repository_root does not contain {runner.relative_to(root)}: {root}"
+        )
 
     mode = generation.get("mode")
     if mode not in {"per-subtask", "whole-source"}:
@@ -73,18 +76,30 @@ def build_generation_command(config_path: Path, config: dict[str, Any]) -> list[
 
     python = str(run.get("python") or sys.executable)
     command = [
-        python, str(runner),
-        "--root", str(root),
-        "--python", python,
-        "--work", str(resolve(config_path, require_string(run, "work_dir"))),
-        "--source-hdf5", str(resolve(config_path, require_string(inputs, "source_hdf5"))),
-        "--target-manifest", str(resolve(config_path, require_string(inputs, "target_manifest"))),
-        "--mode", mode,
-        "--target-success", str(generation.get("target_success", 1)),
-        "--target-start", str(generation.get("target_start", 0)),
-        "--target-end", str(generation.get("target_end", -1)),
-        "--rng-seed-base", str(generation.get("rng_seed_base", 10000)),
-        "--run-label", str(run.get("label", "pnp_generation")),
+        python,
+        str(runner),
+        "--root",
+        str(root),
+        "--python",
+        python,
+        "--work",
+        str(resolve(config_path, require_string(run, "work_dir"))),
+        "--source-hdf5",
+        str(resolve(config_path, require_string(inputs, "source_hdf5"))),
+        "--target-manifest",
+        str(resolve(config_path, require_string(inputs, "target_manifest"))),
+        "--mode",
+        mode,
+        "--target-success",
+        str(generation.get("target_success", 1)),
+        "--target-start",
+        str(generation.get("target_start", 0)),
+        "--target-end",
+        str(generation.get("target_end", -1)),
+        "--rng-seed-base",
+        str(generation.get("rng_seed_base", 10000)),
+        "--run-label",
+        str(run.get("label", "pnp_generation")),
     ]
     if source_count is not None:
         command.extend(["--source-count", str(source_count)])
@@ -102,8 +117,14 @@ def build_generation_command(config_path: Path, config: dict[str, Any]) -> list[
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--config", type=Path, required=True, help="Path to a JSON experiment configuration.")
-    parser.add_argument("--dry-run", action="store_true", help="Validate config and print the command without running it.")
+    parser.add_argument(
+        "--config", type=Path, required=True, help="Path to a JSON experiment configuration."
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Validate config and print the command without running it.",
+    )
     args = parser.parse_args()
 
     config_path = args.config.resolve()

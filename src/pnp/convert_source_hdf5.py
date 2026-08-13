@@ -188,9 +188,7 @@ def build_demo(
     demo.create_dataset(
         "source_joint_position_actions", data=joint_position_actions, compression="gzip"
     )
-    demo.create_dataset(
-        "source_tcp_delta_actions", data=tcp_delta_actions, compression="gzip"
-    )
+    demo.create_dataset("source_tcp_delta_actions", data=tcp_delta_actions, compression="gzip")
     demo.create_dataset("states", data=states, compression="gzip")
     demo.create_dataset("dones", data=dones)
     demo.create_dataset("rewards", data=rewards)
@@ -208,9 +206,7 @@ def build_demo(
     dgi.attrs["env_interface_type"] = "molmospaces"
     dgi.create_dataset("eef_pose", data=eef_hmat, compression="gzip")
     dgi.create_dataset("target_pose", data=target_pose, compression="gzip")
-    dgi.create_dataset(
-        "gripper_action", data=joint_position_actions[:, 7:8].astype(np.float32)
-    )
+    dgi.create_dataset("gripper_action", data=joint_position_actions[:, 7:8].astype(np.float32))
     op = dgi.create_group("object_poses")
     op.create_dataset("pickup_obj", data=pickup_obj_pose, compression="gzip")
     op.create_dataset("place_receptacle", data=place_receptacle_pose, compression="gzip")

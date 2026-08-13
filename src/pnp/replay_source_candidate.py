@@ -15,9 +15,7 @@ ap.add_argument(
     "--manifest",
     default=str(WORK / "artifacts/seeds/pnp_source_manifest.json"),
 )
-ap.add_argument(
-    "--out-root", default=str(WORK / "artifacts/replay_source_candidates")
-)
+ap.add_argument("--out-root", default=str(WORK / "artifacts/replay_source_candidates"))
 args = ap.parse_args()
 T0 = time.monotonic()
 
