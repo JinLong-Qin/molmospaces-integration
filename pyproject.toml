@@ -164,6 +164,7 @@ exclude = [
  "scripts/",
  "tests/",
  "mlspaces_tests/scenes/",
+ "archive/", # Historical snapshots preserved for provenance, excluded from maintained-code formatting.
 ]
 
 [tool.ruff.format]
