@@ -1,34 +1,53 @@
 <div align="center">
-  <img src="media/banner.svg" alt="MolmoSpaces Integration" width="980" />
+  <img src="media/banner.svg" alt="MolmoSpaces x MimicGen" width="980" />
 </div>
 
 <p align="center">
-  <a href="README.md">English</a> | <a href="README_zh.md">中文</a>
+  <a href="README.md">English</a> &nbsp;|&nbsp; <a href="README_zh.md"><strong>中文</strong></a>
+</p>
+
+<h1 align="center">MolmoSpaces x MimicGen</h1>
+
+<p align="center">
+  <strong>面向仿真的受控 Pick-and-Place 轨迹扩充。</strong><br />
+  从通过验证的 Franka 源示范到变换后的 target 布局，并保留明确的 replay、持久化与唯一性验收门。
 </p>
 
 <p align="center">
-  <strong>MolmoSpaces Integration</strong> — Pick-and-Place MimicGen 轨迹生成、bimanual YAM 遥操作及其他 MolmoSpaces 集成工作线。
+  <code>Franka + DROID cameras</code> &nbsp; <code>whole-source / per-subtask transfer</code> &nbsp; <code>严格 artifact 验收</code>
 </p>
 
 <p align="center">
-  <img src="media/gif/heterogeneous_generated_examples.gif" alt="Generated rollout examples" width="245" />
-  &nbsp;
-  <img src="media/gif/source_candidate_example.gif" alt="Source candidate example" width="245" />
-  &nbsp;
-  <img src="media/gif/foodlike_pilot_outcomes.gif" alt="Pilot outcomes" width="245" />
+  <img src="media/gif/heterogeneous_generated_examples.gif" alt="Generated Franka pick-and-place rollouts" width="720" />
 </p>
 
 <p align="center">
-  <a href="media/heterogeneous_generated_examples.mp4">生成示例</a>
-  &nbsp;·&nbsp;
-  <a href="media/foodlike_source_candidates_grid.mp4">源轨迹候选</a>
-  &nbsp;·&nbsp;
-  <a href="media/foodlike_pilot_outcomes.mp4">Pilot 结果</a>
+  <a href="media/heterogeneous_generated_examples.mp4">查看完整尺寸的生成 rollout</a>
 </p>
 
-<p align="center"><em>预览保持紧凑；点击 MP4 链接查看完整尺寸演示。</em></p>
+## 主工作线
 
-## 包含内容
+```text
+通过验证的源示范  ->  跨 target 布局的 MimicGen 变换  ->  replay、视频、HDF5 与唯一性检查
+```
+
+仓库聚焦可复现的 Franka Pick-and-Place 路线。它将源示范采集、target 布局采样和生成 rollout 的验收分开记录，避免将可运行进程、已保存 artifact 与严格任务成功混为同一层证据。
+
+<table>
+  <tr>
+    <td width="50%" align="center"><img src="media/gif/source_candidate_example.gif" alt="Validated source trajectory candidate" width="320" /><br /><sub>通过验证的源轨迹</sub></td>
+    <td width="50%" align="center"><img src="media/gif/foodlike_pilot_outcomes.gif" alt="Controlled pick-and-place pilot outcomes" width="320" /><br /><sub>受控 target-layout 结果</sub></td>
+  </tr>
+</table>
+
+<details>
+<summary><strong>证据边界</strong></summary>
+
+公开媒体展示的是 MolmoSpaces 仿真 rollout，不构成真实机器人迁移结论。CI 只证明仓库健康；生成 HDF5 的存在也不单独证明行为成功。每条 workline 均在其文档中记录各自的验收边界和 inventory。
+
+</details>
+
+## 工作线与仓库地图
 
 本仓库是 MolmoSpaces 集成工作线合集。首页直接列出全部公开 workline，读者无需翻子目录即可了解仓库包含的所有方向。
 

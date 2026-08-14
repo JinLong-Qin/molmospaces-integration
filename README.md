@@ -1,34 +1,53 @@
 <div align="center">
-  <img src="media/banner.svg" alt="MolmoSpaces Integration" width="980" />
+  <img src="media/banner.svg" alt="MolmoSpaces x MimicGen" width="980" />
 </div>
 
 <p align="center">
-  <a href="README.md">English</a> | <a href="README_zh.md">中文</a>
+  <a href="README.md"><strong>English</strong></a> &nbsp;|&nbsp; <a href="README_zh.md">中文</a>
+</p>
+
+<h1 align="center">MolmoSpaces x MimicGen</h1>
+
+<p align="center">
+  <strong>Controlled pick-and-place trajectory augmentation in simulation.</strong><br />
+  From validated Franka source demonstrations to transformed target layouts, with explicit replay, persistence, and uniqueness gates.
 </p>
 
 <p align="center">
-  <strong>MolmoSpaces Integration</strong> — Pick-and-Place MimicGen trajectory generation, bimanual YAM teleoperation, and other integration worklines on top of MolmoSpaces.
+  <code>Franka + DROID cameras</code> &nbsp; <code>whole-source / per-subtask transfer</code> &nbsp; <code>strict artifact validation</code>
 </p>
 
 <p align="center">
-  <img src="media/gif/heterogeneous_generated_examples.gif" alt="Generated rollout examples" width="245" />
-  &nbsp;
-  <img src="media/gif/source_candidate_example.gif" alt="Source candidate example" width="245" />
-  &nbsp;
-  <img src="media/gif/foodlike_pilot_outcomes.gif" alt="Pilot outcomes" width="245" />
+  <img src="media/gif/heterogeneous_generated_examples.gif" alt="Generated Franka pick-and-place rollouts" width="720" />
 </p>
 
 <p align="center">
-  <a href="media/heterogeneous_generated_examples.mp4">Generated examples</a>
-  &nbsp;·&nbsp;
-  <a href="media/foodlike_source_candidates_grid.mp4">Source candidates</a>
-  &nbsp;·&nbsp;
-  <a href="media/foodlike_pilot_outcomes.mp4">Pilot outcomes</a>
+  <a href="media/heterogeneous_generated_examples.mp4">Open full-size generated rollouts</a>
 </p>
 
-<p align="center"><em>Previews are compact; open the MP4 links for full-size demos.</em></p>
+## The primary workline
 
-## What is included
+```text
+Validated source demonstrations  ->  MimicGen transformation across target layouts  ->  Replay, video, HDF5, and uniqueness checks
+```
+
+The repository focuses on a reproducible Franka Pick-and-Place route. It separates source collection, target-layout sampling, and generated rollout acceptance so that a runnable process, a saved artifact, and a strict task outcome are never treated as interchangeable evidence.
+
+<table>
+  <tr>
+    <td width="50%" align="center"><img src="media/gif/source_candidate_example.gif" alt="Validated source trajectory candidate" width="320" /><br /><sub>Validated source trajectory</sub></td>
+    <td width="50%" align="center"><img src="media/gif/foodlike_pilot_outcomes.gif" alt="Controlled pick-and-place pilot outcomes" width="320" /><br /><sub>Controlled target-layout outcomes</sub></td>
+  </tr>
+</table>
+
+<details>
+<summary><strong>Evidence boundary</strong></summary>
+
+Public media illustrate MolmoSpaces simulation rollouts. They do not establish real-robot transfer. CI checks establish repository health; generated HDF5 existence does not alone establish behavioral success. Each workline records its own acceptance boundary and inventory.
+
+</details>
+
+## Worklines and repository map
 
 This repository is a MolmoSpaces integration workline portfolio. The top-level README lists every public workline so a new reader does not need to browse subdirectories to discover what is here.
 
