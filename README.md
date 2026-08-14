@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="media/banner.svg" alt="MolmoSpaces x MimicGen" width="980" />
+  <img src="media/banner.png" alt="MolmoSpaces x MimicGen: Franka pick-and-place trajectory augmentation" width="980" />
 </div>
 
 <p align="center">
