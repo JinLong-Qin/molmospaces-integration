@@ -445,7 +445,11 @@ def _molmospaces_joint_execute(
     success = {k: False for k in env.is_success()}
     stalled_tcp_steps = 0
     previous_tcp_position = None
-    previous_gripper_target = 0.0
+    # Persist gripper state across the seven MimicGen execute() calls.  The
+    # source trajectory keeps the object held through lift and preplace; a
+    # per-subtask reset here would issue a spurious open command.
+    previous_gripper_target = float(getattr(env, "_rollout_gripper_target", 0.0))
+    execute_call_index = int(getattr(env, "_custom_transition_execute_call_index", 0))
 
     def execute_tick(waypoint, subtask_index, gripper_target):
         nonlocal video_count, previous_tcp_position, stalled_tcp_steps
@@ -523,7 +527,6 @@ def _molmospaces_joint_execute(
             truncated=bool(env.last_step_truncated),
         )
 
-    execute_call_index = int(getattr(env, "_custom_transition_execute_call_index", 0))
     setattr(env, "_custom_transition_execute_call_index", execute_call_index + 1)
     # DataGenerator invokes execute once per subtask. The fifth invocation starts
     # the receptacle-referenced preplace segment immediately after pickup lift.
@@ -538,21 +541,29 @@ def _molmospaces_joint_execute(
         and len(self.waypoint_sequences) > 0
     )
     if use_direct_placement_transition:
-        if len(self.waypoint_sequences[0]) < 2:
-            raise RuntimeError(
-                "custom transition requires preplace initial EEF pose plus first target pose"
-            )
+        if len(self.waypoint_sequences[0]) < 1:
+            raise RuntimeError("custom transition requires a preplace target pose")
         from scipy.spatial.transform import Rotation, Slerp
 
-        start = np.asarray(env._custom_transition_previous_waypoint.pose, dtype=float)
-        end = np.asarray(self.waypoint_sequences[0][1].pose, dtype=float)
+        # Waypoints consumed by the env interface are robot-base-relative.
+        # Convert the measured world-frame TCP before interpolating.
+        start = np.linalg.inv(np.asarray(env.robot.robot_view.base.pose, dtype=float)) @ np.asarray(
+            env.interface_current_eef_pose(), dtype=float
+        )
+        # With transform_first_robot_pose disabled this is the first real
+        # transformed preplace target; the bridge itself supplies continuity.
+        end = np.asarray(self.waypoint_sequences[0][0].pose, dtype=float)
         n = int(args.custom_transition_steps)
         alphas = np.linspace(0.0, 1.0, n + 2)[1:-1]
         rotations = Slerp([0.0, 1.0], Rotation.from_matrix(np.stack([start[:3, :3], end[:3, :3]])))(
             alphas
         ).as_matrix()
-        transition_grip = float(
-            np.asarray(env._custom_transition_previous_waypoint.gripper_action).reshape(-1)[0]
+        transition_grip = max(
+            255.0,
+            float(getattr(env, "_rollout_gripper_target", 0.0)),
+            float(
+                np.asarray(env._custom_transition_previous_waypoint.gripper_action).reshape(-1)[0]
+            ),
         )
         for i, alpha in enumerate(alphas):
             pose = np.eye(4, dtype=float)
@@ -566,7 +577,9 @@ def _molmospaces_joint_execute(
 
     for subtask_index, seq in enumerate(self.waypoint_sequences):
         previous_waypoint = None
-        waypoints = seq[1:] if use_direct_placement_transition and subtask_index == 0 else seq
+        # The bridge already ends at the first real preplace target. Do not
+        # drop that target when transform_first_robot_pose is disabled.
+        waypoints = seq if use_direct_placement_transition and subtask_index == 0 else seq
         for waypoint in waypoints:
             if args.rollout_action_type == "osc_pose" and previous_waypoint is not None:
                 from scipy.spatial.transform import Rotation, Slerp
@@ -598,6 +611,10 @@ def _molmospaces_joint_execute(
                 desired_gripper = float(
                     np.asarray(reference_waypoint.gripper_action).reshape(-1)[0]
                 )
+                # Never reopen while the object is held.  The first legal
+                # release is the place-success subtask (execute call 5).
+                if execute_call_index < 5 and previous_gripper_target > 127.0:
+                    desired_gripper = previous_gripper_target
                 closing_edge = desired_gripper > 127.0 and previous_gripper_target <= 127.0
                 if args.rollout_action_type == "osc_pose" and closing_edge:
                     reached = False
@@ -644,6 +661,7 @@ def _molmospaces_joint_execute(
                     if execute_tick(reference_waypoint, subtask_index, desired_gripper):
                         return finished()
                 previous_gripper_target = desired_gripper
+                env._rollout_gripper_target = previous_gripper_target
             previous_waypoint = waypoint
     if len(self.waypoint_sequences) and len(self.waypoint_sequences[-1]):
         env._custom_transition_previous_waypoint = self.waypoint_sequences[-1].last_waypoint
@@ -709,6 +727,7 @@ class MolmoSpacesPnpEnv(EnvBase):
         self.executed_waypoint_subtasks = []
         self._custom_transition_execute_call_index = 0
         self._custom_transition_previous_waypoint = None
+        self._rollout_gripper_target = 0.0
         self.ik_candidate_max_joint_deltas = []
         self.ik_continuity_rejections = []
         self.last_step_terminal = False
@@ -736,8 +755,9 @@ class MolmoSpacesPnpEnv(EnvBase):
         current_arm = np.asarray(arm_group.joint_pos, dtype=float)
         if action.shape[0] == 7 and args.rollout_action_type in ("tcp_delta", "osc_pose"):
             q0 = robot_view.get_qpos_dict()
-            gripper_mgs = set(robot_view.get_gripper_movegroup_ids())
-            unlocked = [x for x in robot_view.move_group_ids() if x not in gripper_mgs]
+            # The rollout commands only the seven arm joints. Including the fixed
+            # Franka base here produces a 13-D solution that the arm integrator truncates.
+            unlocked = ["arm"]
             current_eef = self.interface_current_eef_pose()
             # target_pose_to_action returns a body-frame twist. Convert it once to
             # world coordinates and keep twist_frame aligned with that representation.
@@ -754,6 +774,11 @@ class MolmoSpacesPnpEnv(EnvBase):
             # than an unregularized controller branch. The primary Cartesian task
             # remains DLS; only the damping grows close to a singularity.
             jacobian = np.asarray(robot_view.get_jacobian("arm", unlocked), dtype=float)
+            if jacobian.shape[1] != current_arm.size:
+                raise RuntimeError(
+                    f"arm Jacobian/action mismatch: {jacobian.shape[1]} columns for "
+                    f"{current_arm.size} commanded joints"
+                )
             singular_values = np.linalg.svd(jacobian, compute_uv=False)
             min_singular = float(singular_values[-1]) if singular_values.size else 0.0
             effective_damping = max(
@@ -814,8 +839,26 @@ class MolmoSpacesPnpEnv(EnvBase):
         self.last_step_truncated = bool(truncated)
         actual_arm = np.asarray(arm_group.joint_pos, dtype=float)
         actual_grip = np.asarray(robot_view.get_move_group("gripper").joint_pos, dtype=float)
+        actual_eef = self.interface_current_eef_pose()
+        if self.step_count < 8 and args.rollout_action_type in ("tcp_delta", "osc_pose"):
+            log(
+                "OSC_TRACE "
+                + json.dumps(
+                    {
+                        "tick": self.step_count,
+                        "action": action[:6].tolist(),
+                        "twist_world": twist_world.tolist(),
+                        "jacobian_shape": list(jacobian.shape),
+                        "min_singular": min_singular,
+                        "qdot": qdot.tolist(),
+                        "command_delta": (command_arm - current_arm).tolist(),
+                        "actual_qpos_delta": (actual_arm - current_arm).tolist(),
+                        "actual_tcp_delta": (actual_eef[:3, 3] - current_eef[:3, 3]).tolist(),
+                    }
+                )
+            )
         self.actual_joint_states.append(np.r_[actual_arm, actual_grip])
-        self.actual_eef_states.append(self.interface_current_eef_pose())
+        self.actual_eef_states.append(actual_eef)
         self.step_count += 1
         succ = bool(self.task.judge_success())
         if succ and self.first_success < 0:
