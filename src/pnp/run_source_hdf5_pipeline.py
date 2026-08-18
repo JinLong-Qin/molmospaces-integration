@@ -111,9 +111,7 @@ def main() -> int:
     for index in range(args.candidate_count):
         result_path = replay_root / f"seed_{index:02d}" / "datagen_info_collection_result.json"
         result = (
-            load_json(result_path)
-            if result_path.exists()
-            else {"error": "missing replay result"}
+            load_json(result_path) if result_path.exists() else {"error": "missing replay result"}
         )
         hard_pass = bool(result.get("final_success") and result.get("success_persistent_to_end"))
         accepted += [index] if hard_pass else []

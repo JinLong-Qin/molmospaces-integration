@@ -1,4 +1,5 @@
 """Shared runtime helpers for parameterized MolmoSpaces workflows."""
+
 from __future__ import annotations
 
 import hashlib
@@ -62,7 +63,9 @@ def build_pythonpath(root: Path, current: str | None = None) -> str:
     return os.pathsep.join(str(path) for path in entries if str(path))
 
 
-def workflow_env(root: Path, work: Path, *, base: Mapping[str, str] | None = None) -> dict[str, str]:
+def workflow_env(
+    root: Path, work: Path, *, base: Mapping[str, str] | None = None
+) -> dict[str, str]:
     env = dict(base or os.environ)
     env["MOLMOSPACES_ROOT"] = str(root)
     env["MOLMOSPACES_PNP_WORKDIR"] = str(work)
