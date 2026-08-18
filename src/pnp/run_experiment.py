@@ -15,6 +15,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from src.pnp.runtime import resolve_path
+
 
 class ConfigurationError(ValueError):
     """Raised when an experiment configuration is incomplete or ambiguous."""
@@ -44,11 +46,6 @@ def require_string(parent: dict[str, Any], key: str) -> str:
     return value
 
 
-def resolve(config_path: Path, value: str) -> Path:
-    candidate = Path(value).expanduser()
-    return candidate if candidate.is_absolute() else (config_path.parent / candidate).resolve()
-
-
 def build_generation_command(config_path: Path, config: dict[str, Any]) -> list[str]:
     if config.get("schema_version") != 1:
         raise ConfigurationError("schema_version must be 1")
@@ -58,7 +55,7 @@ def build_generation_command(config_path: Path, config: dict[str, Any]) -> list[
     run = require_object(config, "run")
     inputs = require_object(config, "inputs")
     generation = require_object(config, "generation")
-    root = resolve(config_path, require_string(run, "repository_root"))
+    root = resolve_path(require_string(run, "repository_root"), config_path.parent)
     runner = root / "src/pnp/run_generation.py"
     if not runner.is_file():
         raise ConfigurationError(
@@ -83,11 +80,11 @@ def build_generation_command(config_path: Path, config: dict[str, Any]) -> list[
         "--python",
         python,
         "--work",
-        str(resolve(config_path, require_string(run, "work_dir"))),
+        str(resolve_path(require_string(run, "work_dir"), config_path.parent)),
         "--source-hdf5",
-        str(resolve(config_path, require_string(inputs, "source_hdf5"))),
+        str(resolve_path(require_string(inputs, "source_hdf5"), config_path.parent)),
         "--target-manifest",
-        str(resolve(config_path, require_string(inputs, "target_manifest"))),
+        str(resolve_path(require_string(inputs, "target_manifest"), config_path.parent)),
         "--mode",
         mode,
         "--target-success",

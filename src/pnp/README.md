@@ -63,6 +63,17 @@ The example intentionally references placeholder input artifacts. It is a
 configuration/schema smoke test, not a runnable dataset collection command.
 Use a validated source HDF5 and target manifest to run a real smoke.
 
+
+## Current target-layout control
+
+A recorded cross-scene control reuses the `house 1716` replay-verified source pool
+on an independently reset `house 3080` target in the `procthor-objaverse` validation
+split. Its target manifest uses the `support_adapted_planar_pair` layout and records
+explicit pickup/receptacle identities and reset poses. One normal rollout reached
+final success and persistent post-hold success. Treat this as a diagnostic control
+for the target-layout route only; it is not a formal cross-scene success-rate result,
+full 6-D rigid migration claim, or training-ready dataset.
+
 ## Evidence contract
 
 Successful process completion is insufficient. `run_generation.py` records an

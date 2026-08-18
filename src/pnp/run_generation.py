@@ -9,23 +9,22 @@ JSONL provenance, and summary generation.
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import os
-import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
 
-
-def digest(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
-
-
-def read_jsonl(path: Path) -> list[dict]:
-    if not path.exists():
-        return []
-    return [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
+from src.pnp.runtime import (
+    append_jsonl,
+    file_sha256,
+    load_json,
+    read_jsonl,
+    resolve_path,
+    run_logged,
+    workflow_env,
+    write_json,
+)
 
 
 def source_keys(path: Path, expected: int | None) -> list[str]:
@@ -39,7 +38,7 @@ def source_keys(path: Path, expected: int | None) -> list[str]:
 
 
 def target_range(path: Path, start: int, end: int) -> range:
-    count = len(json.loads(path.read_text())["seeds"])
+    count = len(load_json(path)["seeds"])
     end = count - 1 if end < 0 else end
     if start < 0 or end < start or end >= count:
         raise ValueError(f"invalid target range: {start}-{end}; manifest has {count}")
@@ -84,7 +83,7 @@ def inspect_attempt(
     }
     if not result_file.exists():
         return row
-    result = json.loads(result_file.read_text())
+    result = load_json(result_file)
     trace = json.loads(trace_file.read_text()) if trace_file.exists() else []
     selected = [int(value) for value in result.get("src_demo_inds", [])]
     whole_source = (
@@ -95,7 +94,7 @@ def inspect_attempt(
     )
     per_subtask = mode == "per-subtask" and bool(result.get("select_src_per_subtask"))
     tail30 = len(trace) >= 30 and all(bool(value.get("success")) for value in trace[-30:])
-    action_sha = digest(action_file) if action_file.exists() else None
+    action_sha = file_sha256(action_file) if action_file.exists() else None
     videos_ok = len(videos) >= 2 and all(video.stat().st_size > 0 for video in videos)
     target_matches = result.get("generation_env_seed_index") == target
     direct_hdf5 = Path(result["direct_hdf5"]).resolve() if result.get("direct_hdf5") else None
@@ -169,21 +168,21 @@ def main() -> int:
     parser.add_argument("--extra-rollout-arg", action="append", default=[])
     args = parser.parse_args()
 
-    root = Path(args.root).resolve()
-    work = Path(args.work).resolve()
-    source = Path(args.source_hdf5).resolve()
-    manifest_path = Path(args.target_manifest).resolve()
+    root = resolve_path(args.root)
+    work = resolve_path(args.work)
+    source = resolve_path(args.source_hdf5)
+    manifest_path = resolve_path(args.target_manifest)
     if not source.is_file() or not source.stat().st_size:
         raise SystemExit(f"missing source HDF5: {source}")
     if not manifest_path.is_file() or not manifest_path.stat().st_size:
         raise SystemExit(f"missing target manifest: {manifest_path}")
-    source_sha = digest(source)
-    manifest_sha = digest(manifest_path)
+    source_sha = file_sha256(source)
+    manifest_sha = file_sha256(manifest_path)
     keys = source_keys(source, args.source_count)
     targets = target_range(manifest_path, args.target_start, args.target_end)
-    manifest = json.loads(manifest_path.read_text())
+    manifest = load_json(manifest_path)
     run_dir = (
-        Path(args.run_dir).resolve()
+        resolve_path(args.run_dir)
         if args.run_dir
         else work / "logs" / f"{args.run_label}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
     )
@@ -249,41 +248,36 @@ def main() -> int:
         if args.mode == "per-subtask":
             command.append("--select-src-per-subtask")
         log(f"START name={name} target={target} source={source_key or 'pool'}")
-        with (run_dir / f"{name}.log").open("w") as output:
-            completed = subprocess.run(
-                command,
-                cwd=root,
-                env={**os.environ, "MOLMOSPACES_PNP_WORKDIR": str(work)},
-                stdout=output,
-                stderr=subprocess.STDOUT,
-                check=False,
-            )
+        completed_code = run_logged(
+            command,
+            run_dir / f"{name}.log",
+            workflow_env(root, work),
+            cwd=root,
+        )
         row = inspect_attempt(
             work,
             name,
             target,
             args.mode,
             source_key,
-            completed.returncode,
+            completed_code,
             source_sha,
             manifest_sha,
             manifest["seeds"][target]["layout_sha256"],
             seen_actions,
             seen_layouts,
         )
-        with attempts_file.open("a") as output:
-            output.write(json.dumps(row, ensure_ascii=False) + "\n")
+        append_jsonl(attempts_file, row)
         if row.get("accepted_unique"):
             row["accepted_index"] = len(read_jsonl(accepted_file)) + 1
-            with accepted_file.open("a") as output:
-                output.write(json.dumps(row, ensure_ascii=False) + "\n")
+            append_jsonl(accepted_file, row)
             seen_actions.add(row["action_sha256"])
             seen_layouts.add(row["layout_sha256"])
             action_hashes.write_text("\n".join(sorted(seen_actions)) + "\n")
             layout_hashes.write_text("\n".join(sorted(seen_layouts)) + "\n")
             log(f"ACCEPT name={name} accepted={row['accepted_index']}")
         else:
-            log(f"REJECT name={name} code={completed.returncode}")
+            log(f"REJECT name={name} code={completed_code}")
     attempts = read_jsonl(attempts_file)
     accepted = read_jsonl(accepted_file)
     summary = {
@@ -308,7 +302,7 @@ def main() -> int:
         and generated_hdf5.stat().st_size > 0,
         "complete": len(accepted) >= args.target_success,
     }
-    (run_dir / "summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n")
+    write_json(run_dir / "summary.json", summary)
     log("FINISH " + json.dumps(summary, ensure_ascii=False))
     return 0
 

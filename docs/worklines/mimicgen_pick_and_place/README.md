@@ -4,6 +4,14 @@
 
 This is the active Franka Droid / Pick-and-Place / in-process scripted-IK MimicGen workline. It uses replay-verified source trajectories, an independently sampled target-layout manifest, and real MolmoSpaces rollouts for acceptance. It is separate from RB-Y1 CuRobo planner datagen and from the archived broad 50-demo diagnostic.
 
+
+The current cross-scene target control keeps the source provenance explicit: the
+replay-verified source pool is from `house 1716`, while the independently reset target
+is `house 3080` in the `procthor-objaverse` validation split. The recorded target uses
+the `support_adapted_planar_pair` layout. One normal rollout passed final and
+persistent post-hold success, but this remains a diagnostic control rather than a
+formal cross-scene benchmark result or training-data release.
+
 ## Active Entry Points
 
 The active code is intentionally limited to [`src/pnp/`](../../../src/pnp/):

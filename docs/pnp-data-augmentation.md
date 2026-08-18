@@ -76,6 +76,15 @@ rollouts:
 A target manifest is an input artifact: keep it immutable after a generation
 run begins. It stores the frozen reset state and a layout SHA-256 per target.
 
+
+For the current cross-scene control, the source pool remains from `house 1716` while
+the target manifest describes an independently reset `house 3080` layout in the
+`procthor-objaverse` validation split. This separation is part of the provenance
+record: do not describe the target as an additional source demonstration. The
+recorded `support_adapted_planar_pair` control reached final and persistent success
+for one rollout, which is useful path-validation evidence but not a dataset-level
+success-rate claim.
+
 ### 3. Create and validate a generation configuration
 
 Copy the example rather than editing code:

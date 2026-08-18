@@ -84,6 +84,17 @@ configs/pnp/*.json -> scripts/pnp/run_generation.sh -> src/pnp/run_experiment.py
 
 The configuration records scenario-independent run controls and explicit input artifacts. Shell launchers contain no Python heredocs or experiment-specific paths; historical fixed-layout utilities remain under `archive/pnp/` for provenance only. Start with `configs/pnp/generation.example.json`, run its `--dry-run` validation, then replace its placeholder source HDF5 and target manifest with validated artifacts.
 
+### Current cross-scene target control
+
+The current controlled cross-scene example reuses the replay-verified source pool from
+`house 1716` and evaluates it on an independently reset target in `house 3080`
+(`procthor-objaverse`, `val` split). The target uses the
+`support_adapted_planar_pair` layout, with the Irish potato pickup object and an
+explicit place-receptacle UID recorded in the target manifest. One normal simulator
+rollout reached final success and remained successful through the post-hold window;
+this is a diagnostic control proving the target-layout path, not a formal success-rate
+claim, full 6-D rigid migration result, or training-ready dataset.
+
 ## Franka Datagen Quick Start
 
 ### 1. Clone

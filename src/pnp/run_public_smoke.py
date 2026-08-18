@@ -5,18 +5,14 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
-import subprocess
 import sys
 from pathlib import Path
 
+from src.pnp.runtime import load_json, resolve_path, run_logged, workflow_env, write_json
 
-def call(command: list[str], log: Path, env: dict[str, str]) -> None:
-    log.parent.mkdir(parents=True, exist_ok=True)
-    with log.open("w") as output:
-        code = subprocess.run(
-            command, stdout=output, stderr=subprocess.STDOUT, env=env, check=False
-        ).returncode
+
+def checked(command: list[str], log: Path, env: dict[str, str]) -> None:
+    code = run_logged(command, log, env)
     if code:
         raise SystemExit(f"command failed ({code}); see {log}")
 
@@ -30,29 +26,16 @@ def main() -> int:
     parser.add_argument("--target-count", type=int, default=1)
     parser.add_argument("--max-attempts", type=int, default=20)
     args = parser.parse_args()
-    root = args.root.resolve()
-    work = args.work.resolve()
-    py = str(Path(args.python).resolve())
+    root = resolve_path(args.root)
+    work = resolve_path(args.work)
+    py = str(resolve_path(args.python))
     work.mkdir(parents=True, exist_ok=True)
-    env = os.environ.copy()
-    env["MOLMOSPACES_ROOT"] = str(root)
-    env["MOLMOSPACES_PNP_WORKDIR"] = str(work)
-    env["PYTHONPATH"] = ":".join(
-        filter(
-            None,
-            [
-                str(root),
-                str(root / "vendor/mimicgen"),
-                str(root / "vendor/robomimic"),
-                env.get("PYTHONPATH", ""),
-            ],
-        )
-    )
+    env = workflow_env(root, work)
 
     manifest = work / "source_manifest.json"
     replay_root = work / "replay"
     source_hdf5 = work / "source.hdf5"
-    call(
+    checked(
         [
             py,
             str(root / "src/pnp/run_source_hdf5_pipeline.py"),
@@ -78,7 +61,7 @@ def main() -> int:
         work / "source_pipeline.log",
         env,
     )
-    row = json.loads(manifest.read_text())["seeds"][0]
+    row = load_json(manifest)["seeds"][0]
     raw_dir = Path(row["raw_h5_dir"])
     raw_hdf5 = (
         (work / "artifacts/seeds" / raw_dir) if not raw_dir.is_absolute() else raw_dir
@@ -92,7 +75,7 @@ def main() -> int:
         robot_base_pose = np.asarray(group["obs/extra/robot_base_pose"][0], dtype=float).tolist()
         place_receptacle_uid = str(scene["place_receptacle_name"]).rsplit("/", 1)[-1]
     target_manifest = work / "target_manifest.json"
-    call(
+    checked(
         [
             py,
             str(root / "src/pnp/sample_fixedbase_target_manifest.py"),
@@ -116,7 +99,7 @@ def main() -> int:
         work / "target_sample.log",
         env,
     )
-    call(
+    checked(
         [
             py,
             str(root / "src/pnp/validate_fixedbase_target_manifest.py"),
@@ -133,38 +116,35 @@ def main() -> int:
         env,
     )
     config = work / "generation.json"
-    config.write_text(
-        json.dumps(
-            {
-                "schema_version": 1,
-                "kind": "mimicgen_generation",
-                "run": {
-                    "repository_root": str(root),
-                    "python": py,
-                    "work_dir": str(work / "generation"),
-                    "label": "public_shard_smoke",
-                },
-                "inputs": {
-                    "source_hdf5": str(source_hdf5),
-                    "target_manifest": str(target_manifest),
-                    "source_count": 1,
-                },
-                "generation": {
-                    "mode": "per-subtask",
-                    "target_success": 1,
-                    "max_attempts": 1,
-                    "target_start": 0,
-                    "target_end": 0,
-                    "rng_seed_base": 10000,
-                    "diagnostic": False,
-                    "extra_rollout_args": [],
-                },
+    write_json(
+        config,
+        {
+            "schema_version": 1,
+            "kind": "mimicgen_generation",
+            "run": {
+                "repository_root": str(root),
+                "python": py,
+                "work_dir": str(work / "generation"),
+                "label": "public_shard_smoke",
             },
-            indent=2,
-        )
-        + "\n"
+            "inputs": {
+                "source_hdf5": str(source_hdf5),
+                "target_manifest": str(target_manifest),
+                "source_count": 1,
+            },
+            "generation": {
+                "mode": "per-subtask",
+                "target_success": 1,
+                "max_attempts": 1,
+                "target_start": 0,
+                "target_end": 0,
+                "rng_seed_base": 10000,
+                "diagnostic": False,
+                "extra_rollout_args": [],
+            },
+        },
     )
-    call(
+    checked(
         [py, str(root / "src/pnp/run_experiment.py"), "--config", str(config)],
         work / "generation.log",
         env,

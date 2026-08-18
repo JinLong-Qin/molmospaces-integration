@@ -352,6 +352,16 @@ $MOLMOSPACES_PYTHON src/pnp/run_generation.py --help
 
 先构建或选择 source HDF5，再创建并验证独立 target manifest，之后以 `run_generation.py --mode per-subtask` 执行官方 MimicGen source-selection 路线。`generate_pick_place_rollout.py` 是单条真实 simulator rollout 的执行原语。完整用法和证据 gate 见 [`src/pnp/README.md`](src/pnp/README.md)。
 
+
+### 当前跨场景 target control
+
+当前受控跨场景示例复用通过回放验证的 `house 1716` source pool，在独立 reset 的
+`house 3080` target（`procthor-objaverse` 的 `val` split）上进行评估。该 target
+使用 `support_adapted_planar_pair` 布局，pickup object 为 Irish potato，放置容器
+UID、target layout 和其他 reset 状态均记录在 target manifest 中。一次正常 simulator
+rollout 达到 final success，并在 post-hold 窗口内保持成功；这只是证明 target-layout
+路径可运行的 diagnostic control，不是正式成功率、完整 6-D 刚体迁移或可直接训练数据的声明。
+
 历史 50-demo cross-subtask 脚本与旧 collector 已移入 [`archive/pnp/`](archive/pnp/)，对应的 `results/` 结果目录保持原路径不变。
 
 ## Bimanual YAM 浏览器遥操作
